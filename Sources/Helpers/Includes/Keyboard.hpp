@@ -13,13 +13,13 @@ namespace CTRPluginFramework {
             int SetKeyboard(const string &name, bool canAbort, bool isHex, const int maxLength, u32 &output, u32 start);
             int SetKeyboard(const string &name, bool canAbort, const vector<string> &options, int &index);
     };
-    
+
     using OnCompareCallback = bool (*)(const void *, string &);
     using OnEventsCallback = void(*)(Keyboard &, KeyboardEvent &event);
-    
+
     extern u32 min, max;
     extern bool KeyboardCallback(const void *input, string &error);
-    
+
     template<typename T>
     bool KB(const string &name, bool canAbort, bool isHex, const int maxLength, T &output, T Default, const int minimum, const int maximum, OnCompareCallback callback = nullptr) {
         Sleep(Milliseconds(100));
@@ -33,7 +33,7 @@ namespace CTRPluginFramework {
         s8 res = keyboard.Open((T &)output, (T)Default);
         return res == 0;
     };
-    
+
     template<typename T>
     bool KB(const string &name, bool canAbort, bool isHex, const int maxLength, T &output, T Default, OnCompareCallback callback = nullptr) {
         Sleep(Milliseconds(100));
@@ -45,7 +45,7 @@ namespace CTRPluginFramework {
         s8 res = keyboard.Open((T &)output, (T)Default);
         return res == 0;
     };
-    
+
     template<typename T>
     bool KB(const string &name, bool canAbort, const int maxLength, T &output, T Default, OnEventsCallback callback = nullptr) {
         Sleep(Milliseconds(100));
@@ -56,7 +56,7 @@ namespace CTRPluginFramework {
         s8 res = keyboard.Open((T &)output, (T)Default);
         return res == 0;
     };
-    
+
     /**
      * \brief Return the arg of an entry. If the arg doesn't exist (nullptr) a new one is created calling the default type constructor
      * \tparam T The type of the arg
@@ -66,14 +66,14 @@ namespace CTRPluginFramework {
     template <typename T>
     T *GetArg(MenuEntry *entry) {
         T *arg = reinterpret_cast<T *>(entry->GetArg());
-        
+
         if (arg == nullptr) {
             arg = new T();
             entry->SetArg(arg);
         }
         return (arg);
     }
-    
+
     /**
     * \brief Return the arg of an entry. If the arg doesn't exist (nullptr) a new one is created calling the default type constructor
     * \tparam T The type of the arg
@@ -84,7 +84,7 @@ namespace CTRPluginFramework {
     template <typename T>
     T *GetArg(MenuEntry *entry, T defaultVal) {
         T *arg = reinterpret_cast<T *>(entry->GetArg());
-        
+
         if (arg == nullptr) {
             arg = new T(defaultVal);
             entry->SetArg(arg);

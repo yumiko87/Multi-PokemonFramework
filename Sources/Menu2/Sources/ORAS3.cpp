@@ -9,12 +9,12 @@ namespace ORAS {
         static const u32 address[2] = {0x80845E8, 0x808475C};
         static u32 data[2][2] = {{0x13A05003, 0x3A05002}, {0x13A05005, 0x3A05003}};
         static u32 original[2][2] = {{0, 0}, {0, 0}};
-        
+
         if (!Gen6::IsInBattle()) {
             for (int i = 0; i < 2; i++) {
                 CRO::Force(address[i]);
             }
-            
+
             if (entry->IsActivated()) {
                 for (int j = 0; j < 2; j++) {
                     for (int k = 0; k < 2; k++) {
@@ -24,7 +24,7 @@ namespace ORAS {
                     }
                 }
             }
-            
+
             if (!entry->IsActivated() || !Controller::GetKeysDown()) {
                 Recover:
                     for (int l = 0; l < 2; l++) {
@@ -32,22 +32,22 @@ namespace ORAS {
                     }
             }
         }
-        
+
         else {
             goto Recover;
         }
     }
-    
+
     void BypassWalls(MenuEntry *entry) {
         static const u32 address[2] = {0x80BB414, 0x80B87F8};
         static u32 data[2][1] = {{0xE3A01000}, {0xE3A06000}};
         static u32 original[2][1] = {{0}, {0}};
-        
+
         if (!Gen6::IsInBattle()) {
             for (int i = 1; i < 2; i++) {
                 CRO::Force(address[i]);
             }
-                
+
             if (entry->IsActivated()) {
                 for (int j = 0; j < 2; j++) {
                     if (Process::Read32(address[j], data32) && data32 != data[j][0]) {
@@ -55,7 +55,7 @@ namespace ORAS {
                     }
                 }
             }
-            
+
             if (!entry->IsActivated() || !Controller::GetKeysDown()) {
                 Recover:
                     for (int l = 0; l < 2; l++) {
@@ -63,20 +63,20 @@ namespace ORAS {
                     }
             }
         }
-        
+
         else {
             goto Recover;
         }
     }
-    
+
     void FlyAnywhere(MenuEntry *entry) {
         static const u32 address = 0x8C69330;
-        
+
         if (Process::Read32(address, data32) && data32 == 0x7007C0) {
             Process::Write32(address, 0x700C38);
         }
     }
-    
+
     struct Locations {
         int direction;
         const char *name;
@@ -84,7 +84,7 @@ namespace ORAS {
         float xCoord;
         float yCoord;
     };
-    
+
     const Locations locations[36] = {
         {0, "Ancient Tomb", 0x9F, 225, 333},
         {0, "Battle Resort", 0x206, 351, 441},
@@ -123,21 +123,21 @@ namespace ORAS {
         {0, "Verdanturf Town", 0xF6, 351, 441},
         {0, "Victory Road", 0x7B, 387, 855}
     };
-    
+
     static int locID, place, direction;
     static float coords[2] = {0, 0};
-    
+
     void WarperKB(MenuEntry *entry) {
         static vector<string> options;
-        
+
         if (options.empty()) {
             for (const Locations &nickname:locations) {
                 options.push_back(nickname.name);
             }
         }
-        
+
         KeyboardPlus keyboard;
-        
+
         if (keyboard.SetKeyboard(entry->Name() + ":", true, options, locID) != -1) {
             place = locations[locID].value;
             direction = locations[locID].direction;
@@ -145,10 +145,10 @@ namespace ORAS {
             coords[1] = locations[locID].yCoord;
         }
     }
-    
+
     void Warper(MenuEntry *entry) {
         static const u32 address[5] = {0x8803BCA, 0x8803C20, 0x8C6E886, 0x8C6E894, 0x8C6E89C};
-        
+
         if (entry->Hotkeys[0].IsDown()) {
             if (place > 0) {
                 if (Process::Read16(address[1], data16) && data16 == 0x5544) {
@@ -163,11 +163,11 @@ namespace ORAS {
             }
         }
     }
-    
+
     void RegisterLocations(MenuEntry *entry) {
         static const u32 address = 0x8C81F24;
         static u8 flags[2][10] = {{0xC, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0x8}, {0xA, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0x3, 0xB, 0x1}};
-        
+
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 10; j++) {
                 if (Bit::Read(address + j, data8, i) && data8 != flags[i][j]) {
@@ -175,7 +175,7 @@ namespace ORAS {
                 }
             }
         }
-        
+
         MessageBox("Operation has been " << Color::LimeGreen << "completed" << Color::White << "!", DialogType::DialogOk, ClearScreen::Both)();
     }
 }

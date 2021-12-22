@@ -58,13 +58,13 @@ typedef void (*voidfn)(void);
 
     // Aligns a struct (and other types?) to m, making sure that the size of the struct is a multiple of m.
     #define ALIGN(m) __attribute__((aligned(m)))
-    
+
     // Packs a struct (and other types?) so it won't include padding bytes.
     #define PACKED __attribute__((packed))
-    
+
     #define USED __attribute__((used))
     #define UNUSED __attribute__((unused))
-    
+
     #ifndef LIBCTRU_NO_DEPRECATION
         // Flags a function as deprecated
         #define DEPRECATED __attribute__ ((deprecated))
@@ -72,7 +72,7 @@ typedef void (*voidfn)(void);
         // Flags a function as deprecated.
         #define DEPRECATED
     #endif
-    
+
     #define NAKED __attribute__((naked))
     #define NORETURN __attribute__((noreturn))
 

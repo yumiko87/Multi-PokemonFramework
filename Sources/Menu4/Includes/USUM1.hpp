@@ -10,13 +10,13 @@ namespace USUM {
     void Bypass1MegaRestrict(MenuEntry *entry);
     void InfiniteZMoves(MenuEntry *entry);
     void ZMovesWithoutCrystal(MenuEntry *entry);
-    
+
     void AlwaysShiny(MenuEntry *entry);
     void GuaranteedCatch(MenuEntry *entry);
     void CatchTrainersPokemon(MenuEntry *entry);
     void RematchTrainer(MenuEntry *entry);
     void NoTrainerBattle(MenuEntry *entry);
-    
+
     void ViewEnemyHP(MenuEntry *entry);
     void NoEncounters(MenuEntry *entry);
     void WildPokemon(MenuEntry *entry);

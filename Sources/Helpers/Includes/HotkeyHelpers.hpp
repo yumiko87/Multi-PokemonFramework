@@ -11,7 +11,7 @@ namespace CTRPluginFramework {
         }
         return (entry);
     }
-    
+
     static MenuEntry *EntryWithHotkey(MenuEntry *entry, const vector<Hotkey> &hotkeys) {
         if (entry != nullptr) {
             for (const Hotkey &hotkey : hotkeys) {

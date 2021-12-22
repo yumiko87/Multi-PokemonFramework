@@ -67,7 +67,7 @@ SECTIONS
 		CONSTRUCTORS
 		. = ALIGN(4);
 	} : data
-	
+
 	.tdata ALIGN(4) :
 	{
 		__tdata_lma = .;
@@ -125,7 +125,7 @@ SECTIONS
 		KEEP (*(SORT(.dtors.*)))	
 		KEEP (*(.dtors))
 	} : data
-	
+
 	__bss_start__ = .;
 	.bss ALIGN(4) :
 	{
@@ -142,7 +142,7 @@ SECTIONS
 		__tls_end = .;
 	} : data
 	__bss_end__ = .;
-	
+
 	__end__ = ABSOLUTE(.) ;
 
 	/* ==================

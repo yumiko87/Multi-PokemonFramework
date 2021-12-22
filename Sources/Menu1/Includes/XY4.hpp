@@ -9,7 +9,7 @@ namespace XY {
     void InstantEggHatch(MenuEntry *entry);
     void QuickFriendship(MenuEntry *entry);
     void ViewValuesInSummary(MenuEntry *entry);
-    
+
     void NoOutlines(MenuEntry *entry);
     void FastDialogs(MenuEntry *entry);
 }

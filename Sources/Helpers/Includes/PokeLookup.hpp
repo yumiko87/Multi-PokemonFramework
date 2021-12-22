@@ -8,10 +8,10 @@
 namespace CTRPluginFramework {
     extern u16 spwnSpecies;
     extern u8 spawnLv, spwnForm;
-    
+
     static vector<string> ListOfForms(int pokeNo) {
         vector<string> options;
-        
+
         switch (pokeNo) {
             case 3:   // Venusaur
             case 9:   // Blastoise
@@ -42,118 +42,118 @@ namespace CTRPluginFramework {
             case 460: // Abomasnow
                 options = {"Normal", "Mega"};
                 break;
-            
+
             case 6:   // Charizard
             case 150: // Mewtwo
                 options = {"Normal", "Mega X", "Mega Y"};
                 break;
-            
+
             case 201: // Unown
                 options = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "!", "?"};
                 break;
-            
+
             case 351: // Castform
                 options = {"Normal", "Sunny", "Rainy", "Snowy"};
                 break;
-            
+
             case 386: // Deoxys
                 options = {"Normal", "Attack", "Defense", "Speed"};
                 break;
-            
+
             case 412: // Burmy
             case 413: // Wormadam
             case 414: // Mothim
                 options = {"Plant", "Sandy", "Trash"};
                 break;
-            
+
             case 422: // Shellos
             case 423: // Gastrodon
                 options = {"East", "West"};
                 break;
-            
+
             case 479: // Rotom
                 options = {"Normal", "Heat", "Wash", "Frost", "Fan", "Mow"}; 
                 break;
-            
+
             case 487: // Giratina
                 options = {"Altered", "Origin"};
                 break;
-            
+
             case 492: // Shaymin
                 options = {"Land", "Sky"};
                 break;
-            
+
             case 493: // Arceus
                 options = {"Normal", "Fighting", "Flying", "Poison", "Ground", "Rock", "Bug", "Ghost", "Steel", "Fire", "Water", "Grass", "Electric", "Psychic", "Ice", "Dragon", "Dark", "Fairy"}; 
                 break;
-            
+
             case 550: // Basculin
                 options = {"Red", "Blue"};
                 break;
-            
+
             case 555: // Darmanitan
                 options = {"Standard", "Zen"};
                 break;
-            
+
             case 585: // Deerling
             case 586: // Sawsbuck
                 options = {"Spring", "Summer", "Autumn", "Winter"};
                 break;
-            
+
             case 641: // Tornadus
             case 642: // Thundurus
             case 645: // Landorus
                 options = {"Incarnate", "Therian"};
                 break;
-            
+
             case 646: // Kyurem
                 options = {"Normal", "White", "Black"};
                 break;
-            
+
             case 647: // Keldeo
                 options = {"Ordinary", "Resolute"};
                 break;
-            
+
             case 648: // Meloetta
                 options = {"Aria", "Pirouette"};
                 break;
-            
+
             case 649: // Genesect
                 options = {"Normal", "Douse", "Shock", "Burn", "Chill"};
                 break;
-            
+
             case 664: // Scatterbug
             case 665: // Spewpa
             case 666: // Vivillon
                 options = {"Icy Snow", "Polar", "Tundra", "Continental", "Garden", "Elegant", "Meadow", "Modern", "Marine", "Archipelago", "High-Plains", "Sandstorm", "River", "Monsoon", "Savannah", "Sun", "Ocean", "Jungle", "Fancy", "Poke Ball"}; 
                 break;
-            
+
             case 669: // Flabébé
             case 671: // Florges
                 options = {"Red", "Yellow", "Orange", "Blue", "White"};
                 break;
-            
+
             case 670: // Floette
                 options = {"Red", "Yellow", "Orange", "Blue", "White", "Eternal"};
                 break;
-            
+
             case 676: // Furfrou
                 options = {"Natural", "Heart", "Star", "Diamond", "Deputante", "Matron", "Dandy", "La Reine", "Kabuki", "Pharaoh"};
                 break;
-            
+
             case 681: // Aegislash
                 options = {"Shield", "Blade"};
                 break;
-            
+
             case 710: // Pumpkaboo
             case 711: // Gourgeist
                 options = {"Average", "Small", "Large", "Super"};
                 break;
-            
+
             case 716: // Xerneas
                 options = {"Neutral", "Active"};
                 break;
-            
+
             default:  // All Others
                 options = {"Normal"};
                 break;
@@ -886,14 +886,14 @@ namespace CTRPluginFramework {
     };
 
     extern int pkmnID;
-    
+
     struct Pokemon {
         vector<string> name;
         vector<int> choiceNo;
     };
 
     void SelectAPokemon(MenuEntry *entry);
-    
+
     static vector<string> allNatures = {
         "Hardy",
         "Lonely",
@@ -921,7 +921,7 @@ namespace CTRPluginFramework {
         "Careful",
         "Quirky"
     };
-    
+
     static const char *allAbilities[234] = {
         "None",
         "Stench",
@@ -1158,9 +1158,9 @@ namespace CTRPluginFramework {
         "Prism Armor",
         "Neuroforce"
     };
-    
+
     extern int abilityID;
-    
+
     struct Ability {
         vector<string> name;
         vector<int> choiceNo;
@@ -2130,9 +2130,9 @@ namespace CTRPluginFramework {
         "Roto Boost",
         "Roto Catch"
     };
-    
+
     extern int heldItemID;
-    
+
     struct HeldItem {
         vector<string> name;
         vector<int> choiceNo;
@@ -2885,9 +2885,9 @@ namespace CTRPluginFramework {
         "Veevee Volley",
         "Double Iron Bash"
     };
-    
+
     extern int moveID;
-    
+
     struct Moves {
         vector<string> name;
         vector<int> choiceNo;
