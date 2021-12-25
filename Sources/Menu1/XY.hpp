@@ -32,14 +32,22 @@ namespace XY {
 
         MenuFolder *computer = new MenuFolder("Computer"); {
             *computer += new MenuEntry("Backup", nullptr, PCBackup);
-
-            *computer += new MenuFolder("Modificator", vector<MenuEntry *>({
-                EntryWithHotkey(new MenuEntry("Steal Pokémon in Trade", StealPokemonInTrade, "Note: This will overwrite any Pokémon sitting in slot 1 of box 1. If you understand, you may press on the following hotkeys."), {Hotkey(Key::Start, "")})
-            }));
-
-            *computer += new MenuEntry("PC Anywhere", PCAnywhere);
-            *computer += new MenuEntry("Unlock Every Box", nullptr, UnlockEveryBox);
         }
+
+        MenuFolder *editor = new MenuFolder("Editor"); {
+            *editor += new MenuEntry(Color::Orange << "Intialize", nullptr, Editor::Initialize),
+
+            *editor += new MenuFolder("Primary", vector<MenuEntry *>({
+                new MenuEntry("Species", nullptr, Editor::Species),
+                new MenuEntry("Form", nullptr, Editor::Form),
+                new MenuEntry("Shinify", nullptr, Editor::Shinify)
+            }));
+        }
+
+        *computer += editor;
+
+        *computer += new MenuEntry("PC Anywhere", PCAnywhere);
+        *computer += new MenuEntry("Unlock Every Box", nullptr, UnlockEveryBox);
 
         menu += computer;
 
@@ -61,6 +69,7 @@ namespace XY {
                 new MenuEntry("Instant Egg Hatch", InstantEggHatch),
                 new MenuEntry("Quick Friendship", QuickFriendship),
                 EntryWithHotkey(new MenuEntry("View Values in Summary", ViewValuesInSummary, "Note: hold one of the following hotkey(s) to view your Individual and Effort Values."), {Hotkey(Key::L, ""), Hotkey(Key::R, "")}),
+                EntryWithHotkey(new MenuEntry("Steal Pokémon in Trade", StealPokemonInTrade, "Note: This will overwrite any Pokémon sitting in slot 1 of box 1. If you understand, you may press on the following hotkeys."), {Hotkey(Key::Start, "")})
             }));
 
             *misc += new MenuEntry("Remove Outlines", NoOutlines);

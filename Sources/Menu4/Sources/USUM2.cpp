@@ -53,7 +53,7 @@ namespace USUM {
             if (index <= 20) {
                 File dumpFile(bin + fileName, File::RWC);
                 dumpFile.Dump(address, 222720);
-                MessageBox("Operation has been " << Color::LimeGreen << "completed" << Color::White << "!", DialogType::DialogOk, ClearScreen::Both)();
+                Message::Completed();
                 return;
             }
         }
@@ -71,11 +71,11 @@ namespace USUM {
                 if (fileIndex >= 0) {
                     File injectFile(bin + listOfFileNames[fileIndex]);
                     injectFile.Inject(address, 222720);
-                    MessageBox("Operation has been " << Color::LimeGreen << "completed" << Color::White << "!", DialogType::DialogOk, ClearScreen::Both)();
+                    Message::Completed();
                     return;
                 }
 
-                MessageBox("Operation has been " << Color(255, 51, 51) << "interrupted" << Color::White << "!", DialogType::DialogOk, ClearScreen::Both)();
+                Message::Interrupted();
                 return;
             }
         }
@@ -136,10 +136,10 @@ namespace USUM {
 
         if (Process::Read8(address, data8) && data8 < 32) {
             Process::Write8(address, 32);
-            MessageBox("Operation has been " << Color::LimeGreen << "completed" << Color::White << "!", DialogType::DialogOk, ClearScreen::Both)();
+            Message::Completed();
             return;
         }
 
-        MessageBox("Operation has already been " << Color::Orange << "completed" << Color::White << "!", DialogType::DialogOk, ClearScreen::Both)();
+        Message::Warning();
     }
 }

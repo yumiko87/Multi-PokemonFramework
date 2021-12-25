@@ -33,6 +33,12 @@ namespace CTRPluginFramework {
         bool Edit(u32 address, u8 value, bool rightSide);
     }
 
+    namespace Message {
+        void Completed(void);
+        void Interrupted(void);
+        void Warning(void);
+    }
+
     namespace Gen6 {
         vector<string> Choices(vector<string> vect1, vector<string> vect2);
         u32 Auto(u32 address1, u32 address2);
@@ -72,6 +78,6 @@ namespace CTRPluginFramework {
 
 #include "PokeInfo.hpp"
 #include "PokeLookup.hpp"
-#include "PokeEditor.hpp"
+#include "Editor.hpp"
 
 #endif

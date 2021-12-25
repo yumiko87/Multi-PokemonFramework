@@ -270,6 +270,18 @@ namespace CTRPluginFramework
         return low + (rand() % (high - low + 1));
     }
 
+    void Message::Completed(void) {
+        MessageBox("Operation has been " << Color::LimeGreen << "completed" << Color::White << "!", DialogType::DialogOk, ClearScreen::Both)();
+    }
+
+    void Message::Interrupted(void) {
+        MessageBox("Operation has been " << Color(255, 51, 51) << "interrupted" << Color::White << "!", DialogType::DialogOk, ClearScreen::Both)();
+    }
+
+    void Message::Warning(void) {
+        MessageBox("Operation has already been " << Color::Orange << "completed" << Color::White << "!", DialogType::DialogOk, ClearScreen::Both)();
+    }
+
     vector<string> Gen6::Choices(vector<string> vect1, vector<string> vect2) {
         if (group == Group::XY || group == Group::SM) {
             return vect1;

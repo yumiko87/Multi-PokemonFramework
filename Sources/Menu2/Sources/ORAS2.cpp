@@ -53,7 +53,7 @@ namespace ORAS {
             if (index <= 20) {
                 File dumpFile(bin + fileName, File::RWC);
                 dumpFile.Dump(address, 215760);
-                MessageBox("Operation has been " << Color::LimeGreen << "completed" << Color::White << "!", DialogType::DialogOk, ClearScreen::Both)();
+                Message::Completed();
                 return;
             }
         }
@@ -71,11 +71,11 @@ namespace ORAS {
                 if (fileIndex >= 0) {
                     File injectFile(bin + listOfFileNames[fileIndex]);
                     injectFile.Inject(address, 215760);
-                    MessageBox("Operation has been " << Color::LimeGreen << "completed" << Color::White << "!", DialogType::DialogOk, ClearScreen::Both)();
+                    Message::Completed();
                     return;
                 }
 
-                MessageBox("Operation has been " << Color(255, 51, 51) << "interrupted" << Color::White << "!", DialogType::DialogOk, ClearScreen::Both)();
+                Message::Interrupted();
                 return;
             }
         }
@@ -118,10 +118,10 @@ namespace ORAS {
 
         if (Process::Read8(address, data8) && data8 < 31) {
             Process::Write8(address, 31);
-            MessageBox("Operation has been " << Color::LimeGreen << "completed" << Color::White << "!", DialogType::DialogOk, ClearScreen::Both)();
+            Message::Completed();
             return;
         }
 
-        MessageBox("Operation has already been " << Color::Orange << "completed" << Color::White << "!", DialogType::DialogOk, ClearScreen::Both)();
+        Message::Warning();
     }
 }

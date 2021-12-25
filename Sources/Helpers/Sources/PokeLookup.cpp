@@ -259,11 +259,11 @@ namespace CTRPluginFramework
         keyboard.OnKeyboardEvent(OnAbilityInputChange);
 
         if (keyboard.Open(output) >= 0) {
-            MessageBox("Operation has been " << Color::LimeGreen << "completed" << Color::White << "!", DialogType::DialogOk, ClearScreen::Both)();
+            Message::Completed();
             return;
         }
 
-        MessageBox("Operation has been " << Color(255, 51, 51) << "interrupted" << Color::White << "!", DialogType::DialogOk, ClearScreen::Both)();
+        Message::Interrupted();
         abilityID = -1;
         return;
     }
@@ -406,11 +406,11 @@ namespace CTRPluginFramework
         keyboard.OnKeyboardEvent(OnItemInputChange);
 
         if (keyboard.Open(output) >= 0) {
-            MessageBox("Operation has been " << Color::LimeGreen << "completed" << Color::White << "!", DialogType::DialogOk, ClearScreen::Both)();
+            Message::Completed();
             return;
         }
 
-        MessageBox("Operation has been " << Color(255, 51, 51) << "interrupted" << Color::White << "!", DialogType::DialogOk, ClearScreen::Both)();
+        Message::Interrupted();
         heldItemID = -1;
         return;
     }
@@ -559,11 +559,11 @@ namespace CTRPluginFramework
         keyboard.OnKeyboardEvent(OnMovesInputChange);
 
         if (keyboard.Open(output) >= 0) {
-            MessageBox("Operation has been " << Color::LimeGreen << "completed" << Color::White << "!", DialogType::DialogOk, ClearScreen::Both)();
+            Message::Completed();
             return;
         }
 
-        MessageBox("Operation has been " << Color(255, 51, 51) << "interrupted" << Color::White << "!", DialogType::DialogOk, ClearScreen::Both)();
+        Message::Interrupted();
         moveID = -1;
         return;
     }

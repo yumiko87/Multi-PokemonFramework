@@ -167,6 +167,6 @@ namespace XY {
             }
         }
 
-        MessageBox("Operation has been " << Color::LimeGreen << "completed" << Color::White << "!", DialogType::DialogOk, ClearScreen::Both)();
+        Message::Completed();
     }
 }

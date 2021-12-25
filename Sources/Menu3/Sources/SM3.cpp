@@ -51,12 +51,12 @@ namespace SM {
                 Process::Write32(address, data32);
             }
 
-            MessageBox("Operation has been " << Color::LimeGreen << "completed" << Color::White << "!", DialogType::DialogOk, ClearScreen::Both)();
+            Message::Completed();
             return;
         }
 
         else {
-            MessageBox("Operation has already been " << Color::Orange << "completed" << Color::White << "!", DialogType::DialogOk, ClearScreen::Both)();
+            Message::Warning();
         }
     }
 

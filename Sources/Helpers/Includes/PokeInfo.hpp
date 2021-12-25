@@ -23,7 +23,7 @@ namespace CTRPluginFramework {
         u8  trainingBag;
         u32 pokeID;
         u8  nature;
-        u8  fatefulEncGenderForm;
+        u8  miscData;
         u8  evs[6];
         u8  cntCool;
         u8  cntBeauty;
@@ -382,7 +382,12 @@ namespace CTRPluginFramework {
         EncryptPokemon(poke, ekm);
 
         // Write array data to game
-        return (Process::Patch(pokePointer, ekm, 232));
+        if (Process::Patch(pokePointer, ekm, 232)) {
+            return true; 
+        }
+
+        MessageBox("Failed to encrypt or write data!", DialogType::DialogOk)();
+        return false;
     }
 
     template <class PKX>
@@ -403,8 +408,13 @@ namespace CTRPluginFramework {
         }
     }
 
+    template<class PKX>
+    void SetForm(PKX *poke, int value) {
+        poke->miscData = (poke->miscData & 0x7) | (value << 3);
+    }
+
     template <class PKX>
-    u8 SetNature(PKX *poke, int index) {
+    int SetNature(PKX *poke, int index) {
         return poke->nature = index;
     }
 
