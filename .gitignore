@@ -1,0 +1,11 @@
+Build/
+Release/
+.DS_Store
+.vs/
+.vscode/
+*.json
+*.3gx
+*.zip
+*.lst
+*.elf
+desktop.ini
