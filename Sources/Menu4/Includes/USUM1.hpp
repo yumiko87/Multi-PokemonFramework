@@ -3,6 +3,11 @@
 using namespace CTRPluginFramework;
 
 namespace USUM {
+    void StatisticsKB(MenuEntry *entry);
+    void Statistics(MenuEntry *entry);
+    void InvincibilityKB(MenuEntry *entry);
+    void Invincibility(MenuEntry *entry);
+
     void GodMode(MenuEntry *entry);
     void AccessBag(MenuEntry *entry);
     void AlwaysCriticalHit(MenuEntry *entry);

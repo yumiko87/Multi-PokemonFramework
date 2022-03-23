@@ -8,7 +8,7 @@ using namespace CTRPluginFramework;
 namespace XY {
     void PCBackup(MenuEntry *entry) {
         static const u32 address = 0x8C861C8;
-        vector<string> listOfFiles, listOfFileNames;
+        StringVector listOfFiles, listOfFileNames;
         string extension = ".bin";
 
         Directory directory(bin);
@@ -24,6 +24,7 @@ namespace XY {
 
                 MessageBox("All backups have been erased.", DialogType::DialogOk, ClearScreen::Both)();
             }
+
             return;
         }
 
@@ -37,7 +38,7 @@ namespace XY {
         string fileName = timeStamp + extension;
 
         int choice;
-        static const vector<string> options = {"Export", "Import"};
+        static const StringVector options = {"Export", "Import"};
         KeyboardPlus keyboard;
         keyboard.SetKeyboard(entry->Name() + ":", true, options, choice);
 

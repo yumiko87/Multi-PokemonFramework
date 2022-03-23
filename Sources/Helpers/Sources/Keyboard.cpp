@@ -3,7 +3,7 @@
 #include "Helpers.hpp"
 
 namespace CTRPluginFramework {
-    int KeyboardPlus::SetKeyboard(const string &name, bool canAbort, bool isHex, const int maxLength, u8 &output, u8 start) {
+    int KeyboardPlus::SetKeyboard(const String &name, bool canAbort, bool isHex, const int maxLength, u8 &output, u8 start) {
         Sleep(Milliseconds(100));
         Keyboard keyboard(name);
         keyboard.CanAbort(canAbort);
@@ -12,7 +12,7 @@ namespace CTRPluginFramework {
         return keyboard.Open((u8 &)output, (u8)start);
     }
 
-    int KeyboardPlus::SetKeyboard(const string &name, bool canAbort, bool isHex, const int maxLength, u16 &output, u16 start) {
+    int KeyboardPlus::SetKeyboard(const String &name, bool canAbort, bool isHex, const int maxLength, u16 &output, u16 start) {
         Sleep(Milliseconds(100));
         Keyboard keyboard(name);
         keyboard.CanAbort(canAbort);
@@ -21,7 +21,7 @@ namespace CTRPluginFramework {
         return keyboard.Open((u16 &)output, (u16)start);
     }
 
-    int KeyboardPlus::SetKeyboard(const string &name, bool canAbort, bool isHex, const int maxLength, u32 &output, u32 start) {
+    int KeyboardPlus::SetKeyboard(const String &name, bool canAbort, bool isHex, const int maxLength, u32 &output, u32 start) {
         Sleep(Milliseconds(100));
         Keyboard keyboard(name);
         keyboard.CanAbort(canAbort);
@@ -30,7 +30,7 @@ namespace CTRPluginFramework {
         return keyboard.Open((u32 &)output, (u32)start);
     }
 
-    int KeyboardPlus::SetKeyboard(const string &name, bool canAbort, const vector<string> &options, int &index) {
+    int KeyboardPlus::SetKeyboard(const String &name, bool canAbort, const StringVector &options, int &index) {
         Sleep(Milliseconds(100));
         Keyboard keyboard(name);
         keyboard.CanAbort(canAbort);

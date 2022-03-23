@@ -113,7 +113,7 @@ namespace CTRPluginFramework
             return true;
         }
 
-        // Left side of the byte	
+        // Left side of the byte
         value = (*(u8 *)(address) >> 4) & 0xF;
         return true;
     }
@@ -254,16 +254,14 @@ namespace CTRPluginFramework
         FRD_GetMyFriendKey(frndKeyPointer);
         FRD_PrincipalIdToFriendCode(frndKey.principalId, frndCodePointer);
 
-        vector<string> frndCodes;
+        StringVector frndCodes;
 
         if (find(frndCodes.begin(), frndCodes.end(), to_string(*frndCodePointer)) == frndCodes.end()) {
             abort();
             return false;
         }
 
-        else {
-            return true;
-        }
+        else return true;
     }
 
     int RandMinMax(int low, int high) {
@@ -282,10 +280,19 @@ namespace CTRPluginFramework
         MessageBox("Operation has already been " << Color::Orange << "completed" << Color::White << "!", DialogType::DialogOk, ClearScreen::Both)();
     }
 
-    vector<string> Gen6::Choices(vector<string> vect1, vector<string> vect2) {
+    int Value(int data1, int data2) {
+        if (group == Group::XY || group == Group::SM) {
+            return data1;
+        }
+
+        return data2;
+    }
+
+    StringVector Gen6::Choices(StringVector vect1, StringVector vect2) {
         if (group == Group::XY || group == Group::SM) {
             return vect1;
         }
+
         return vect2;
     }
 
@@ -293,25 +300,20 @@ namespace CTRPluginFramework
         if (game == Game::X || game == Game::OR) {
             return address1;
         }
-        return address2;
-    }
 
-    int Gen6::Value(int data1, int data2) {
-        if (group == Group::XY || group == Group::SM) {
-            return data1;
-        }
-        return data2;
+        return address2;
     }
 
     string Gen6::Name(string name1, string name2) {
         if (game == Game::X || game == Game::OR) {
             return name1;
         }
+
         return name1;
     }
 
-    vector<string> Gen6::Forms(int pokeNo) {
-        vector<string> options;
+    StringVector Gen6::Forms(int pokeNo) {
+        StringVector options;
 
         switch (pokeNo)
         {
@@ -398,7 +400,7 @@ namespace CTRPluginFramework
                 break;
 
             case 479: // Rotom
-                options = {"Normal", "Heat", "Wash", "Frost", "Fan", "Mow"}; 
+                options = {"Normal", "Heat", "Wash", "Frost", "Fan", "Mow"};
                 break;
 
             case 487: // Giratina
@@ -410,7 +412,7 @@ namespace CTRPluginFramework
                 break;
 
             case 493: // Arceus
-                options = {"Normal", "Fighting", "Flying", "Poison", "Ground", "Rock", "Bug", "Ghost", "Steel", "Fire", "Water", "Grass", "Electric", "Psychic", "Ice", "Dragon", "Dark", "Fairy"}; 
+                options = {"Normal", "Fighting", "Flying", "Poison", "Ground", "Rock", "Bug", "Ghost", "Steel", "Fire", "Water", "Grass", "Electric", "Psychic", "Ice", "Dragon", "Dark", "Fairy"};
                 break;
 
             case 550: // Basculin
@@ -451,7 +453,7 @@ namespace CTRPluginFramework
             case 664: // Scatterbug
             case 665: // Spewpa
             case 666: // Vivillon
-                options = {"Icy Snow", "Polar", "Tundra", "Continental", "Garden", "Elegant", "Meadow", "Modern", "Marine", "Archipelago", "High-Plains", "Sandstorm", "River", "Monsoon", "Savannah", "Sun", "Ocean", "Jungle", "Fancy", "Poke Ball"}; 
+                options = {"Icy Snow", "Polar", "Tundra", "Continental", "Garden", "Elegant", "Meadow", "Modern", "Marine", "Archipelago", "High-Plains", "Sandstorm", "River", "Monsoon", "Savannah", "Sun", "Ocean", "Jungle", "Fancy", "Poke Ball"};
                 break;
 
             case 669: // Flabébé
@@ -488,22 +490,25 @@ namespace CTRPluginFramework
                 options = {"Normal"};
                 break;
         }
+
         return options;
     }
 
     bool Gen6::IsInBattle(void) {
-        static const u32 pointer = Gen6::Value(0x81FB170, 0x81FB478);
+        static const u32 pointer = Value(0x81FB170, 0x81FB478);
 
         if (Process::Read32(pointer, data32) && data32 == 0x40001) {
             return true;
         }
+
         return false;
     }
 
-    vector<string> Gen7::Choices(vector<string> vect1, vector<string> vect2) {
+    StringVector Gen7::Choices(StringVector vect1, StringVector vect2) {
         if (group == Group::SM || group == Group::USUM) {
             return vect1;
         }
+
         return vect2;
     }
 
@@ -511,25 +516,20 @@ namespace CTRPluginFramework
         if (game == Game::S || game == Game::US) {
             return address1;
         }
-        return address2;
-    }
 
-    int Gen7::Value(int data1, int data2) {
-        if (group == Group::SM || group == Group::USUM) {
-            return data1;
-        }
-        return data2;
+        return address2;
     }
 
     string Gen7::Name(string name1, string name2) {
         if (game == Game::S || game == Game::US) {
             return name1;
         }
+
         return name2;
     }
 
-    vector<string> Gen7::Forms(int pokeNo) {
-        vector<string> options;
+    StringVector Gen7::Forms(int pokeNo) {
+        StringVector options;
 
         switch (pokeNo)
         {
@@ -642,7 +642,7 @@ namespace CTRPluginFramework
                 break;
 
             case 479: // Rotom
-                options = {"Normal", "Heat", "Wash", "Frost", "Fan", "Mow"}; 
+                options = {"Normal", "Heat", "Wash", "Frost", "Fan", "Mow"};
                 break;
 
             case 487: // Giratina
@@ -655,7 +655,7 @@ namespace CTRPluginFramework
 
             case 493: // Arceus
             case 773: // Silvally
-                options = {"Normal", "Fighting", "Flying", "Poison", "Ground", "Rock", "Bug", "Ghost", "Steel", "Fire", "Water", "Grass", "Electric", "Psychic", "Ice", "Dragon", "Dark", "Fairy"}; 
+                options = {"Normal", "Fighting", "Flying", "Poison", "Ground", "Rock", "Bug", "Ghost", "Steel", "Fire", "Water", "Grass", "Electric", "Psychic", "Ice", "Dragon", "Dark", "Fairy"};
                 break;
 
             case 550: // Basculin
@@ -700,7 +700,7 @@ namespace CTRPluginFramework
             case 664: // Scatterbug
             case 665: // Spewpa
             case 666: // Vivillon
-                options = {"Icy Snow", "Polar", "Tundra", "Continental", "Garden", "Elegant", "Meadow", "Modern", "Marine", "Archipelago", "High-Plains", "Sandstorm", "River", "Monsoon", "Savannah", "Sun", "Ocean", "Jungle", "Fancy", "Poke Ball"}; 
+                options = {"Icy Snow", "Polar", "Tundra", "Continental", "Garden", "Elegant", "Meadow", "Modern", "Marine", "Archipelago", "High-Plains", "Sandstorm", "River", "Monsoon", "Savannah", "Sun", "Ocean", "Jungle", "Fancy", "Poke Ball"};
                 break;
 
             case 669: // Flabébé
@@ -730,7 +730,7 @@ namespace CTRPluginFramework
                 break;
 
             case 718: // Zygarde
-                options = {"50%", "10%", "10%-C", "50%-C", "100%-C"}; 
+                options = {"50%", "10%", "10%-C", "50%-C", "100%-C"};
                 break;
 
             case 720: // Hoopa
@@ -780,6 +780,7 @@ namespace CTRPluginFramework
                 options = {"Normal"};
                 break;
         }
+
         return options;
     }
 
@@ -789,6 +790,7 @@ namespace CTRPluginFramework
         if (Process::Read32(pointer[0], data32) && data32 == 0x40001 && Process::Read8(pointer[1], data8) && data8 == 3) {
             return true;
         }
+
         return false;
     }
 }

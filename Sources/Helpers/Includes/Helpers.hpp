@@ -8,7 +8,7 @@
 
 #define REPO "https://github.com/Jared0714/Multi-PokemonFramework"
 
-namespace CTRPluginFramework {    
+namespace CTRPluginFramework {
     class ProcessPlus {
         public:
             static void Write8(u32 address, u8 value);
@@ -40,20 +40,18 @@ namespace CTRPluginFramework {
     }
 
     namespace Gen6 {
-        vector<string> Choices(vector<string> vect1, vector<string> vect2);
+        StringVector Choices(StringVector vect1, StringVector vect2);
         u32 Auto(u32 address1, u32 address2);
-        int Value(int data1, int data2);
         string Name(string name1, string name2);
-        vector<string> Forms(int pokeNo);
+        StringVector Forms(int pokeNo);
         bool IsInBattle(void);
     };
 
     namespace Gen7 {
-        vector<string> Choices(vector<string> vect1, vector<string> vect2);
+        StringVector Choices(StringVector vect1, StringVector vect2);
         u32 Auto(u32 address1, u32 address2);
-        int Value(int data1, int data2);
         string Name(string name1, string name2);
-        vector<string> Forms(int pokeNo);
+        StringVector Forms(int pokeNo);
         bool IsInBattle(void);
     };
 
@@ -74,6 +72,7 @@ namespace CTRPluginFramework {
     extern bool IsCompatible(void);
     extern bool IsOnWhiteList(void);
     extern int RandMinMax(int low, int high);
+    extern int Value(int data1, int data2);
 }
 
 #include "PokeInfo.hpp"

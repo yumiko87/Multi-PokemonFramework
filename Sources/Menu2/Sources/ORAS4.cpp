@@ -4,8 +4,7 @@
 
 using namespace CTRPluginFramework;
 
-namespace ORAS
-{
+namespace ORAS {
     void IsRenamable(MenuEntry *entry) {
         static const u32 address = Gen6::Auto(0x4EA990, 0x4EA998);
         static u32 data[1] = {0xE3A00001};
@@ -87,7 +86,7 @@ namespace ORAS
         static u32 original[1] = {0xE92D4070};
         static u32 data[2][7][1] =
         {
-            {{0xEA006283}, {0xEA00624B}, {0xEAF2032B}, {0xEAF20325}, {0xEAF202EA}, {0xEAF202E4}, {0xEAF20331}}, 
+            {{0xEA006283}, {0xEA00624B}, {0xEAF2032B}, {0xEAF20325}, {0xEAF202EA}, {0xEAF202E4}, {0xEAF20331}},
             {{0xEA006278}, {0xEA006240}, {0xEAF20308}, {0xEAF20300}, {0xEAF202D4}, {0xEAF202CC}, {0xEAF20310}}
         };
 

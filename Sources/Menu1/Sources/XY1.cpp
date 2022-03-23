@@ -5,6 +5,146 @@
 using namespace CTRPluginFramework;
 
 namespace XY {
+    static const u32 party[6][2] =
+    {
+        {0x81FB284, 0x81FB624},
+        {0x81FB288, 0x81FB628},
+        {0x81FB28C, 0x81FB62C},
+        {0x81FB290, 0x81FB630},
+        {0x81FB294, 0x81FB634},
+        {0x81FB298, 0x81FB638}
+    };
+
+    static const u32 opponent[6][2] =
+    {
+        {0x81FB2A0, 0x81FB640},
+        {0x81FB2A4, 0x81FB644},
+        {0x81FB2A8, 0x81FB648},
+        {0x81FB2AC, 0x81FB64C},
+        {0x81FB2B0, 0x81FB650},
+        {0x81FB2B4, 0x81FB654}
+    };
+
+    static int statOption, baseIndex, boostsIndex;
+    static u16 baseVals[5];
+    static u8 boostVals[7];
+
+    void StatisticsKB(MenuEntry *entry) {
+        static const StringVector init = {"Base", "Boosts"}, base = {"Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed"}, boosts = {"Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed", "Accuracy", "Evasiveness"};
+        u16 vals[2];
+
+        if (Gen6::IsInBattle()) {
+            Start:
+            KeyboardPlus keyboard;
+            keyboard.SetKeyboard(entry->Name() + ":", true, init, statOption);
+
+            if (statOption == 0) {
+                Base:
+                keyboard.SetKeyboard(entry->Name() + ":", true, base, baseIndex);
+
+                if (baseIndex != -1) {
+                    if (KB<u16>(base[baseIndex] + ":", true, false, 3, vals[0], 0, 1, 999, KeyboardCallback))
+                        baseVals[baseIndex] = vals[0];
+
+                    else goto Base;
+                }
+
+                else goto Start;
+            }
+
+            else if (statOption == 1) {
+                Boosts:
+                keyboard.SetKeyboard(entry->Name() + ":", true, boosts, boostsIndex);
+
+                if (boostsIndex != -1) {
+                    if (KB<u16>(boosts[boostsIndex] + ":", true, false, 1, vals[1], 0, 0, 6, KeyboardCallback))
+                        boostVals[boostsIndex] = vals[1] + 6;
+
+                    else goto Boosts;
+                }
+
+                else goto Start;
+            }
+        }
+    }
+
+    void Statistics(MenuEntry *entry) {
+        if (Gen6::IsInBattle()) {
+            for (int i = 0; i < 1; i++) {
+                for (int j = 0; j < 2; j++) {
+                    if (Process::Read32(party[i][j], data32) && data32 != 0) {
+                        if (Process::Read32(party[i][j], offset32)) {
+                            for (int k = 0; k < 5; k++) {
+                                if (baseVals[k] != 0) {
+                                    Process::Write16(offset32 + 0xF6 + (k * 2), baseVals[k]);
+                                }
+                            }
+
+                            for (int l = 0; l < 7; l++) {
+                                if (boostVals[l] != 0) {
+                                    Process::Write8(offset32 + 0x104 + (l * 1), boostVals[l]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    static int invincIndex;
+    static u16 healthVals;
+    static u8 staminaVals;
+
+    void InvincibilityKB(MenuEntry *entry) {
+        static const StringVector options = {"Health", "Stamina"};
+        u16 val; u8 val2;
+
+        if (Gen6::IsInBattle()) {
+            Start:
+            KeyboardPlus keyboard;
+            keyboard.SetKeyboard(entry->Name() + ":", true, options, invincIndex);
+
+            if (invincIndex == 0) {
+                if (KB<u16>("Health:", true, false, 3, val, 0, 1, 999, KeyboardCallback))
+                    healthVals = val;
+
+                else goto Start;
+            }
+
+            else if (invincIndex == 1) {
+                if (KB<u8>("Stamina:", true, false, 2, val2, 0, 1, 99, KeyboardCallback))
+                    staminaVals = val2;
+
+                else goto Start;
+            }
+        }
+    }
+
+    void Invincibility(MenuEntry *entry) {
+        if (Gen6::IsInBattle()) {
+            for (int i = 0; i < 1; i++) {
+                for (int j = 0; j < 2; j++) {
+                    if (Process::Read32(party[i][j], data32) && data32 != 0) {
+                        if (Process::Read32(party[i][j], offset32)) {
+                            for (int k = 0; k < 2; k++) {
+                                if (healthVals != 0) {
+                                    Process::Write16(offset32 + 0x10 - (k * 2), healthVals);
+                                }
+                            }
+
+                            for (int l = 0; l < 4; l++) {
+                                if (staminaVals != 0) {
+                                    Process::Write16(offset32 + 0x11E + (l * 0xE), (staminaVals << 8) | staminaVals);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     void AccessBag(MenuEntry *entry) {
         static const u32 pointer = 0x8000158;
 
@@ -114,7 +254,7 @@ namespace XY {
     static int legendaryIndex;
 
     void RematchLegendariesKB(MenuEntry *entry) {
-        static const vector<string> options = {"Mewtwo", Gen6::Name("Xerneas", "Yveltal"), "Zygarde"};
+        static const StringVector options = {"Mewtwo", Gen6::Name("Xerneas", "Yveltal"), "Zygarde"};
         KeyboardPlus keyboard;
         keyboard.SetKeyboard(entry->Name() + ":", true, options, legendaryIndex);
     }
@@ -181,6 +321,7 @@ namespace XY {
                 }
             }
         }
+
         return false;
     }
 
@@ -197,7 +338,7 @@ namespace XY {
                     last = ProcessPlus::Read16(pointerOffset + 4);
                     unsigned int encOffset = zoOffset + ProcessPlus::Read32(zoOffset + 0x10) + byteJump;
 
-                    // Make sure the table for the DexNav is exactly the same as the one used for normal encounters	
+                    // Make sure the table for the DexNav is exactly the same as the one used for normal encounters
                     if (group == Group::ORAS && updateRadar) {
                         Process::CopyMemory((void *) (0x16B3DF40 + ProcessPlus::Read32(0x16B3DF40 + 4 + ProcessPlus::Read16(pointerOffset + 4) * 4) + byteJump), (void *) encOffset, 0xF4);
                     }
@@ -229,12 +370,11 @@ namespace XY {
                             }
                         }
                     }
+
                     return;
                 }
 
-                else {
-                    last = 0xFFFF;
-                }
+                else last = 0xFFFF;
             }
         }
     }
@@ -248,7 +388,7 @@ namespace XY {
 
         if (pokeID > 0) {
             if (keyboard.SetKeyboard("Form:", true, Gen6::Forms(pokeID), form) != -1) {
-                InitPokemon(pokeID, form, Gen6::Value(false, true));
+                InitPokemon(pokeID, form, Value(false, true));
             }
         }
     }

@@ -55,9 +55,7 @@ namespace USUM {
             return;
         }
 
-        else {
-            Message::Warning();
-        }
+        else Message::Warning();
     }
 
     void CameraZoomOut(MenuEntry *entry) {

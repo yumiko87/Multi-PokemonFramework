@@ -3,6 +3,11 @@
 using namespace CTRPluginFramework;
 
 namespace XY {
+    void StatisticsKB(MenuEntry *entry);
+    void Statistics(MenuEntry *entry);
+    void InvincibilityKB(MenuEntry *entry);
+    void Invincibility(MenuEntry *entry);
+
     void AccessBag(MenuEntry *entry);
     void InfiniteMegaEvolution(MenuEntry *entry);
 

@@ -9,8 +9,8 @@ namespace CTRPluginFramework {
     extern u16 spwnSpecies;
     extern u8 spawnLv, spwnForm;
 
-    static vector<string> ListOfForms(int pokeNo) {
-        vector<string> options;
+    static StringVector ListOfForms(int pokeNo) {
+        StringVector options;
 
         switch (pokeNo) {
             case 3:   // Venusaur
@@ -72,7 +72,7 @@ namespace CTRPluginFramework {
                 break;
 
             case 479: // Rotom
-                options = {"Normal", "Heat", "Wash", "Frost", "Fan", "Mow"}; 
+                options = {"Normal", "Heat", "Wash", "Frost", "Fan", "Mow"};
                 break;
 
             case 487: // Giratina
@@ -84,7 +84,7 @@ namespace CTRPluginFramework {
                 break;
 
             case 493: // Arceus
-                options = {"Normal", "Fighting", "Flying", "Poison", "Ground", "Rock", "Bug", "Ghost", "Steel", "Fire", "Water", "Grass", "Electric", "Psychic", "Ice", "Dragon", "Dark", "Fairy"}; 
+                options = {"Normal", "Fighting", "Flying", "Poison", "Ground", "Rock", "Bug", "Ghost", "Steel", "Fire", "Water", "Grass", "Electric", "Psychic", "Ice", "Dragon", "Dark", "Fairy"};
                 break;
 
             case 550: // Basculin
@@ -125,7 +125,7 @@ namespace CTRPluginFramework {
             case 664: // Scatterbug
             case 665: // Spewpa
             case 666: // Vivillon
-                options = {"Icy Snow", "Polar", "Tundra", "Continental", "Garden", "Elegant", "Meadow", "Modern", "Marine", "Archipelago", "High-Plains", "Sandstorm", "River", "Monsoon", "Savannah", "Sun", "Ocean", "Jungle", "Fancy", "Poke Ball"}; 
+                options = {"Icy Snow", "Polar", "Tundra", "Continental", "Garden", "Elegant", "Meadow", "Modern", "Marine", "Archipelago", "High-Plains", "Sandstorm", "River", "Monsoon", "Savannah", "Sun", "Ocean", "Jungle", "Fancy", "Poke Ball"};
                 break;
 
             case 669: // Flabébé
@@ -888,13 +888,13 @@ namespace CTRPluginFramework {
     extern int pkmnID;
 
     struct Pokemon {
-        vector<string> name;
+        StringVector name;
         vector<int> choiceNo;
     };
 
     void SelectAPokemon(MenuEntry *entry);
 
-    static vector<string> allNatures = {
+    static const StringVector allNatures = {
         "Hardy",
         "Lonely",
         "Brave",
@@ -1162,7 +1162,7 @@ namespace CTRPluginFramework {
     extern int abilityID;
 
     struct Ability {
-        vector<string> name;
+        StringVector name;
         vector<int> choiceNo;
     };
 
@@ -2134,7 +2134,7 @@ namespace CTRPluginFramework {
     extern int heldItemID;
 
     struct HeldItem {
-        vector<string> name;
+        StringVector name;
         vector<int> choiceNo;
     };
 
@@ -2889,11 +2889,366 @@ namespace CTRPluginFramework {
     extern int moveID;
 
     struct Moves {
-        vector<string> name;
+        StringVector name;
         vector<int> choiceNo;
     };
 
     void SelectAMove(MenuEntry *entry);
+
+    struct Origins {
+        const char *name;
+        int choiceNo;
+        int generationFrom;
+    };
+
+    static const Origins allOrigins[30] = {
+        {"Sun", 30, 7},
+        {"Moon", 31, 7},
+        {"Ultra Sun", 32, 7},
+        {"Ultra Moon", 33, 7},
+        {"X", 24, 6},
+        {"Y", 25, 6},
+        {"Omega Ruby", 27, 6},
+        {"Alpha Sapphire", 26, 6},
+        {"Black", 21, 5},
+        {"White", 20, 5},
+        {"Black 2", 23, 5},
+        {"White 2", 22, 5},
+        {"Diamond", 10, 4},
+        {"Pearl", 11, 4},
+        {"Platinum", 12, 4},
+        {"HeatGold", 7, 4},
+        {"SoulSilver", 8, 4},
+        {"Ruby", 2, 3},
+        {"Sapphire", 1, 3},
+        {"Emerald", 3, 3},
+        {"FireRed", 4, 2},
+        {"LeafGreen", 5, 2},
+        {"Colosseum/XD", 15, 3},
+        {"Gold", 39, 2},
+        {"Silver", 40, 2},
+        {"Crystal", 41, 2},
+        {"Red", 35, 1},
+        {"Blue [INT]/Green [JP]", 36, 1},
+        {"Blue [JP]", 37, 1},
+        {"Yellow", 38, 1}
+    };
+
+    struct Locations {
+        int choiceNo;
+        const char *name;
+    };
+
+    static const Locations allLocs1[106] = {
+        {2, "Mystery Zone"},
+        {4, "Faraway Place"},
+        {6, "Vaniville Town"},
+        {8, "Route 1"},
+        {9, "Vaniville Pathway"},
+        {10, "Aquacorde Town"},
+        {12, "Route 2"},
+        {13, "Avance Trail"},
+        {14, "Santalune Forest"},
+        {16, "Route 3"},
+        {17, "Ouvert Way"},
+        {18, "Santalune City"},
+        {20, "Route 4"},
+        {21, "Parterre Way"},
+        {22, "Lumiose City"},
+        {24, "Prism Tower"},
+        {26, "Lysandre Labs"},
+        {28, "Route 5"},
+        {29, "Versant Road"},
+        {30, "Camphrier Town"},
+        {32, "Shabboneau Castle"},
+        {34, "Route 6"},
+        {35, "Palais Lane"},
+        {36, "Parfum Palace"},
+        {38, "Route 7"},
+        {39, "Rivière Walk"},
+        {40, "Cyllage City"},
+        {42, "Route 8"},
+        {43, "Muraille Coast"},
+        {44, "Ambrette Town"},
+        {46, "Route 9"},
+        {47, "Spikes Passage"},
+        {48, "Battle Chateau"},
+        {50, "Route 10"},
+        {51, "Menhir Trail"},
+        {52, "Geosenge Town"},
+        {54, "Route 11"},
+        {55, "Miroir Way"},
+        {56, "Reflection Cave"},
+        {58, "Shalour City"},
+        {60, "Tower of Mastery"},
+        {62, "Route 12"},
+        {63, "Fourrage Road"},
+        {64, "Coumarine City"},
+        {66, "Route 13"},
+        {67, "Lumiose Badlands"},
+        {68, "Route 14"},
+        {69, "Laverre Nature Trail"},
+        {70, "Laverre City"},
+        {72, "Poké Ball Factory"},
+        {74, "Route 15"},
+        {75, "Brun Way"},
+        {76, "Dendemille Town"},
+        {78, "Route 16"},
+        {79, "Mélancolie Path"},
+        {82, "Frost Cavern"},
+        {84, "Route 17"},
+        {85, "Mamoswine Road"},
+        {86, "Anistar City"},
+        {88, "Route 18"},
+        {89, "Vallée Étroite Way"},
+        {90, "Couriway Town"},
+        {92, "Route 19"},
+        {93, "Grande Vallée Way"},
+        {94, "Snowbelle City"},
+        {96, "Route 20"},
+        {97, "Winding Woods"},
+        {98, "Pokémon Village"},
+        {100, "Route 21"},
+        {101, "Dernière Way"},
+        {102, "Route 22"},
+        {103, "Détourner Way"},
+        {104, "Victory Road"},
+        {106, "Pokémon League"},
+        {108, "Kiloude City"},
+        {110, "Battle Maison"},
+        {112, "Azure Bay"},
+        {114, "Dendemille Gate"},
+        {116, "Couriway Gate"},
+        {118, "Ambrette Gate"},
+        {120, "Lumiose Gate"},
+        {122, "Shalour Gate"},
+        {124, "Coumarine Gate"},
+        {126, "Laverre Gate"},
+        {128, "Anistar Gate"},
+        {130, "Snowbelle Gate"},
+        {132, "Glittering Cave"},
+        {134, "Connecting Cave"},
+        {135, "Zubat Roost"},
+        {136, "Kalos Power Plant"},
+        {138, "Team Flare Secret HQ"},
+        {140, "Terminus Cave"},
+        {142, "Lost Hotel"},
+        {144, "Chamber of Emptiness"},
+        {146, "Sea Spirit’s Den"},
+        {148, "Friend Safari"},
+        {150, "Blazing Chamber"},
+        {152, "Flood Chamber"},
+        {154, "Ironworks Chamber"},
+        {156, "Dragonmark Chamber"},
+        {158, "Radiant Chamber"},
+        {160, "Pokémon League Gate"},
+        {162, "Lumiose Station"},
+        {164, "Kiloude Station"},
+        {166, "Ambrette Aquarium"},
+        {168, "Unknown Dungeon"}
+    };
+
+    static const Locations allLocs2[93] = {
+        {170, "Littleroot Town"},
+        {172, "Oldale Town"},
+        {174, "Dewford Town"},
+        {176, "Lavaridge Town"},
+        {178, "Fallarbor Town"},
+        {180, "Verdanturf Town"},
+        {182, "Pacifidlog Town"},
+        {184, "Petalburg City"},
+        {186, "Slateport City"},
+        {188, "Mauville City"},
+        {190, "Rustboro City"},
+        {192, "Fortree City"},
+        {194, "Lilycove City"},
+        {196, "Mossdeep City"},
+        {198, "Sootopolis City"},
+        {200, "Ever Grande City"},
+        {202, "Pokémon League"},
+        {204, "Route 101"},
+        {206, "Route 102"},
+        {208, "Route 103"},
+        {210, "Route 104"},
+        {212, "Route 105"},
+        {214, "Route 106"},
+        {216, "Route 107"},
+        {218, "Route 108"},
+        {220, "Route 109"},
+        {222, "Route 110"},
+        {224, "Route 111"},
+        {226, "Route 112"},
+        {228, "Route 113"},
+        {230, "Route 114"},
+        {232, "Route 115"},
+        {234, "Route 116"},
+        {236, "Route 117"},
+        {238, "Route 118"},
+        {240, "Route 119"},
+        {242, "Route 120"},
+        {244, "Route 121"},
+        {246, "Route 122"},
+        {248, "Route 123"},
+        {250, "Route 124"},
+        {252, "Route 125"},
+        {254, "Route 126"},
+        {256, "Route 127"},
+        {258, "Route 128"},
+        {260, "Route 129"},
+        {262, "Route 130"},
+        {264, "Route 131"},
+        {266, "Route 132"},
+        {268, "Route 133"},
+        {270, "Route 134"},
+        {272, "Meteor Falls"},
+        {274, "Rusturf Tunnel"},
+        {276, "???"},
+        {278, "Desert Ruins"},
+        {280, "Granite Cave"},
+        {282, "Petalburg Woods"},
+        {284, "Mt. Chimney"},
+        {286, "Jagged Pass"},
+        {288, "Fiery Path"},
+        {290, "Mt. Pyre"},
+        {292, "Team Aqua Hideout"},
+        {294, "Seafloor Cavern"},
+        {296, "Cave of Origin"},
+        {298, "Victory Road"},
+        {300, "Shoal Cave"},
+        {302, "New Mauville"},
+        {304, "Sea Mauville"},
+        {306, "Island Cave"},
+        {308, "Ancient Tomb"},
+        {310, "Sealed Chamber"},
+        {312, "Scorched Slab"},
+        {314, "Team Magma Hideout"},
+        {316, "Sky Pillar"},
+        {318, "Battle Resort"},
+        {320, "Southern Island"},
+        {322, "S.S. Tidal"},
+        {324, "Safari Zone"},
+        {326, "Mirage Forest"},
+        {328, "Mirage Cave"},
+        {330, "Mirage Island"},
+        {332, "Mirage Mountain"},
+        {334, "Trackless Forest"},
+        {336, "Pathless Plain"},
+        {338, "Nameless Cavern"},
+        {340, "Fabled Cave"},
+        {342, "Gnarled Den"},
+        {344, "Crescent Isle"},
+        {346, "Secret Islet"},
+        {348, "Soaring in the sky"},
+        {350, "Secret Shore"},
+        {352, "Secret Meadow"},
+        {354, "Secret Base"}
+    };
+
+    struct Balls {
+        int choiceNo;
+        const char *name;
+        int generationFrom;
+    };
+
+    static const Balls allBalls[26] = {
+        {4, "Poké Ball", 3},
+        {3, "Great Ball", 3},
+        {2, "Ultra Ball", 3},
+        {26, "Beast Ball", 7},
+        {16, "Cherish Ball", 4},
+        {7, "Dive Ball", 3},
+        {25, "Dream Ball", 5},
+        {13, "Dusk Ball", 4},
+        {17, "Fast Ball", 4},
+        {22, "Friend Ball", 4},
+        {14, "Heal Ball", 4},
+        {20, "Heavy Ball", 4},
+        {18, "Level Ball", 4},
+        {21, "Love Ball", 4},
+        {19, "Lure Ball", 4},
+        {11, "Luxury Ball", 3},
+        {1, "Master Ball", 3},
+        {23, "Moon Ball", 4},
+        {8, "Nest Ball", 3},
+        {6, "Net Ball", 3},
+        {12, "Premier Ball", 3},
+        {15, "Quick Ball", 4},
+        {9, "Repeat Ball", 3},
+        {5, "Safari Ball", 3},
+        {24, "Sport Ball", 4},
+        {10, "Timer Ball", 3}
+    };
+
+    static const StringVector rib0Ribbons = {
+        {"Champion Kalos"},
+        {"Champion G3"},
+        {"Champion Sinnoh"},
+        {"Best Friends"},
+        {"Training"},
+        {"Battler Skillful"},
+        {"Battler Expert"},
+        {"Effort"}
+    };
+
+    static const StringVector rib1Ribbons = {
+        {"Alert"},
+        {"Shock"},
+        {"Downcast"},
+        {"Careless"},
+        {"Relax"},
+        {"Snooze"},
+        {"Smile"},
+        {"Gorgeous"}
+    };
+
+    static const StringVector rib2Ribbons = {
+        {"Royal"},
+        {"Gorgeous Royal"},
+        {"Artist"},
+        {"Footprint"},
+        {"Record"},
+        {"Legend"},
+        {"Country"},
+        {"National"}
+    };
+
+    static const StringVector rib3Ribbons = {
+        {"Earth"},
+        {"World"},
+        {"Classic"},
+        {"Premier"},
+        {"Event"},
+        {"Birthday"},
+        {"Special"},
+        {"Souvenir"}
+    };
+
+    static const StringVector rib4Ribbons = {
+        {"Wishing"},
+        {"Champion Battle"},
+        {"Champion Regional"},
+        {"Champion National"},
+        {"Champion World"},
+        {"Has Contest Memory Ribbon"},
+        {"Has Battle Memory Ribbon"},
+        {"Champion G6 Hoenn"}
+    };
+
+    static const StringVector rib5Ribbons = {
+        {"Contest Star"},
+        {"Master Coolness"},
+        {"Master Beauty"},
+        {"Master Cuteness"},
+        {"Master Cleverness"},
+        {"Master Toughness"},
+        {"Champion Alola"},
+        {"Battle Royale"}
+    };
+
+    static const StringVector rib6Ribbons = {
+        {"Battle Tree Great"},
+        {"Battle Tree Master"}
+    };
 }
 
 #endif

@@ -27,15 +27,13 @@ namespace XY {
 
             if (!entry->IsActivated() || !Controller::GetKeysDown()) {
                 Recover:
-                    for (int l = 0; l < 2; l++) {
-                        Process::Patch(address[l], original[l], 8);
-                    }
+                for (int l = 0; l < 2; l++) {
+                    Process::Patch(address[l], original[l], 8);
+                }
             }
         }
 
-        else {
-            goto Recover;
-        }
+        else goto Recover;
     }
 
     void BypassWalls(MenuEntry *entry) {
@@ -58,15 +56,13 @@ namespace XY {
 
             if (!entry->IsActivated() || !Controller::GetKeysDown()) {
                 Recover:
-                    for (int l = 0; l < 2; l++) {
-                        Process::Patch(address[l], original[l], 4);
-                    }
+                for (int l = 0; l < 2; l++) {
+                    Process::Patch(address[l], original[l], 4);
+                }
             }
         }
 
-        else {
-            goto Recover;
-        }
+        else goto Recover;
     }
 
     void FlyAnywhere(MenuEntry *entry) {
@@ -119,15 +115,14 @@ namespace XY {
     static float coords[2] = {0, 0};
 
     void WarperKB(MenuEntry *entry) {
-        static vector<string> options;
+        static StringVector options;
+        KeyboardPlus keyboard;
 
         if (options.empty()) {
             for (const Locations &nickname:locations) {
                 options.push_back(nickname.name);
             }
         }
-
-        KeyboardPlus keyboard;
 
         if (keyboard.SetKeyboard(entry->Name() + ":", true, options, locID) != -1) {
             place = locations[locID].value;

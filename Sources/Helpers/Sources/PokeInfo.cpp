@@ -21,6 +21,7 @@ namespace CTRPluginFramework {
         if (group == Group::USUM) {
             pokePointer = 0x33015AB0;
         }
+
         return pokePointer;
     }
 

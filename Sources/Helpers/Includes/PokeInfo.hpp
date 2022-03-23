@@ -37,18 +37,12 @@ namespace CTRPluginFramework {
         u8  st2;
         u8  st3;
         u8  st4;
-        u8  rib0;
-        u8  rib1;
-        u8  rib2;
-        u8  rib3;
-        u8  rib4;
-        u8  rib5;
+        u8  ribbons[6];
         u8  unused1[2];
         u8  ribbonCountMemoryContest;
         u8  ribbonCountMemoryBattle;
-        u16 distByte;
-        u32 formArgument;
-        u8  unused2[2];
+        u8  superTrainingFlags;
+        u8  unused2[5];
 
         // Block B
         u8  nickname[26];
@@ -99,7 +93,7 @@ namespace CTRPluginFramework {
         u8  enjoyment;
 
         // Block D
-        u8  ogTrnerName[24];
+        u8  ogTrnerName[26];
         u8  ogTrnerFriendship;
         u8  ogTrnerAffection;
         u8  ogTrnerIntensity;
@@ -116,8 +110,8 @@ namespace CTRPluginFramework {
         u16 eggLocation;
         u16 metLocation;
         u8  ball;
-        u8  metLevelogTrnerGender;
-        u8  groundTile;
+        u8  metLevel;
+        u8  fatefulEnc;
         u8  version;
         u8  country;
         u8  region;
@@ -156,19 +150,12 @@ namespace CTRPluginFramework {
         u8  st2;
         u8  st3;
         u8  st4;
-        u8  rib0;
-        u8  rib1;
-        u8  rib2;
-        u8  rib3;
-        u8  rib4;
-        u8  rib5;
-        u8  rib6;
-        u8  unused1;
+        u8  ribbons[6];
+        u8  unused1[2];
         u8  ribbonCountMemoryContest;
         u8  ribbonCountMemoryBattle;
-        u16 distByte;
-        u32 formArgument;
-        u8  unused2[2];
+        u8  superTrainingFlags;
+        u8  unused2[5];
 
         // Block B
         u8  nickname[26];
@@ -219,7 +206,7 @@ namespace CTRPluginFramework {
         u8  enjoyment;
 
         // Block D
-        u8  ogTrnerName[24];
+        u8  ogTrnerName[26];
         u8  ogTrnerFriendship;
         u8  ogTrnerAffection;
         u8  ogTrnerIntensity;
@@ -236,7 +223,7 @@ namespace CTRPluginFramework {
         u16 eggLocation;
         u16 metLocation;
         u8  ball;
-        u8  metLevelogTrnerGender;
+        u8  metLevel;
         u8  hyperTrainFlags;
         u8  version;
         u8  country;
@@ -244,15 +231,6 @@ namespace CTRPluginFramework {
         u8  consoleRegion;
         u8  language;
         u8  unused8[4];
-    };
-
-    enum Stats {
-        HP,
-        Atk,
-        DEF,
-        SPE,
-        SPA,
-        SPD
     };
 
     u32 GetPokePointer(void);
@@ -266,7 +244,7 @@ namespace CTRPluginFramework {
 
     void Unshuffle(u8 *shuffled, u8 *poke, u32 sv);
 
-    template <class PKX> 
+    template <class PKX>
     void DecryptPokemon(u8 *ekm, PKX *poke) {
         // Encryption key from first 4 bytes of ekm
         u32 pokeVal = *(u32*)ekm;
@@ -323,8 +301,9 @@ namespace CTRPluginFramework {
         for (u8 i = 4; i < 232 / 2; i++) {
             chksum += *((u16*)(poke) + i);
         }
+
         return chksum;
-    } 
+    }
 
     template <class PKX>
     bool IsValid(PKX *poke)  {
@@ -383,7 +362,7 @@ namespace CTRPluginFramework {
 
         // Write array data to game
         if (Process::Patch(pokePointer, ekm, 232)) {
-            return true; 
+            return true;
         }
 
         MessageBox("Failed to encrypt or write data!", DialogType::DialogOk)();
@@ -409,29 +388,174 @@ namespace CTRPluginFramework {
     }
 
     template<class PKX>
-    void SetForm(PKX *poke, int value) {
-        poke->miscData = (poke->miscData & 0x7) | (value << 3);
+    void SetIsNicknamed(PKX *poke, int option) {
+        poke->iv32 = ((poke->iv32 & 0x7FFFFFFFu) | (option ? 0x80000000u : 0u));
+    }
+
+    template<class PKX>
+    void SetNickname(PKX *poke, String name) {
+        Process::WriteString((u32)poke->nickname, name, StringFormat::Utf16);
+    }
+
+    template<class PKX>
+    void SetGender(PKX *poke, int option) {
+        poke->miscData = ((poke->miscData & ~0x6) | (option << 1));
+    }
+
+    template<class PKX>
+    bool SetExp(PKX *poke, u32 amount) {
+        if (amount <= 1640000) {
+            poke->exp = amount;
+            return true;
+        }
+
+        return false;
     }
 
     template <class PKX>
-    int SetNature(PKX *poke, int index) {
-        return poke->nature = index;
+    int SetNature(PKX *poke, int option) {
+        return poke->nature = option;
+    }
+
+    template<class PKX>
+    void SetForm(PKX *poke, int option) {
+        poke->miscData = (poke->miscData & 0x7) | (option << 3);
+    }
+
+    template<class PKX>
+    void SetHeldItem(PKX *poke, int id) {
+        poke->heldItem = id;
     }
 
     template <class PKX>
-    void SetFriendship(PKX *poke, u8 amount) {
+    void SetAbility(PKX *poke, int option) {
+        poke->ability = option;
+        // poke->abilityNumber = ((poke->abilityNumber & ~7) | (option & 7));
+    }
+
+    template <class PKX>
+    void SetFriendship(PKX *poke, int amount) {
         poke->ogTrnerFriendship = amount;
     }
 
+    template<class PKX>
+    void SetLanguage(PKX *poke, int languageID) {
+        poke->language = languageID;
+    }
+
+    template<class PKX>
+    void SetIsEgg(PKX *poke, int option) {
+        poke->iv32 = (poke->iv32 & ~0x40000000u) | (option ? 0x40000000u : 0u);
+    }
+
+    template<class PKX>
+    void SetPokerus(PKX *poke, int days, int strain, bool isCured) {
+        if (!isCured) {
+            poke->pkrus = ((poke->pkrus & ~0xF) | days);
+            poke->pkrus = ((poke->pkrus & 0xF) | strain << 4);
+            return;
+        }
+
+        poke->pkrus = 0;
+    }
+
+    template<class PKX>
+    void SetCountry(PKX *poke, int countryID) {
+        poke->country = countryID;
+    }
+
+    template<class PKX>
+    void SetRegion(PKX *poke, int regionID) {
+        poke->region = regionID;
+    }
+
+    template<class PKX>
+    void SetConsRegion(PKX *poke, int consoleRegID) {
+        poke->consoleRegion = consoleRegID;
+    }
+
+    template<class PKX>
+    void SetOrigin(PKX *poke, int ver) {
+        poke->version = ver;
+    }
+
+    template<class PKX>
+    void SetMetLocation(PKX *poke, int loc, bool isEgg) {
+        if (isEgg) {
+            poke->eggLocation = loc;
+            return;
+        }
+
+        else {
+            poke->metLocation = loc;
+        }
+    }
+
+    template<class PKX>
+    void SetBall(PKX *poke, int option) {
+        poke->ball = option;
+    }
+
+    template<class PKX>
+    void SetMetLevel(PKX *poke, int value) {
+        poke->metLevel = ((poke->metLevel & 0x80) | value);
+    }
+
+    template<class PKX>
+    void SetMetDate(PKX *poke, bool setYear, int year, bool setMonth, int month, bool setDay, int day, bool isEgg) {
+        if (setYear) {
+            if (isEgg) {
+                poke->eggYear = year;
+                return;
+            }
+
+            poke->metYear = year;
+        }
+
+        else if (setMonth) {
+            if (isEgg) {
+                poke->eggMonth = month;
+                return;
+            }
+
+            poke->metMonth = month;
+        }
+
+        else if (setDay) {
+            if (isEgg) {
+                poke->eggYearDay = day;
+                return;
+            }
+
+            poke->metDay = day;
+        }
+
+        else return;
+    }
+
+    template<class PKX>
+    void SetIsFatefulEnc(PKX *poke, int option) {
+        poke->fatefulEnc = ((poke->fatefulEnc & ~0x1) | (option ? 1 : 0));
+    }
+
     template <class PKX>
-    void SetEV(PKX *poke, Stats index, int value) {
+    void SetIV(PKX *poke, int index, int value) {
+        if (value > 31) {
+            return;
+        }
+
+        poke->iv32 = (poke->iv32 & ~(0x1F << (5 * index))) | (value << (5 * index));
+    }
+
+    template <class PKX>
+    void SetEV(PKX *poke, int index, int value) {
         if (value > 252) {
             return;
         }
 
-        int total;
+        static int total;
 
-        for (int i = 0; i < poke->evs.size(); i++) {
+        for (int i = 0; i < 6; i++) {
             total += poke->evs[i];
 
             if (total > 510) {
@@ -443,12 +567,120 @@ namespace CTRPluginFramework {
     }
 
     template <class PKX>
-    void SetIV(PKX *poke, Stats index, int value) {
-        if (value > 31) {
+    void SetContestStats(PKX *poke, int index, int value) {
+        if (value > 255) {
             return;
         }
 
-        poke->ivs = (poke->iv32 & ~(0x1F << (5 * index))) | (value << (5 * index));
+        switch (index) {
+            case 0:
+                poke->cntCool = value;
+                break;
+            case 1:
+                poke->cntBeauty = value;
+                break;
+            case 2:
+                poke->cntCute = value;
+                break;
+            case 3:
+                poke->cntSmart = value;
+                break;
+            case 4:
+                poke->cntTough = value;
+                break;
+            case 5:
+                poke->cntSheen = value;
+                break;
+        }
+    }
+
+    template <class PKX>
+    void SetMoves(PKX *poke, int index, int id, bool isRelearnable) {
+        if (!isRelearnable) {
+            switch (index) {
+                case 0:
+                    poke->move1 = id;
+                    break;
+                case 1:
+                    poke->move2 = id;
+                    break;
+                case 2:
+                    poke->move3 = id;
+                    break;
+                case 3:
+                    poke->move4 = id;
+                    break;
+            }
+            return;
+        }
+
+        else {
+            switch (index) {
+                case 0:
+                    poke->relearnMove1 = id;
+                    break;
+                case 1:
+                    poke->relearnMove2 = id;
+                    break;
+                case 2:
+                    poke->relearnMove3 = id;
+                    break;
+                case 3:
+                    poke->relearnMove4 = id;
+                    break;
+            }
+        }
+    }
+
+    template <class PKX>
+    void SetPPUps(PKX *poke, int index, int value) {
+        switch (index) {
+            case 0:
+                poke->move1PPUps = value;
+                break;
+            case 1:
+                poke->move2PPUps = value;
+                break;
+            case 2:
+                poke->move3PPUps = value;
+                break;
+            case 3:
+                poke->move4PPUps = value;
+                break;
+        }
+    }
+
+    template <class PKX>
+    void SetSID(PKX *poke, int value) {
+        if (value > 65535) {
+            return;
+        }
+
+        poke->secretID = value;
+    }
+
+    template <class PKX>
+    void SetTID(PKX *poke, int value) {
+        if (value > 65535) {
+            return;
+        }
+
+        poke->trainerID = value;
+    }
+
+    template <class PKX>
+    void SetOTName(PKX *poke, String name) {
+        Process::WriteString((u32)poke->ogTrnerName, name, StringFormat::Utf16);
+    }
+
+    template <class PKX>
+    void SetLatestHandler(PKX *poke, String name) {
+        Process::WriteString((u32)poke->hiddnTrnerName, name, StringFormat::Utf16);
+    }
+
+    template <class PKX>
+    void SetRibbons(PKX *poke, int index, bool obtain, int option) {
+        poke->ribbons[index] = ((poke->ribbons[index] & ~(1 << option)) | (obtain ? 1 << option : 0));
     }
 }
 

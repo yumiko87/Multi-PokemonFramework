@@ -8,7 +8,7 @@ using namespace CTRPluginFramework;
 namespace SM {
     void PCBackup(MenuEntry *entry) {
         static const u32 address = 0x330D9838;
-        vector<string> listOfFiles, listOfFileNames;
+        StringVector listOfFiles, listOfFileNames;
         string extension = ".bin";
 
         Directory directory(bin);
@@ -24,6 +24,7 @@ namespace SM {
 
                 MessageBox("All backups have been erased.", DialogType::DialogOk, ClearScreen::Both)();
             }
+
             return;
         }
 
@@ -37,7 +38,7 @@ namespace SM {
         string fileName = timeStamp + extension;
 
         int choice;
-        static const vector<string> options = {"Export", "Import"};
+        static const StringVector options = {"Export", "Import"};
         KeyboardPlus keyboard;
         keyboard.SetKeyboard(entry->Name() + ":", true, options, choice);
 
@@ -101,7 +102,7 @@ namespace SM {
         static const u32 address[4] = {0x597878, 0x37E5E4, 0x374C3C, 0x5978A8};
         static u32 original[3][1] = {{0}, {0}, {0}};
         static u32 patch[37] = {
-            0xE92D400E, 0xE59F1074, 0xE5912000, 0xE3A03000, 0xE5813000, 0xE3A03C13, 0xE2833093, 0xE1520003, 0x03A04000, 0x11A04000, 0xE8BD800E, 0xE350000E, 0xEAF77958, 0xE92D400F, 0xE24DD010, 0xE3A00000, 0xE58D0000, 
+            0xE92D400E, 0xE59F1074, 0xE5912000, 0xE3A03000, 0xE5813000, 0xE3A03C13, 0xE2833093, 0xE1520003, 0x03A04000, 0x11A04000, 0xE8BD800E, 0xE350000E, 0xEAF77958, 0xE92D400F, 0xE24DD010, 0xE3A00000, 0xE58D0000,
             0xE58D0004, 0xE58D0008, 0xE58D000C, 0xE1A03000, 0xE1A02000, 0xE3A01C13, 0xE2811093, 0xE59F0018, 0xE5801000, 0xE59F0014, 0xE5900000, 0xEBF7D6DC, 0xE3A00002, 0xE28DD010, 0xE8BD800F, 0x00638000, 0x006740BC,
             0xEB0864A3, 0xEB088B18, 0x1AF77958
         };

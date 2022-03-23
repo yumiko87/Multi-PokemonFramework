@@ -5,12 +5,154 @@
 using namespace CTRPluginFramework;
 
 namespace USUM {
+    bool IsOnline = System::IsConnectedToInternet();
+
+    static const u32 party[6][2] =
+    {
+        {0x30000484, 0x3000746C},
+        {0x30000488, 0x30007470},
+        {0x3000048C, 0x30007474},
+        {0x30000490, 0x30007478},
+        {0x30000494, 0x3000747C},
+        {0x30000498, 0x30007480}
+    };
+
+    static const u32 opponent[6][2] =
+    {
+        {0x300004B4, 0x3000749C},
+        {0x300004B8, 0x300074A0},
+        {0x300004BC, 0x300074A4},
+        {0x300004C0, 0x300074A8},
+        {0x300004C4, 0x300074AC},
+        {0x300004C8, 0x300074B0}
+    };
+
+    static int statOption, baseIndex, boostsIndex;
+    static u16 baseVals[5];
+    static u8 boostVals[7];
+
+    void StatisticsKB(MenuEntry *entry) {
+        static const StringVector init = {"Base", "Boosts"}, base = {"Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed"}, boosts = {"Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed", "Accuracy", "Evasiveness"};
+        u16 vals[2];
+
+        if (Gen7::IsInBattle() && !IsOnline) {
+            Start:
+            KeyboardPlus keyboard;
+            keyboard.SetKeyboard(entry->Name() + ":", true, init, statOption);
+
+            if (statOption == 0) {
+                Base:
+                keyboard.SetKeyboard(entry->Name() + ":", true, base, baseIndex);
+
+                if (baseIndex != -1) {
+                    if (KB<u16>(base[baseIndex] + ":", true, false, 3, vals[0], 0, 1, 999, KeyboardCallback))
+                        baseVals[baseIndex] = vals[0];
+
+                    else goto Base;
+                }
+
+                else goto Start;
+            }
+
+            else if (statOption == 1) {
+                Boosts:
+                keyboard.SetKeyboard(entry->Name() + ":", true, boosts, boostsIndex);
+
+                if (boostsIndex != -1) {
+                    if (KB<u16>(boosts[boostsIndex] + ":", true, false, 1, vals[1], 0, 0, 6, KeyboardCallback))
+                        boostVals[boostsIndex] = vals[1] + 6;
+
+                    else goto Boosts;
+                }
+
+                else goto Start;
+            }
+        }
+    }
+
+    void Statistics(MenuEntry *entry) {
+        if (Gen7::IsInBattle() && !IsOnline) {
+            for (int i = 0; i < 1; i++) {
+                for (int j = 0; j < 2; j++) {
+                    if (Process::Read32(party[i][j], data32) && data32 != 0) {
+                        if (Process::Read32(party[i][j], offset32)) {
+                            for (int k = 0; k < 5; k++) {
+                                if (baseVals[k] != 0) {
+                                    Process::Write16(offset32 + 0x1DA + (k * 2), baseVals[k]);
+                                }
+                            }
+
+                            for (int l = 0; l < 7; l++) {
+                                if (boostVals[l] != 0) {
+                                    Process::Write8(offset32 + 0x1EA + (l * 1), boostVals[l]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    static int invincIndex;
+    static u16 healthVals;
+    static u8 staminaVals;
+
+    void InvincibilityKB(MenuEntry *entry) {
+        static const StringVector options = {"Health", "Stamina"};
+        u16 val; u8 val2;
+
+        if (Gen7::IsInBattle() && !IsOnline) {
+            Start:
+            KeyboardPlus keyboard;
+            keyboard.SetKeyboard(entry->Name() + ":", true, options, invincIndex);
+
+            if (invincIndex == 0) {
+                if (KB<u16>("Health:", true, false, 3, val, 0, 1, 999, KeyboardCallback))
+                    healthVals = val;
+
+                else goto Start;
+            }
+
+            else if (invincIndex == 1) {
+                if (KB<u8>("Stamina:", true, false, 2, val2, 0, 1, 99, KeyboardCallback))
+                    staminaVals = val2;
+
+                else goto Start;
+            }
+        }
+    }
+
+    void Invincibility(MenuEntry *entry) {
+        if (Gen7::IsInBattle() && !IsOnline) {
+            for (int i = 0; i < 1; i++) {
+                for (int j = 0; j < 2; j++) {
+                    if (Process::Read32(party[i][j], data32) && data32 != 0) {
+                        if (Process::Read32(party[i][j], offset32)) {
+                            for (int k = 0; k < 2; k++) {
+                                if (healthVals != 0) {
+                                    Process::Write16(offset32 + 0x10 - (k * 2), healthVals);
+                                }
+                            }
+
+                            for (int l = 0; l < 4; l++) {
+                                if (staminaVals != 0) {
+                                    Process::Write16(offset32 + 0x204 + (l * 0xE), (staminaVals << 8) | staminaVals);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     void HealthAlwaysFull(MenuEntry *entry) {
         static const u32 address[2] = {0x5BBBD4, 0x8099DC4};
         static u32 patch[15] = {0xE1D021B0, 0xE92D407C, 0xE59F2024, 0xE59F3024, 0xE2834018, 0xE4925004, 0xE4936004, 0xE1500005, 0x11500006, 0x03A01000, 0xE1530004, 0x1AFFFFF8, 0xE8BD807C, 0x30000404, 0x300073EC};
         static u32 original[1] = {0};
 
-        if (Gen7::IsInBattle()) {
+        if (Gen7::IsInBattle() && !IsOnline) {
             CRO::Toggle(address[1], true);
 
             if (entry->IsActivated()) {
@@ -40,7 +182,7 @@ namespace USUM {
         static u32 patch[11] = {0xE1A04000, 0xE92D4007, 0xE59F0018, 0xE2801018, 0xE4902004, 0xE1560002, 0x03A04000, 0xE1510000, 0x1AFFFFFA, 0xE8BD8007, 0x300073EC};
         static u32 original[1] = {0};
 
-        if (Gen7::IsInBattle()) {
+        if (Gen7::IsInBattle() && !IsOnline) {
             CRO::Toggle(address[1], true);
 
             if (entry->IsActivated()) {
@@ -89,7 +231,7 @@ namespace USUM {
         static u32 patch[12] = {0xE59D0000, 0xE92D401E, 0xE59A1008, 0xE2813004, 0xE281401C, 0xE4932004, 0xE1500002, 0x03A01001, 0x058D1018, 0xE1530004, 0x1AFFFFF9, 0xE8BD801E};
         static u32 original[1] = {0};
 
-        if (Gen7::IsInBattle()) {
+        if (Gen7::IsInBattle() && !IsOnline) {
                 CRO::Toggle(address[2], true);
 
             if (entry->IsActivated()) {
@@ -130,12 +272,12 @@ namespace USUM {
         static const u32 address[2] = {0x5BBD60, 0x29B86C};
         static u32 original[1] = {0};
         static u32 patch[25] = {
-            0xE92D401F, 0xE59F0018, 0xE150000E, 0x18BD801F, 0xE59F0010, 0xFA000005, 0xE59F000C, 0xFA000003, 0xE8BD801F, 0x0071C600, 0x30000404, 0x300073EC, 
+            0xE92D401F, 0xE59F0018, 0xE150000E, 0x18BD801F, 0xE59F0010, 0xFA000005, 0xE59F000C, 0xFA000003, 0xE8BD801F, 0x0071C600, 0x30000404, 0x300073EC,
             0x1C03B53F, 0x68013318, 0xD00B2900, 0x31F531F5, 0x1DE5A406, 0x2AFF7822, 0x700AD000, 0x34013101, 0xD1F742A5, 0x42833004, 0xBD3FD1ED, 0x0C0C0C0C,
             0x000C0C0C,
         };
 
-        if (Gen7::IsInBattle()) {
+        if (Gen7::IsInBattle() && !IsOnline) {
             if (entry->IsActivated()) {
                 for (int i = 0; i < 25; i++) {
                     if (Process::Read32(address[0] + (i * 4), data32) && data32 != patch[i]) {
@@ -163,7 +305,7 @@ namespace USUM {
         static u32 data[1] = {0xE3A00000};
         static u32 original[1] = {0};
 
-        if (Gen7::IsInBattle()) {
+        if (Gen7::IsInBattle() && !IsOnline) {
             CRO::Toggle(address, true);
 
             if (entry->IsActivated()) {
@@ -183,7 +325,7 @@ namespace USUM {
         static u32 data[3] = {0xE3A00000, 0xE5C30005, 0xE1500000};
         static u32 original[3] = {0, 0, 0};
 
-        if (Gen7::IsInBattle()) {
+        if (Gen7::IsInBattle() && !IsOnline) {
             CRO::Toggle(address, true);
 
             if (entry->IsActivated()) {
@@ -204,7 +346,7 @@ namespace USUM {
         static const u32 address[4] = {0x5BBDE0, 0x31C494, 0x31C504, 0x376EB0};
         static u32 data[23] = {0xE92D407D, 0xE1A00006, 0xEA000000, 0xE92D407D, 0xE1D510B4, 0xE59D201C, 0xE202530F, 0xE3550203, 0x18BD807D, 0xE59F300C, 0xEB000004, 0xE59F3008, 0xEB000002, 0xE8BD807D, 0x30000404, 0x300073EC, 0xE2834018, 0xE4935004, 0xE1550002, 0x01A01000, 0xE1530004, 0x1AFFFFFA, 0xE12FFF1E};
 
-        if (entry->WasJustActivated()) {
+        if (entry->WasJustActivated() && !IsOnline) {
             Process::Patch(address[0], data, 0x5C);
         }
 
@@ -335,7 +477,7 @@ namespace USUM {
         static u32 data[1] = {0xEAFFFEE7};
         static u32 original[1] = {0};
 
-        if (Gen7::IsInBattle()) {
+        if (Gen7::IsInBattle() && !IsOnline) {
             CRO::Toggle(address, true);
 
             if (entry->IsActivated()) {
@@ -448,7 +590,7 @@ namespace USUM {
     static int legendaryIndex;
 
     void RematchLegendariesKB(MenuEntry *entry) {
-        static const vector<string> options = {"Tapu Koko", "Tapu Lele", "Tapu Bulu", "Tapu Fini", "Cosmog", Gen7::Name("Solgaleo", "Lunala"), "Necrozma"};
+        static const StringVector options = {"Tapu Koko", "Tapu Lele", "Tapu Bulu", "Tapu Fini", "Cosmog", Gen7::Name("Solgaleo", "Lunala"), "Necrozma"};
         KeyboardPlus keyboard;
         keyboard.SetKeyboard(entry->Name() + ":", true, options, legendaryIndex);
     }

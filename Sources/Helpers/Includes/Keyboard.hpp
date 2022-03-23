@@ -8,10 +8,10 @@
 namespace CTRPluginFramework {
     class KeyboardPlus : public Keyboard {
         public:
-            int SetKeyboard(const string &name, bool canAbort, bool isHex, const int maxLength, u8 &output, u8 start);
-            int SetKeyboard(const string &name, bool canAbort, bool isHex, const int maxLength, u16 &output, u16 start);
-            int SetKeyboard(const string &name, bool canAbort, bool isHex, const int maxLength, u32 &output, u32 start);
-            int SetKeyboard(const string &name, bool canAbort, const vector<string> &options, int &index);
+            int SetKeyboard(const String &name, bool canAbort, bool isHex, const int maxLength, u8 &output, u8 start);
+            int SetKeyboard(const String &name, bool canAbort, bool isHex, const int maxLength, u16 &output, u16 start);
+            int SetKeyboard(const String &name, bool canAbort, bool isHex, const int maxLength, u32 &output, u32 start);
+            int SetKeyboard(const String &name, bool canAbort, const StringVector &options, int &index);
     };
 
     using OnCompareCallback = bool (*)(const void *, string &);
@@ -21,7 +21,7 @@ namespace CTRPluginFramework {
     extern bool KeyboardCallback(const void *input, string &error);
 
     template<typename T>
-    bool KB(const string &name, bool canAbort, bool isHex, const int maxLength, T &output, T Default, const int minimum, const int maximum, OnCompareCallback callback = nullptr) {
+    bool KB(const String &name, bool canAbort, bool isHex, const int maxLength, T &output, T Default, const u32 minimum, const u32 maximum, OnCompareCallback callback = nullptr) {
         Sleep(Milliseconds(100));
         Keyboard keyboard(name);
         keyboard.CanAbort(canAbort);
@@ -35,7 +35,7 @@ namespace CTRPluginFramework {
     };
 
     template<typename T>
-    bool KB(const string &name, bool canAbort, bool isHex, const int maxLength, T &output, T Default, OnCompareCallback callback = nullptr) {
+    bool KB(const String &name, bool canAbort, bool isHex, const int maxLength, T &output, T Default, OnCompareCallback callback = nullptr) {
         Sleep(Milliseconds(100));
         Keyboard keyboard(name);
         keyboard.CanAbort(canAbort);
@@ -47,7 +47,7 @@ namespace CTRPluginFramework {
     };
 
     template<typename T>
-    bool KB(const string &name, bool canAbort, const int maxLength, T &output, T Default, OnEventsCallback callback = nullptr) {
+    bool KB(const String &name, bool canAbort, const int maxLength, T &output, T Default, OnEventsCallback callback = nullptr) {
         Sleep(Milliseconds(100));
         Keyboard keyboard(name);
         keyboard.CanAbort(canAbort);
@@ -71,6 +71,7 @@ namespace CTRPluginFramework {
             arg = new T();
             entry->SetArg(arg);
         }
+
         return (arg);
     }
 
@@ -89,6 +90,7 @@ namespace CTRPluginFramework {
             arg = new T(defaultVal);
             entry->SetArg(arg);
         }
+
         return (arg);
     }
 }

@@ -26,7 +26,7 @@ namespace CTRPluginFramework
         int index = 0;
 
         // Parse our possibilities to find the matches
-        for (const string &pkmn : allPkmn) {
+        for (const String &pkmn : allPkmn) {
             string::iterator iterator = lowerCase.begin();
             string::const_iterator pokeIterator = pkmn.begin();
 
@@ -44,6 +44,7 @@ namespace CTRPluginFramework
 
             index++;
         }
+
         return (output.choiceNo.size());
     }
 
@@ -129,8 +130,7 @@ namespace CTRPluginFramework
             return;
         }
 
-        pkmnID = -1;
-        return;
+        pkmnID = 0;
     }
 
     int abilityID;
@@ -139,6 +139,7 @@ namespace CTRPluginFramework
         if (group == Group::XY) {
             return 188;
         }
+
         return 191;
     }
 
@@ -159,7 +160,7 @@ namespace CTRPluginFramework
         int index = 0;
 
         // Parse our possibilities to find the matches
-        for (const string &ability : allAbilities) {
+        for (const String &ability : allAbilities) {
             string::iterator iterator = lowerCase.begin();
             string::const_iterator itemIterator = ability.begin();
 
@@ -177,6 +178,7 @@ namespace CTRPluginFramework
 
             index++;
         }
+
         return (output.choiceNo.size());
     }
 
@@ -259,13 +261,10 @@ namespace CTRPluginFramework
         keyboard.OnKeyboardEvent(OnAbilityInputChange);
 
         if (keyboard.Open(output) >= 0) {
-            Message::Completed();
             return;
         }
 
-        Message::Interrupted();
-        abilityID = -1;
-        return;
+        abilityID = 0;
     }
 
     int heldItemID;
@@ -274,6 +273,7 @@ namespace CTRPluginFramework
         if (group == Group::XY) {
             return 717;
         }
+
         return 775;
     }
 
@@ -281,6 +281,7 @@ namespace CTRPluginFramework
         if (group == Group::SM) {
             return 920;
         }
+
         return 959;
     }
 
@@ -301,7 +302,7 @@ namespace CTRPluginFramework
         int index = 0;
 
         // Parse our possibilities to find the matches
-        for (const string &item : allHeldItems) {
+        for (const String &item : allHeldItems) {
             string::iterator iterator = lowerCase.begin();
             string::const_iterator itemIterator = item.begin();
 
@@ -319,6 +320,7 @@ namespace CTRPluginFramework
 
             index++;
         }
+
         return (output.choiceNo.size());
     }
 
@@ -406,13 +408,10 @@ namespace CTRPluginFramework
         keyboard.OnKeyboardEvent(OnItemInputChange);
 
         if (keyboard.Open(output) >= 0) {
-            Message::Completed();
             return;
         }
 
-        Message::Interrupted();
-        heldItemID = -1;
-        return;
+        heldItemID = 0;
     }
 
     int moveID;
@@ -421,6 +420,7 @@ namespace CTRPluginFramework
         if (group == Group::XY) {
             return 617;
         }
+
         return 621;
     }
 
@@ -428,6 +428,7 @@ namespace CTRPluginFramework
         if (group == Group::SM) {
             return 719;
         }
+
         return 742;
     }
 
@@ -448,7 +449,7 @@ namespace CTRPluginFramework
         int index = 0;
 
         // Parse our possibilities to find the matches
-        for (const string &moves : allMoves) {
+        for (const String &moves : allMoves) {
             string::iterator iterator = lowerCase.begin();
             string::const_iterator itemIterator = moves.begin();
 
@@ -466,6 +467,7 @@ namespace CTRPluginFramework
 
             index++;
         }
+
         return (output.choiceNo.size());
     }
 
@@ -559,12 +561,9 @@ namespace CTRPluginFramework
         keyboard.OnKeyboardEvent(OnMovesInputChange);
 
         if (keyboard.Open(output) >= 0) {
-            Message::Completed();
             return;
         }
 
-        Message::Interrupted();
-        moveID = -1;
-        return;
+        moveID = 0;
     }
 }
