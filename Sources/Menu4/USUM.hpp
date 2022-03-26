@@ -13,12 +13,16 @@ namespace USUM {
     void Menu(PluginMenu &menu) {
         MenuFolder *battle = new MenuFolder("Battle");
         MenuFolder *primary = new MenuFolder("Primary");
-        *primary += new MenuFolder("Active", vector<MenuEntry *>({
+        *primary += new MenuFolder("Active", "Note: must be in a battle to use.", vector<MenuEntry *>({
+            new MenuEntry("Condition", nullptr, Condition),
             new MenuEntry("Statistics", Statistics, StatisticsKB),
-            new MenuEntry("Invincibility", Invincibility, InvincibilityKB)
+            new MenuEntry("Invincibility", Invincibility, InvincibilityKB),
+            new MenuEntry("Item", nullptr, Item),
+            new MenuEntry("Attacks", nullptr, Attacks)
         }));
         *primary += EntryWithHotkey(new MenuEntry("Access Bag", AccessBag, "Note: hold the hotkey(s) below while pressing on an action when in a battle."), {Key::R, ""});
         *primary += new MenuEntry("Always Critical Hit", AlwaysCriticalHit);
+        *primary += new MenuEntry("View Enemy Stats", ViewEnemyHP, "Note: tap on the opponent on the bottom screen during a battle."),
         *primary += new MenuEntry("Raise Statuses by 6", RaiseStatusesBy6, "Basically the same as the one in the Statistics cheat, but in ASM.");
         *primary += new MenuEntry("Bypass 1 Mega Restrict.", Bypass1MegaRestrict);
         *primary += new MenuEntry("Infinite Z-Moves", InfiniteZMoves);
@@ -27,21 +31,20 @@ namespace USUM {
         *battle += new MenuEntry("Always Shiny", AlwaysShiny);
         *battle += new MenuEntry("Guaranteed Catch", GuaranteedCatch);
         *battle += new MenuEntry("Catch Trainer's Pokémon", CatchTrainersPokemon);
+        *battle += new MenuEntry("Can Catch Trials", CanCatchTrials);
         *battle += new MenuEntry("Rematch Trainer", RematchTrainer);
         *battle += new MenuEntry("No Trainer Battle", NoTrainerBattle);
         *battle += new MenuFolder("Other", vector<MenuEntry *>({
-            new MenuEntry("View Enemy Stats", ViewEnemyHP),
-            EntryWithHotkey(new MenuEntry("No Encounters", NoEncounters, "Note: hold the hotkey(s) below while pressing on an action when in a battle."), {Key::Start, ""}),
+            new MenuEntry("No Encounters", NoEncounters),
             new MenuEntry("Wild Pokémon", nullptr, WildPokemon, "Note: change locations to reset."),
-            new MenuEntry("Can Catch Trials", CanCatchTrials),
             new MenuEntry("Rematch Legendaries", RematchLegendaries, RematchLegendariesKB)
         }));
         menu += battle;
 
         MenuFolder *computer = new MenuFolder("Computer");
         *computer += new MenuEntry("Backup", nullptr, PCBackup);
-        *computer += new MenuEntry(Color::Orange << "Initiate", nullptr, Editor::Initialize, "Note: this is to set up who you would like to modify via the Editor section of the plugin.");
         MenuFolder *editor = new MenuFolder("Editor");
+        *editor += new MenuEntry("Initiate", nullptr, Editor::Initialize, "Note: this is to set up who you would like to modify via the Editor section of the plugin.");
         *editor += new MenuFolder("Primary", vector<MenuEntry *>({
             new MenuEntry("Shiny", nullptr, Editor::Shinify),
             new MenuEntry("Species", nullptr, Editor::Species),
@@ -61,7 +64,7 @@ namespace USUM {
             new MenuEntry("Region"),
             new MenuEntry("3DS Region", nullptr, Editor::ConsoleRegion)
         }));
-        *editor += new MenuFolder("Met", vector<MenuEntry *>({
+        *editor += new MenuFolder("Obtained", vector<MenuEntry *>({
             new MenuEntry("Origin Game", nullptr, Editor::OriginGame),
             new MenuEntry("Met Location", nullptr, Editor::MetLocation),
             new MenuEntry("Ball", nullptr, Editor::Ball),
@@ -88,6 +91,7 @@ namespace USUM {
             new MenuEntry("Latest (not OT) Handler", nullptr, Editor::LatestHandler),
             new MenuEntry("Ribbons", nullptr, Editor::Ribbons)
         }));
+        *editor += new MenuEntry("Cloning", nullptr, Editor::Cloning);
         *computer += editor;
         *computer += new MenuEntry("PC Anywhere", PCAnywhere);
         *computer += new MenuEntry("Unlock Every Box", nullptr, UnlockEveryBox);
@@ -98,22 +102,22 @@ namespace USUM {
             new MenuEntry("Speed Up", Speedx2, "Note: only applies to walk and run speeds."),
             new MenuEntry("Bypass Walls", BypassWalls),
             EntryWithHotkey(new MenuEntry("Camera Zoom Out", CameraZoomOut), {Hotkey(Key::L, "Zoom-Out"), Hotkey(Key::R, "Zoom-In")}),
-            new MenuEntry("Register Mounts", nullptr, RegisterMounts)
+            new MenuEntry("Register Mounts", nullptr, RegisterMounts, "Note: all mounts will be registered and unlocked despite not reaching a certain point of the story.")
         }));
         menu += movement;
 
         MenuFolder *misc = new MenuFolder("Misc");
         *misc += new MenuFolder("Pokémon", vector<MenuEntry *>({
-            new MenuEntry("Is Renamable", IsRenamable),
-            new MenuEntry("Learn Any Teachables", LearnAnyTeachables),
-            new MenuEntry("Fast Offspring", FastOffspring),
+            new MenuEntry("Is Renamable", IsRenamable, "Note: you will be able to rename any Pokémon despite it not being at your ownership."),
+            new MenuEntry("Learn Any Teachables", LearnAnyTeachables, "Note: you will be able to teach your Pokémon any moves."),
+            new MenuEntry("Fast Offspring", FastOffspring, "Note: produces Pokémon faster in Day Care."),
             new MenuEntry("Instant Egg Hatch", InstantEggHatch),
             new MenuEntry("Quick Friendship", QuickFriendship),
             EntryWithHotkey(new MenuEntry("View Values in Summary", ViewValuesInSummary, "Note: hold one of the following hotkey(s) to view your Individual and Effort Values."), {Hotkey(Key::L, ""), Hotkey(Key::R, "")}),
             EntryWithHotkey(new MenuEntry("Steal Pokémon in Trade", StealPokemonInTrade, "Note: This will overwrite any Pokémon sitting in slot 1 of box 1. If you understand, you may press on the following hotkeys."), {Hotkey(Key::Start, "")})
         }));
-        *misc += new MenuEntry("Remove Outlines", NoOutlines);
-        *misc += new MenuEntry("Fast Dialogs", FastDialogs);
+        *misc += new MenuEntry("Remove Outlines", NoOutlines, "Note: removes outlines in the overworld and in battles.");
+        *misc += new MenuEntry("Fast Dialogs", FastDialogs, "Note: game dialogs will be sped up.");
         *misc += new MenuEntry("No Player Shadow", NoPlayerShadow);
         menu += misc;
     }

@@ -3,7 +3,7 @@ Author: Jared0714
 Version: # Plugin version
     Major: 22
     Minor: 3
-    Revision: 23
+    Revision: 25
 
 Targets: 0x00055D00, 0x00055E00, 0x0011C400, 0x0011C500, 0x00164800, 0x00175E00, 0x001B5000, 0x001B5100
 

@@ -3,10 +3,13 @@
 using namespace CTRPluginFramework;
 
 namespace ORAS {
+    void Condition(MenuEntry *entry);
     void StatisticsKB(MenuEntry *entry);
     void Statistics(MenuEntry *entry);
     void InvincibilityKB(MenuEntry *entry);
     void Invincibility(MenuEntry *entry);
+    void Item(MenuEntry *entry);
+    void Attacks(MenuEntry *entry);
 
     void AccessBag(MenuEntry *entry);
     void InfiniteMegaEvolution(MenuEntry *entry);
@@ -17,6 +20,7 @@ namespace ORAS {
 
     void NoEncounters(MenuEntry *entry);
     void WildPokemon(MenuEntry *entry);
+    void ExpMultiplier(MenuEntry *entry);
     void RematchLegendariesKB(MenuEntry *entry);
     void RematchLegendaries(MenuEntry *entry);
 }

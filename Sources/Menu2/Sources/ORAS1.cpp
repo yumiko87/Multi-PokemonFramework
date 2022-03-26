@@ -25,6 +25,54 @@ namespace ORAS {
         {0x81FB5BC, 0x81FB95C},
     };
 
+    struct Conditions {
+        const char *name;
+        int choiceNo;
+    };
+
+    static const Conditions allCndtions[5] = {
+        {"Asleep", 0x24},
+        {"Burned", 0x2C},
+        {"Frozen", 0x28},
+        {"Paralyzed", 0x20},
+        {"Poisoned", 0x30}
+    };
+
+    static int initCndition, getCndition, setCndition;
+
+    void Condition(MenuEntry *entry) {
+        static const StringVector init = {"None", "Affected"};
+        StringVector options;
+        KeyboardPlus keyboard;
+
+        for (const Conditions &nickname:allCndtions) {
+            options.push_back(nickname.name);
+        }
+
+        if (Gen6::IsInBattle()) {
+            if (keyboard.SetKeyboard(entry->Name() + ":", true, init, initCndition) != -1) {
+                if (keyboard.SetKeyboard(entry->Name() + ":", true, options, getCndition) != -1) {
+                    setCndition = allCndtions[getCndition].choiceNo;
+
+                    for (int i = 0; i < 1; i++) {
+                        for (int j = 0; j < 2; j++) {
+                            if (Process::Read32(party[i][j], data32) && data32 != 0) {
+                                if (Process::Read32(party[i][j], offset32)) {
+                                    for (int i = 0; i < 5; i++)
+                                        Process::Write8(offset32 + (0x20 + (i * 4)), 0);
+
+                                    if (initCndition == 1) {
+                                        Process::Write8(offset32 + setCndition, 1);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     static int statOption, baseIndex, boostsIndex;
     static u16 baseVals[5];
     static u8 boostVals[7];
@@ -145,6 +193,57 @@ namespace ORAS {
         }
     }
 
+    static u16 item;
+
+    void Item(MenuEntry *entry) {
+        if (Gen6::IsInBattle()) {
+            SelectAHeldItem(entry);
+            item = heldItemID;
+
+            if (item > 0) {
+                for (int i = 0; i < 1; i++) {
+                    for (int j = 0; j < 2; j++) {
+                        if (Process::Read32(party[i][j], data32) && data32 != 0) {
+                            if (Process::Read32(party[i][j], offset32)) {
+                                Process::Write16(offset32 + 0x12, item);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    static u16 attack;
+    static int atkSlot;
+
+    void Attacks(MenuEntry *entry) {
+        static const StringVector options = {"Move 1", "Move 2", "Move 3", "Move 4"};
+        KeyboardPlus keyboard;
+
+        if (Gen6::IsInBattle()) {
+            Start:
+            if (keyboard.SetKeyboard(entry->Name() + ":", true, options, atkSlot) != -1) {
+                SelectAMove(entry);
+                attack = moveID;
+
+                if (attack > 0) {
+                    for (int i = 0; i < 1; i++) {
+                        for (int j = 0; j < 2; j++) {
+                            if (Process::Read32(party[i][j], data32) && data32 != 0) {
+                                if (Process::Read32(party[i][j], offset32)) {
+                                    Process::Write16(offset32 + 0x11C + (atkSlot * 0xE), attack);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                else goto Start;
+            }
+        }
+    }
+
     void AccessBag(MenuEntry *entry) {
         static const u32 pointer = 0x8000158;
 
@@ -174,6 +273,29 @@ namespace ORAS {
                     Process::Write8(offset32 + 0xEDD, 1);
                 }
             }
+        }
+    }
+
+    static u16 multiplier;
+
+    void ExpMultiplier(MenuEntry *entry) {
+        static const u32 address[2] = {0x579860, 0x16B81C};
+        static u32 data[5] = {0xE1D002B2, 0xE92D4002, (0xE3A01000 + multiplier), 0xE0000190, 0xE8BD8002};
+        static u32 original[5] = {0, 0, 0, 0, 0};
+
+        if (KB<u16>(entry->Name() + ":", true, false, 3, multiplier, 0, 0, 100, KeyboardCallback)) {
+            for (int i = 0; i < 5; i++) {
+                if (Process::Read32(address[0] + (i * 4), data32) && data32 != data[i]) {
+                    Process::Patch(address[0], data, 20, original);
+                }
+            }
+
+            Process::Write32(address[1], 0xEB10380F);
+        }
+
+        if (multiplier <= 0) {
+            Process::Patch(address[0], original, 20);
+            Process::Write32(address[1], 0xE1D002B2);
         }
     }
 

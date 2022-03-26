@@ -957,4 +957,28 @@ namespace CTRPluginFramework {
             }
         }
     }
+
+    u8 amount;
+
+    void Editor::Cloning(MenuEntry *entry) {
+        u32 pointer = (((slot - 1) * 232) + ((box - 1) * 6960 + GetPokePointer()));
+        PK6 *pkmn = new PK6;
+
+        if (IsValid(pointer, pkmn)) {
+            if (KB<u8>(entry->Name() + ":", true, false, 2, amount, 0, 0, 30 - slot, KeyboardCallback)) {
+                for (int i = 0; i < amount; i++) {
+                    if (IsValid(pointer + (i * 232), pkmn)) {
+                        if (!SetPokemon(pointer + (i * 232) + 232, pkmn)) {
+                            Message::Interrupted();
+                            return;
+                        }
+                    }
+
+                    else return;
+                }
+
+                Message::Completed();
+            }
+        }
+    }
 }

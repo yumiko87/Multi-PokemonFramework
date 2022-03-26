@@ -3,10 +3,13 @@
 using namespace CTRPluginFramework;
 
 namespace SM {
+    void Condition(MenuEntry *entry);
     void StatisticsKB(MenuEntry *entry);
     void Statistics(MenuEntry *entry);
     void InvincibilityKB(MenuEntry *entry);
     void Invincibility(MenuEntry *entry);
+    void Item(MenuEntry *entry);
+    void Attacks(MenuEntry *entry);
 
     void GodMode(MenuEntry *entry);
     void AccessBag(MenuEntry *entry);

@@ -13,12 +13,16 @@ namespace ORAS {
     void Menu(PluginMenu &menu) {
         MenuFolder *battle = new MenuFolder("Battle");
         MenuFolder *primary = new MenuFolder("Primary");
-        *primary += new MenuFolder("Active", vector<MenuEntry *>({
+        *primary += new MenuFolder("Active", "Note: must be in a battle to use.", vector<MenuEntry *>({
+            new MenuEntry("Condition", nullptr, Condition),
             new MenuEntry("Statistics", Statistics, StatisticsKB),
-            new MenuEntry("Invincibility", Invincibility, InvincibilityKB)
+            new MenuEntry("Invincibility", Invincibility, InvincibilityKB),
+            new MenuEntry("Item", nullptr, Item),
+            new MenuEntry("Attacks", nullptr, Attacks)
         }));
         *primary += EntryWithHotkey(new MenuEntry("Access Bag", AccessBag, "Note: hold the hotkey(s) below while pressing on an action when in a battle."), {Key::R, ""});
         *primary += new MenuEntry("Infinite Mega Evolution", InfiniteMegaEvolution);
+        *primary += new MenuEntry("Exp. Multiplier", nullptr, ExpMultiplier);
         *battle += primary;
         *battle += new MenuEntry("Always Shiny", AlwaysShiny);
         *battle += new MenuEntry("Guaranteed Catch", GuaranteedCatch);
@@ -32,9 +36,9 @@ namespace ORAS {
 
         MenuFolder *computer = new MenuFolder("Computer");
         *computer += new MenuEntry("Backup", nullptr, PCBackup);
-        *computer += new MenuEntry(Color::Orange << "Initiate", nullptr, Editor::Initialize, "Note: this is to set up who you would like to modify via the Editor section of the plugin.");
         MenuFolder *editor = new MenuFolder("Editor");
-        *editor += new MenuFolder("Primary", vector<MenuEntry *>({
+        *editor += new MenuEntry("Initiate", nullptr, Editor::Initialize, "Note: this is to set up who you would like to modify via the Editor section of the plugin.");
+        *editor += new MenuFolder("Main", vector<MenuEntry *>({
             new MenuEntry("Shiny", nullptr, Editor::Shinify),
             new MenuEntry("Species", nullptr, Editor::Species),
             new MenuEntry("Is Nicknamed", nullptr, Editor::IsNicknamed),
@@ -53,7 +57,7 @@ namespace ORAS {
             new MenuEntry("Region"),
             new MenuEntry("3DS Region", nullptr, Editor::ConsoleRegion)
         }));
-        *editor += new MenuFolder("Met", vector<MenuEntry *>({
+        *editor += new MenuFolder("Obtained", vector<MenuEntry *>({
             new MenuEntry("Origin Game", nullptr, Editor::OriginGame),
             new MenuEntry("Met Location", nullptr, Editor::MetLocation),
             new MenuEntry("Ball", nullptr, Editor::Ball),
@@ -80,13 +84,14 @@ namespace ORAS {
             new MenuEntry("Latest (not OT) Handler", nullptr, Editor::LatestHandler),
             new MenuEntry("Ribbons", nullptr, Editor::Ribbons)
         }));
+        *editor += new MenuEntry("Cloning", nullptr, Editor::Cloning);
         *computer += editor;
         *computer += new MenuEntry("PC Anywhere", PCAnywhere);
         *computer += new MenuEntry("Unlock Every Box", nullptr, UnlockEveryBox);
         menu += computer;
 
         MenuFolder *movement = new MenuFolder("Movement", vector<MenuEntry *>({
-            new MenuEntry("Speed Up", Speedx2, "Note: only applies to walk and run speeds."),
+            new MenuEntry("Speed Up", Speedx2, "Note: only applies to walk and run speeds, and works with D-Pad."),
             new MenuEntry("Bypass Walls", BypassWalls),
             new MenuEntry("Fly Anywhere", FlyAnywhere, "Note: you must click on a Pokémon's summary."),
             EntryWithHotkey(new MenuEntry("Warper", Warper, WarperKB, "Note: hold the hotkey(s) below while moving."), {Key::L, ""}),
@@ -96,16 +101,16 @@ namespace ORAS {
 
         MenuFolder *misc = new MenuFolder("Misc");
         *misc += new MenuFolder("Pokémon", vector<MenuEntry *>({
-            new MenuEntry("Is Renamable", IsRenamable),
-            new MenuEntry("Learn Any Teachables", LearnAnyTeachables),
-            new MenuEntry("Fast Offspring", FastOffspring),
+            new MenuEntry("Is Renamable", IsRenamable, "Note: you will be able to rename any Pokémon despite it not being at your ownership."),
+            new MenuEntry("Learn Any Teachables", LearnAnyTeachables, "Note: you will be able to teach your Pokémon any moves."),
+            new MenuEntry("Fast Offspring", FastOffspring, "Note: produces Pokémon faster in Day Care."),
             new MenuEntry("Instant Egg Hatch", InstantEggHatch),
             new MenuEntry("Quick Friendship", QuickFriendship),
             EntryWithHotkey(new MenuEntry("View Values in Summary", ViewValuesInSummary, "Note: hold one of the following hotkey(s) to view your Individual and Effort Values."), {Hotkey(Key::L, ""), Hotkey(Key::R, "")}),
-            EntryWithHotkey(new MenuEntry("Steal Pokémon in Trade", StealPokemonInTrade, "Note: This will overwrite any Pokémon sitting in slot 1 of box 1. If you understand, you may press on the following hotkeys."), {Hotkey(Key::Start, "")})
+            EntryWithHotkey(new MenuEntry("Steal Pokémon in Trade", StealPokemonInTrade, "Note: this will overwrite any Pokémon sitting in slot 1 of box 1. If you understand, you may press on the following hotkeys."), {Hotkey(Key::Start, "")})
         }));
-        *misc += new MenuEntry("Remove Outlines", NoOutlines);
-        *misc += new MenuEntry("Fast Dialogs", FastDialogs);
+        *misc += new MenuEntry("Remove Outlines", NoOutlines, "Note: removes outlines in the overworld and in battles.");
+        *misc += new MenuEntry("Fast Dialogs", FastDialogs, "Note: game dialogs will be sped up.");
         menu += misc;
     }
 }

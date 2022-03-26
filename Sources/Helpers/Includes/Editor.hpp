@@ -51,6 +51,8 @@ namespace CTRPluginFramework {
         void OTName(MenuEntry *entry);
         void LatestHandler(MenuEntry *entry);
         void Ribbons(MenuEntry *entry);
+
+        void Cloning(MenuEntry *entry);
     }
 }
 

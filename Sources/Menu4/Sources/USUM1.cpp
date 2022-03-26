@@ -27,6 +27,54 @@ namespace USUM {
         {0x300004C8, 0x300074B0}
     };
 
+    struct Conditions {
+        const char *name;
+        int choiceNo;
+    };
+
+    static const Conditions allCndtions[5] = {
+        {"Asleep", 0x30},
+        {"Burned", 0x40},
+        {"Frozen", 0x38},
+        {"Paralyzed", 0x28},
+        {"Poisoned", 0x48}
+    };
+
+    static int initCndition, getCndition, setCndition;
+
+    void Condition(MenuEntry *entry) {
+        static const StringVector init = {"None", "Affected"};
+        StringVector options;
+        KeyboardPlus keyboard;
+
+        for (const Conditions &nickname:allCndtions) {
+            options.push_back(nickname.name);
+        }
+
+        if (Gen6::IsInBattle()) {
+            if (keyboard.SetKeyboard(entry->Name() + ":", true, init, initCndition) != -1) {
+                if (keyboard.SetKeyboard(entry->Name() + ":", true, options, getCndition) != -1) {
+                    setCndition = allCndtions[getCndition].choiceNo;
+
+                    for (int i = 0; i < 1; i++) {
+                        for (int j = 0; j < 2; j++) {
+                            if (Process::Read32(party[i][j], data32) && data32 != 0) {
+                                if (Process::Read32(party[i][j], offset32)) {
+                                    for (int i = 0; i < 5; i++)
+                                        Process::Write8(offset32 + (0x28 + (i * 4)), 0);
+
+                                    if (initCndition == 1) {
+                                        Process::Write8(offset32 + setCndition, 1);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     static int statOption, baseIndex, boostsIndex;
     static u16 baseVals[5];
     static u8 boostVals[7];
@@ -35,7 +83,7 @@ namespace USUM {
         static const StringVector init = {"Base", "Boosts"}, base = {"Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed"}, boosts = {"Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed", "Accuracy", "Evasiveness"};
         u16 vals[2];
 
-        if (Gen7::IsInBattle() && !IsOnline) {
+        if (Gen6::IsInBattle()) {
             Start:
             KeyboardPlus keyboard;
             keyboard.SetKeyboard(entry->Name() + ":", true, init, statOption);
@@ -71,7 +119,7 @@ namespace USUM {
     }
 
     void Statistics(MenuEntry *entry) {
-        if (Gen7::IsInBattle() && !IsOnline) {
+        if (Gen6::IsInBattle()) {
             for (int i = 0; i < 1; i++) {
                 for (int j = 0; j < 2; j++) {
                     if (Process::Read32(party[i][j], data32) && data32 != 0) {
@@ -102,7 +150,7 @@ namespace USUM {
         static const StringVector options = {"Health", "Stamina"};
         u16 val; u8 val2;
 
-        if (Gen7::IsInBattle() && !IsOnline) {
+        if (Gen6::IsInBattle()) {
             Start:
             KeyboardPlus keyboard;
             keyboard.SetKeyboard(entry->Name() + ":", true, options, invincIndex);
@@ -124,7 +172,7 @@ namespace USUM {
     }
 
     void Invincibility(MenuEntry *entry) {
-        if (Gen7::IsInBattle() && !IsOnline) {
+        if (Gen6::IsInBattle()) {
             for (int i = 0; i < 1; i++) {
                 for (int j = 0; j < 2; j++) {
                     if (Process::Read32(party[i][j], data32) && data32 != 0) {
@@ -143,6 +191,57 @@ namespace USUM {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    static u16 item;
+
+    void Item(MenuEntry *entry) {
+        if (Gen6::IsInBattle()) {
+            SelectAHeldItem(entry);
+            item = heldItemID;
+
+            if (item > 0) {
+                for (int i = 0; i < 1; i++) {
+                    for (int j = 0; j < 2; j++) {
+                        if (Process::Read32(party[i][j], data32) && data32 != 0) {
+                            if (Process::Read32(party[i][j], offset32)) {
+                                Process::Write16(offset32 + 0x12, item);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    static u16 attack;
+    static int atkSlot;
+
+    void Attacks(MenuEntry *entry) {
+        static const StringVector options = {"Move 1", "Move 2", "Move 3", "Move 4"};
+        KeyboardPlus keyboard;
+
+        if (Gen6::IsInBattle()) {
+            Start:
+            if (keyboard.SetKeyboard(entry->Name() + ":", true, options, atkSlot) != -1) {
+                SelectAMove(entry);
+                attack = moveID;
+
+                if (attack > 0) {
+                    for (int i = 0; i < 1; i++) {
+                        for (int j = 0; j < 2; j++) {
+                            if (Process::Read32(party[i][j], data32) && data32 != 0) {
+                                if (Process::Read32(party[i][j], offset32)) {
+                                    Process::Write16(offset32 + 0x202 + (atkSlot * 0xE), attack);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                else goto Start;
             }
         }
     }
@@ -205,11 +304,6 @@ namespace USUM {
                 Process::Patch(address[1], original, 4);
             }
         }
-    }
-
-    void GodMode(MenuEntry *entry) {
-        HealthAlwaysFull(entry);
-        StaminaAlwaysFull(entry);
     }
 
     void AccessBag(MenuEntry *entry) {
