@@ -11,7 +11,7 @@ Coming soon!
 https://discord.gg/49zeyKctTZ
 
 ## Note
-This plugin contains some cheat codes that were derived from a database in AR format, which were mostly created by ymyn. Those derived codes then gets written in C++ and establishes its way into the plugin by [Jared0714](https://github.com/Jared0714).
+This plugin contains some cheat codes that were derived from a database in AR format, which were mostly created by [ymyn](https://gbatemp.net/members/ymyn.264104/). Those derived codes then gets written in C++ and establishes its way into the plugin by [Jared0714](https://github.com/Jared0714).
 
 ## Credits
 Thanks to [Nanquitas](https://github.com/Nanquitas/) for their CTRPluginFramework that allowed me to develop plugins with, and huge thanks to the following people who have contributed to the plugin:
