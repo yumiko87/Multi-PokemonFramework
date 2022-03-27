@@ -2,11 +2,8 @@
 #include "stdafx.hpp"
 #include "Helpers.hpp"
 
-namespace CTRPluginFramework
-{
-    u16 spwnSpecies;
-    u8 spawnLv, spwnForm;
-
+namespace CTRPluginFramework {
+    u16 spwnSpecies; u8 spawnLv, spwnForm;
     int pkmnID;
 
     /**
@@ -15,15 +12,13 @@ namespace CTRPluginFramework
     * @param input The input string entered by the user
     * @return The amount of Pokémon that matches the input.
     */
-    int GetPokemonMatches(Pokemon &output, string &input) {
+    int MatchPkmn(Pokemon &output, string &input) {
+        int index = 0;
         output.name.clear();
         string lowerCase(input);
 
-        for (char &character : lowerCase) {
+        for (char &character : lowerCase)
             character = tolower(character);
-        }
-
-        int index = 0;
 
         // Parse our possibilities to find the matches
         for (const String &pkmn : allPkmn) {
@@ -53,8 +48,11 @@ namespace CTRPluginFramework
     * @param keyboard The keyboard that called the function
     * @param event The event that changed the input
     */
-    void OnPokemonInputChange(Keyboard &keyboard, KeyboardEvent &event) {
+    void PkmnInputChange(Keyboard &keyboard, KeyboardEvent &event) {
         string &input = keyboard.GetInput();
+        Pokemon matches;
+        int count = MatchPkmn(matches, input), choice;
+        pkmnID = matches.choiceNo[choice] + 1;
 
         // If the user removed a letter, clear the input and set an error
         if (event.type == KeyboardEvent::CharacterRemoved) {
@@ -69,27 +67,21 @@ namespace CTRPluginFramework
             return;
         }
 
-        Pokemon matches;
-        int count = GetPokemonMatches(matches, input);
-
         // If we don't have any matches, tell the user
         if (!count) {
             keyboard.SetError("Nothing matches your input. Please try again.");
             return;
         }
 
-        int choice;
-        pkmnID = matches.choiceNo[choice] + 1;
-
         // If we have only one matches, complete the input
         if (count == 1) {
             // The choiceNo must be within a valid range depending on the game
-            if (pkmnID <= (group == Group::XY || group == Group::ORAS ? 721 : 802)) {
+            if (pkmnID <= AutoGen(721, AutoGroup(802, 807))) {
                 input = matches.name[0];
                 return;
             }
 
-            keyboard.SetError("This species is not valid. Please try again.");
+            keyboard.SetError("This species is not available. Please try again.");
             return;
         }
 
@@ -102,12 +94,12 @@ namespace CTRPluginFramework
 
             if (choice >= 0) {
                 // The choiceNo must be within a valid range depending on the game
-                if (pkmnID <= (group == Group::XY || group == Group::ORAS ? 721 : 802)) {
+                if (pkmnID <= AutoGen(721, AutoGroup(802, 807))) {
                     input = matches.name[choice];
                     return;
                 }
 
-                keyboard.SetError("This species is not valid. Please try again.");
+                keyboard.SetError("This species is not available. Please try again.");
                 return;
             }
         }
@@ -120,28 +112,16 @@ namespace CTRPluginFramework
     * @brief A cheat function that needs the user to select a Pokémon before doing something
     * @param entry The entry that called the function
     */
-    void SelectAPokemon(MenuEntry *entry) {
-        string output;
-        Keyboard keyboard(entry->Name() + ":");
-        keyboard.SetMaxLength(11);
-        keyboard.OnKeyboardEvent(OnPokemonInputChange);
+    void FindPkmnKB(MenuEntry *entry) {
+        String output;
 
-        if (keyboard.Open(output) >= 0) {
+        if (KB<String>(entry->Name() + ":", true, 11, output, "", PkmnInputChange))
             return;
-        }
 
-        pkmnID = 0;
+        else pkmnID = 0;
     }
 
     int abilityID;
-
-    int lastAbility(void) {
-        if (group == Group::XY) {
-            return 188;
-        }
-
-        return 191;
-    }
 
     /**
     * @brief Gets the ability that matches the first letters of the input
@@ -149,15 +129,13 @@ namespace CTRPluginFramework
     * @param input The input string entered by the user
     * @return The amount of ability that matches the input.
     */
-    int GetAbilityMatches(Ability &output, string &input) {
+    int MatchAbility(Ability &output, string &input) {
+        int index = 0;
         output.name.clear();
         string lowerCase(input);
 
-        for (char &character : lowerCase) {
+        for (char &character : lowerCase)
             character = tolower(character);
-        }
-
-        int index = 0;
 
         // Parse our possibilities to find the matches
         for (const String &ability : allAbilities) {
@@ -187,8 +165,11 @@ namespace CTRPluginFramework
     * @param keyboard The keyboard that called the function
     * @param event The event that changed the input
     */
-    void OnAbilityInputChange(Keyboard &keyboard, KeyboardEvent &event) {
+    void AbilityInputChange(Keyboard &keyboard, KeyboardEvent &event) {
         string &input = keyboard.GetInput();
+        Ability matches;
+        int count = MatchAbility(matches, input), choice;
+        abilityID = matches.choiceNo[choice] + 1;
 
         // If the user removed a letter, clear the input and set an error
         if (event.type == KeyboardEvent::CharacterRemoved) {
@@ -203,22 +184,16 @@ namespace CTRPluginFramework
             return;
         }
 
-        Ability matches;
-        int count = GetAbilityMatches(matches, input);
-
         // If we don't have any matches, tell the user
         if (!count) {
             keyboard.SetError("Nothing matches your input. Please try again.");
             return;
         }
 
-        int choice;
-        abilityID = matches.choiceNo[choice];
-
         // If we have only one matches, complete the input
         if (count == 1) {
             // The choiceNo must be within a valid range depending on the game
-            if (abilityID <= (group == Group::SM || group == Group::USUM ? 233 : lastAbility())) {
+            if (abilityID <= AutoGen(AutoGroup(188, 191), 233)) {
                 input = matches.name[0];
                 return;
             }
@@ -230,7 +205,7 @@ namespace CTRPluginFramework
         // If we have less than or equal to ten matches, populate a list keyboard
         if (count <= 10) {
             // The choiceNo must be within a valid range depending on the game
-            if (abilityID <= (group == Group::SM || group == Group::USUM ? 233 : lastAbility())) {
+            if (abilityID <= AutoGen(AutoGroup(188, 191), 233)) {
                 Keyboard populate(matches.name);
                 populate.CanAbort(false);
                 populate.DisplayTopScreen = false;
@@ -254,36 +229,16 @@ namespace CTRPluginFramework
     * @brief A cheat function that needs the user to select an ability before doing something
     * @param entry The entry that called the function
     */
-    void SelectAnAbility(MenuEntry *entry) {
-        string output;
-        Keyboard keyboard(entry->Name() + ":");
-        keyboard.SetMaxLength(16);
-        keyboard.OnKeyboardEvent(OnAbilityInputChange);
+    void FindAbilityKB(MenuEntry *entry) {
+        String output;
 
-        if (keyboard.Open(output) >= 0) {
+        if (KB<String>(entry->Name() + ":", true, 16, output, "", AbilityInputChange))
             return;
-        }
 
-        abilityID = 0;
+        else abilityID = 0;
     }
 
     int heldItemID;
-
-    int LastHeldItemG6(void) {
-        if (group == Group::XY) {
-            return 717;
-        }
-
-        return 775;
-    }
-
-    int LastHeldItemG7(void) {
-        if (group == Group::SM) {
-            return 920;
-        }
-
-        return 959;
-    }
 
     /**
     * @brief Gets the held item that matches the first letters of the input
@@ -291,18 +246,16 @@ namespace CTRPluginFramework
     * @param input The input string entered by the user
     * @return The amount of held item that matches the input.
     */
-    int GetHeldItemMatches(HeldItem &output, string &input) {
+    int MatchHeldItem(HeldItem &output, string &input) {
+        int index = 0;
         output.name.clear();
         string lowerCase(input);
 
-        for (char &character : lowerCase) {
+        for (char &character : lowerCase)
             character = tolower(character);
-        }
-
-        int index = 0;
 
         // Parse our possibilities to find the matches
-        for (const String &item : allHeldItems) {
+        for (const String &item : allItems) {
             string::iterator iterator = lowerCase.begin();
             string::const_iterator itemIterator = item.begin();
 
@@ -324,13 +277,18 @@ namespace CTRPluginFramework
         return (output.choiceNo.size());
     }
 
+    int countInvalid;
+
     /**
     * @brief This function will be called by the keyboard everytime the input change
     * @param keyboard The keyboard that called the function
     * @param event The event that changed the input
     */
-    void OnItemInputChange(Keyboard &keyboard, KeyboardEvent &event) {
+    void ItemInputChange(Keyboard &keyboard, KeyboardEvent &event) {
         string &input = keyboard.GetInput();
+        HeldItem matches;
+        int count = MatchHeldItem(matches, input), choice;
+        static const vector<int> ignored = {114, 120, 129, 130, 131, 132, 133, 426, 427, 622, 807, 808, 809, 810, 811, 812, 813, 814, 815, 816, 817, 818, 819, 820, 821, 822, 823, 824, 825, 826, 827, 828, 829, 830, 831, 832, 833, 834, 834, 835, 837, 838, 839, 840, 848, 859, 867, 868, 869, 870, 871, 887, 898, 899, 927, 928, 929, 930, 931, 932};
 
         // If the user removed a letter, clear the input and set an error
         if (event.type == KeyboardEvent::CharacterRemoved) {
@@ -345,22 +303,24 @@ namespace CTRPluginFramework
             return;
         }
 
-        HeldItem matches;
-        int count = GetHeldItemMatches(matches, input);
-
         // If we don't have any matches, tell the user
         if (!count) {
             keyboard.SetError("Nothing matches your input. Please try again.");
             return;
         }
 
-        int choice;
-        heldItemID = matches.choiceNo[choice];
-
         // If we have only one matches, complete the input
         if (count == 1) {
             // The choiceNo must be within a valid range depending on the game
-            if (heldItemID <= (group == Group::SM || group == Group::USUM ? LastHeldItemG7() : LastHeldItemG6())) {
+            if (heldItemID <= AutoGen(AutoGroup(717, 775), AutoGroup(920, 959)) - 59) {
+                countInvalid = 0;
+
+                for (int i = 0; i < ignored.size(); i++) {
+                    if (matches.choiceNo[0] + 1 > ignored[i])
+                        countInvalid++;
+                }
+
+                heldItemID = matches.choiceNo[0] + 1 + countInvalid;
                 input = matches.name[0];
                 return;
             }
@@ -372,18 +332,22 @@ namespace CTRPluginFramework
         // If we have less than or equal to ten matches, populate a list keyboard
         if (count <= 10) {
             // The choiceNo must be within a valid range depending on the game
-            if (heldItemID <= (group == Group::SM || group == Group::USUM ? LastHeldItemG7() : LastHeldItemG6())) {
-                if (matches.name[choice] == matches.name[choice + 1] || matches.name[choice] == matches.name[choice - 1]) {
-                    input = matches.name[choice];
-                    return;
-                }
-
-                Keyboard populate(matches.name);
-                populate.CanAbort(false);
-                populate.DisplayTopScreen = false;
-                choice = populate.Open();
+            if (heldItemID <= AutoGen(AutoGroup(717, 775), AutoGroup(920, 959)) - 59) {
+                Keyboard kb;
+                kb.CanAbort(false);
+                kb.DisplayTopScreen = false;
+                kb.Populate(matches.name);
+                choice = kb.Open();
 
                 if (choice >= 0) {
+                    countInvalid = 0;
+
+                    for (int i = 0; i < ignored.size(); i++) {
+                        if (matches.choiceNo[choice] + 1 > ignored[i])
+                            countInvalid++;
+                    }
+
+                    heldItemID = matches.choiceNo[choice] + 1 + countInvalid;
                     input = matches.name[choice];
                     return;
                 }
@@ -401,36 +365,16 @@ namespace CTRPluginFramework
     * @brief A cheat function that needs the user to select a held item before doing something
     * @param entry The entry that called the function
     */
-    void SelectAHeldItem(MenuEntry *entry) {
-        string output;
-        Keyboard keyboard(entry->Name() + ":");
-        keyboard.SetMaxLength(18);
-        keyboard.OnKeyboardEvent(OnItemInputChange);
+    void FindItemKB(MenuEntry *entry) {
+        String output;
 
-        if (keyboard.Open(output) >= 0) {
+        if (KB<String>(entry->Name() + ":", true, 18, output, "", ItemInputChange))
             return;
-        }
 
-        heldItemID = 0;
+        else heldItemID = 0;
     }
 
     int moveID;
-
-    int LastMoveG6(void) {
-        if (group == Group::XY) {
-            return 617;
-        }
-
-        return 621;
-    }
-
-    int LastMoveG7(void) {
-        if (group == Group::SM) {
-            return 719;
-        }
-
-        return 742;
-    }
 
     /**
     * @brief Gets the move that matches the first letters of the input
@@ -438,15 +382,13 @@ namespace CTRPluginFramework
     * @param input The input string entered by the user
     * @return The amount of move that matches the input.
     */
-    int GetMoveMatches(Moves &output, string &input) {
+    int MatchMove(Moves &output, string &input) {
+        int index = 0;
         output.name.clear();
         string lowerCase(input);
 
-        for (char &character : lowerCase) {
+        for (char &character : lowerCase)
             character = tolower(character);
-        }
-
-        int index = 0;
 
         // Parse our possibilities to find the matches
         for (const String &moves : allMoves) {
@@ -476,8 +418,11 @@ namespace CTRPluginFramework
     * @param keyboard The keyboard that called the function
     * @param event The event that changed the input
     */
-    void OnMovesInputChange(Keyboard &keyboard, KeyboardEvent &event) {
+    void MoveInputChange(Keyboard &keyboard, KeyboardEvent &event) {
         string &input = keyboard.GetInput();
+        Moves matches;
+        int count = MatchMove(matches, input), choice;
+        moveID = matches.choiceNo[choice] + 1;
 
         // If the user removed a letter, clear the input and set an error
         if (event.type == KeyboardEvent::CharacterRemoved) {
@@ -492,22 +437,16 @@ namespace CTRPluginFramework
             return;
         }
 
-        Moves matches;
-        int count = GetMoveMatches(matches, input);
-
         // If we don't have any matches, tell the user
         if (!count) {
             keyboard.SetError("Nothing matches your input. Please try again.");
             return;
         }
 
-        int choice;
-        moveID = matches.choiceNo[choice];
-
         // If we have only one matches, complete the input
         if (count == 1) {
             // The choiceNo must be within a valid range depending on the game
-            if (moveID <= (group == Group::SM || group == Group::USUM ? LastMoveG7() : LastMoveG6())) {
+            if (moveID <= AutoGen(AutoGroup(617, 621), AutoGroup(719, 742))) {
                 input = matches.name[0];
                 return;
             }
@@ -521,7 +460,7 @@ namespace CTRPluginFramework
         // If we have less than or equal to ten matches, populate a list keyboard
         if (count <= 10) {
             // The choiceNo must be within a valid range depending on the game
-            if (moveID <= (group == Group::SM || group == Group::USUM ? LastMoveG7() : LastMoveG6())) {
+            if (moveID <= AutoGen(AutoGroup(617, 621), AutoGroup(719, 742))) {
                 if (matches.name[choice] == matches.name[choice + 1] || matches.name[choice] == matches.name[choice - 1]) {
                     input = matches.name[choice];
                     return;
@@ -554,15 +493,11 @@ namespace CTRPluginFramework
     * @brief A cheat function that needs the user to select a move before doing something
     * @param entry The entry that called the function
     */
-    void SelectAMove(MenuEntry *entry) {
-        string output;
-        Keyboard keyboard(entry->Name() + ":");
-        keyboard.SetMaxLength(27);
-        keyboard.OnKeyboardEvent(OnMovesInputChange);
+    void FindMoveKB(MenuEntry *entry) {
+        String output;
 
-        if (keyboard.Open(output) >= 0) {
+        if (KB<String>(entry->Name() + ":", true, 27, output, "", MoveInputChange))
             return;
-        }
 
         moveID = 0;
     }

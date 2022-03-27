@@ -21,7 +21,7 @@ namespace CTRPluginFramework {
         u8  abilityNumber;
         u8  trainingBagHits;
         u8  trainingBag;
-        u32 pokeID;
+        u32 pid;
         u8  nature;
         u8  miscData;
         u8  evs[6];
@@ -134,7 +134,7 @@ namespace CTRPluginFramework {
         u8  ability;
         u8  abilityNumber;
         u8  markValue;
-        u32 pokeID;
+        u32 pid;
         u8  nature;
         u8  fatefulEncounterGenderForm;
         u8  evs[6];
@@ -371,18 +371,25 @@ namespace CTRPluginFramework {
 
     template <class PKX>
     u8 IsShiny(PKX *poke) {
-        return (poke->trainerID ^ poke->secretID ^ (u16)(poke->pokeID & 0x0000FFFF) ^ (u16)((poke->pokeID & 0xFFFF0000) >> 16)) < 16;
+        return (poke->trainerID ^ poke->secretID ^ (u16)(poke->pid & 0x0000FFFF) ^ (u16)((poke->pid & 0xFFFF0000) >> 16)) < 16;
     }
 
     template <class PKX>
-    void MakeShiny(PKX *poke) {
-        u16 sxor = (poke->trainerID ^ poke->secretID ^ (u16)(poke->pokeID & 0x0000FFFF)) & 0xFFF0;
-        poke->pokeID = (poke->pokeID & 0x000FFFFF) | (sxor << 16);
+    void MakeShiny(PKX *poke, bool shinify) {
+        u16 sxor = (poke->trainerID ^ poke->secretID ^ (u16)(poke->pid & 0x0000FFFF)) & 0xFFF0;
+
+        if (shinify) {
+            poke->pid = (poke->pid & 0x000FFFFF) | (sxor << 16);
+        }
+
+        else {
+            poke->pid = Utils::Random(1, 0xFFFFFFFF);
+        }
     }
 
     template <class PKX>
     void SetSpecies(PKX *poke, u16 pokeNo) {
-        if (pokeNo <= (group == Group::XY || group == Group::ORAS ? 721 : 802)) {
+        if (pokeNo > 0 && pokeNo <= 721 || pokeNo <= 802 || pokeNo <= 807) {
             poke->species = pokeNo;
         }
     }

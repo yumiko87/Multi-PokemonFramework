@@ -45,7 +45,7 @@ namespace ORAS {
         StringVector options;
         KeyboardPlus keyboard;
 
-        for (const Conditions &nickname:allCndtions) {
+        for (const Conditions &nickname : allCndtions) {
             options.push_back(nickname.name);
         }
 
@@ -197,7 +197,7 @@ namespace ORAS {
 
     void Item(MenuEntry *entry) {
         if (Gen6::IsInBattle()) {
-            SelectAHeldItem(entry);
+            FindItemKB(entry);
             item = heldItemID;
 
             if (item > 0) {
@@ -224,7 +224,7 @@ namespace ORAS {
         if (Gen6::IsInBattle()) {
             Start:
             if (keyboard.SetKeyboard(entry->Name() + ":", true, options, atkSlot) != -1) {
-                SelectAMove(entry);
+                FindMoveKB(entry);
                 attack = moveID;
 
                 if (attack > 0) {
@@ -358,7 +358,7 @@ namespace ORAS {
     }
 
     void NoEncounters(MenuEntry *entry) {
-        static const u32 address = Gen6::Auto(0x4640EC, 0x4640E4);
+        static const u32 address = AutoGame(0x4640EC, 0x4640E4);
         static u32 data[1] = {0xE12FFF1E};
         static u32 original[1] = {0};
 
@@ -376,7 +376,7 @@ namespace ORAS {
     static int legendaryIndex;
 
     void RematchLegendariesKB(MenuEntry *entry) {
-        static const StringVector options = {Gen6::Name("Ho-Oh", "Lugia"), Gen6::Name("Latias", "Latios"), Gen6::Name("Groudon", "Kyogre"), "Rayquaza", "Deoxys", Gen6::Name("Palkia", "Dialga"), "Heatran", "Regigigas", "Giritina", Gen6::Name("Tornadus", "Thunderus"), "Landorus", "Kyruem"};
+        static const StringVector options = {AutoGame("Ho-Oh", "Lugia"), AutoGame("Latias", "Latios"), AutoGame("Groudon", "Kyogre"), "Rayquaza", "Deoxys", AutoGame("Palkia", "Dialga"), "Heatran", "Regigigas", "Giritina", AutoGame("Tornadus", "Thunderus"), "Landorus", "Kyruem"};
         KeyboardPlus keyboard;
         keyboard.SetKeyboard(entry->Name() + ":", true, options, legendaryIndex);
     }
@@ -403,7 +403,7 @@ namespace ORAS {
         }
 
         if (legendaryIndex == 2) {
-            static const u32 address = Gen6::Auto(0x8C81E29, 0x8C81E28);
+            static const u32 address = AutoGame(0x8C81E29, 0x8C81E28);
 
             if (game == Game::OR) {
                 if (Bit::Read(address, data8, true) && data8 != 0) {
@@ -604,13 +604,13 @@ namespace ORAS {
     int pokeID, form;
 
     void WildPokemon(MenuEntry *entry) {
-        SelectAPokemon(entry);
+        FindPkmnKB(entry);
         pokeID = pkmnID;
         KeyboardPlus keyboard;
 
         if (pokeID > 0) {
-            if (keyboard.SetKeyboard("Form:", true, Gen6::Forms(pokeID), form) != -1) {
-                InitPokemon(pokeID, form, Value(false, true));
+            if (keyboard.SetKeyboard("Form:", true, Gen6::FindForms(pokeID), form) != -1) {
+                InitPokemon(pokeID, form, AutoGroup(false, true));
             }
         }
     }

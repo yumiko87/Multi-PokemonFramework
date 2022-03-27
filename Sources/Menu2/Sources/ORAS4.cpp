@@ -6,7 +6,7 @@ using namespace CTRPluginFramework;
 
 namespace ORAS {
     void IsRenamable(MenuEntry *entry) {
-        static const u32 address = Gen6::Auto(0x4EA990, 0x4EA998);
+        static const u32 address = AutoGame(0x4EA990, 0x4EA998);
         static u32 data[1] = {0xE3A00001};
         static u32 original[1] = {0};
 
@@ -22,7 +22,7 @@ namespace ORAS {
     }
 
     void LearnAnyTeachables(MenuEntry *entry) {
-        static const u32 address = Gen6::Auto(0x4D051C, 0x4D0514);
+        static const u32 address = AutoGame(0x4D051C, 0x4D0514);
         static u32 data[1] = {0xE3A00001};
         static u32 original[1] = {0};
 
@@ -38,7 +38,7 @@ namespace ORAS {
     }
 
     void FastOffspring(MenuEntry *entry) {
-        static const u32 address = Gen6::Auto(0x4658A4, 0x46589C);
+        static const u32 address = AutoGame(0x4658A4, 0x46589C);
         static u32 data[3] = {0xE3A01001, 0xE5C011E8, 0xEA00209B};
         static u32 original[3] = {0, 0, 0};
 

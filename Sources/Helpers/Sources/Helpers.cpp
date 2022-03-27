@@ -2,8 +2,7 @@
 #include "Helpers.hpp"
 #include "stdafx.hpp"
 
-namespace CTRPluginFramework
-{
+namespace CTRPluginFramework {
     void ProcessPlus::Write8(u32 address, u8 value) {
         *(volatile unsigned char *)(address) = value;
     }
@@ -137,100 +136,78 @@ namespace CTRPluginFramework
         return true;
     }
 
-    u8 data8, offset8;
-    u16 data16, offset16;
-    u32 data32, offset32;
-
+    u8 data8, offset8; u16 data16, offset16; u32 data32, offset32;
+    Game game = Game::None; Group group = Group::None; Version version = Version::Supported;
     string bin, path;
-
-    Game game = Game::None;
-    Group group = Group::None;
-    Version version = Version::Supported;
 
     bool IsCompatible(void) {
         u64 titleID = Process::GetTitleID();
         u16 ver = Process::GetVersion();
 
         switch (titleID) {
-            case 0x0004000000055D00: {
-                if (ver != 5232) {
+            case 0x0004000000055D00:
+                if (ver != 5232)
                     version = Version::Unsupported;
-                }
 
                 game = Game::X;
                 group = Group::XY;
-            }
-            break;
+                break;
 
-            case 0x0004000000055E00: {
-                if (ver != 5216) {
+            case 0x0004000000055E00:
+                if (ver != 5216)
                     version = Version::Unsupported;
-                }
 
                 game = Game::Y;
                 group = Group::XY;
-            }
-            break;
+                break;
 
-            case 0x000400000011C400: {
-                if (ver != 7280) {
+            case 0x000400000011C400:
+                if (ver != 7280)
                     version = Version::Unsupported;
-                }
 
                 game = Game::OR;
                 group = Group::ORAS;
-            }
-            break;
+                break;
 
-            case 0x000400000011C500: {
-                if (ver != 7280) {
+            case 0x000400000011C500:
+                if (ver != 7280)
                     version = Version::Unsupported;
-                }
 
                 game = Game::AS;
                 group = Group::ORAS;
-            }
-            break;
+                break;
 
-            case 0x0004000000164800: {
-                if (ver != 2112) {
+            case 0x0004000000164800:
+                if (ver != 2112)
                     version = Version::Unsupported;
-                }
 
                 game = Game::S;
                 group = Group::SM;
-            }
-            break;
+                break;
 
-            case 0x0004000000175E00: {
-                if (ver != 2112) {
+            case 0x0004000000175E00:
+                if (ver != 2112)
                     version = Version::Unsupported;
-                }
 
                 game = Game::M;
                 group = Group::SM;
-            }
-            break;
+                break;
 
-            case 0x00040000001B5000: {
-                if (ver != 2080) {
+            case 0x00040000001B5000:
+                if (ver != 2080)
                     version = Version::Unsupported;
-                }
 
                 game = Game::US;
                 group = Group::USUM;
-            }
-            break;
+                break;
 
-            case 0x00040000001B5100: {
-                if (ver != 2080) {
+            case 0x00040000001B5100:
+                if (ver != 2080)
                     version = Version::Unsupported;
-                }
 
                 game = Game::UM;
                 group = Group::USUM;
-            }
-            break;
+                break;
 
             default: {
                 abort();
@@ -264,10 +241,6 @@ namespace CTRPluginFramework
         else return true;
     }
 
-    int RandMinMax(int low, int high) {
-        return low + (rand() % (high - low + 1));
-    }
-
     void Message::Completed(void) {
         MessageBox("Operation has been " << Color::LimeGreen << "completed" << Color::White << "!", DialogType::DialogOk, ClearScreen::Both)();
     }
@@ -280,43 +253,70 @@ namespace CTRPluginFramework
         MessageBox("Operation has already been " << Color::Orange << "completed" << Color::White << "!", DialogType::DialogOk, ClearScreen::Both)();
     }
 
-    int Value(int data1, int data2) {
-        if (group == Group::XY || group == Group::SM) {
+    int AutoGroup(int data1, int data2) {
+        if (group == Group::XY || group == Group::SM)
             return data1;
-        }
 
-        return data2;
+        else return data2;
     }
 
-    StringVector Gen6::Choices(StringVector vect1, StringVector vect2) {
-        if (group == Group::XY || group == Group::SM) {
+    StringVector AutoGroup(StringVector vect1, StringVector vect2) {
+        if (group == Group::XY || group == Group::SM)
             return vect1;
-        }
 
-        return vect2;
+        else return vect2;
     }
 
-    u32 Gen6::Auto(u32 address1, u32 address2) {
-        if (game == Game::X || game == Game::OR) {
+    u32 AutoGame(u32 address1, u32 address2) {
+        if (game == Game::X || game == Game::OR || game == Game::S || game == Game::US)
             return address1;
-        }
 
-        return address2;
+        else return address2;
     }
 
-    string Gen6::Name(string name1, string name2) {
-        if (game == Game::X || game == Game::OR) {
+    string AutoGame(string name1, string name2) {
+        if (game == Game::X || game == Game::OR || game == Game::S || game == Game::US)
             return name1;
-        }
 
-        return name1;
+        else return name1;
     }
 
-    StringVector Gen6::Forms(int pokeNo) {
+    u32 AutoGen(u32 autoGame1, u32 autoGame2) {
+        if (group == Group ::XY || group == Group::ORAS)
+            return autoGame1;
+
+        else return autoGame2;
+    }
+
+    StringVector AutoGen(StringVector vect1, StringVector vect2) {
+        if (group == Group::XY || group == Group::ORAS)
+            return vect1;
+
+        else return vect2;
+    }
+
+    bool Gen6::IsInBattle(void) {
+        static const u32 pointer = AutoGroup(0x81FB170, 0x81FB478);
+
+        if (Process::Read32(pointer, data32) && data32 == 0x40001)
+            return true;
+
+        else return false;
+    }
+
+    bool Gen7::IsInBattle(void) {
+        static u32 pointer[2] = {0x30000158, 0x30000180};
+
+        if (Process::Read32(pointer[0], data32) && data32 == 0x40001 && Process::Read8(pointer[1], data8) && data8 == 3)
+            return true;
+
+        else return false;
+    }
+
+    StringVector Gen6::FindForms(int pokeNo) {
         StringVector options;
 
-        switch (pokeNo)
-        {
+        switch (pokeNo) {
             case 3:   // Venusaur
             case 9:   // Blastoise
             case 65:  // Alakazam
@@ -369,7 +369,7 @@ namespace CTRPluginFramework
             case 475: // Gallade
             case 531: // Audino
             case 719: // Diancie
-                options = Gen6::Choices({"Normal"}, {"Normal", "Mega"});
+                options = AutoGroup({"Normal"}, {"Normal", "Mega"});
                 break;
 
             case 201: // Unown
@@ -382,7 +382,7 @@ namespace CTRPluginFramework
 
             case 382: // Kyogre
             case 383: // Groudon
-                options = Gen6::Choices({"Normal"}, {"Normal", "Primal"});
+                options = AutoGroup({"Normal"}, {"Normal", "Primal"});
 
             case 386: // Deoxys
                 options = {"Normal", "Attack", "Defense", "Speed"};
@@ -483,7 +483,7 @@ namespace CTRPluginFramework
                 break;
 
             case 720: // Hoopa
-                options = Gen6::Choices({"Confined"}, {"Confined", "Unbound"});
+                options = AutoGroup({"Confined"}, {"Confined", "Unbound"});
                 break;
 
             default:  // All Others
@@ -494,45 +494,10 @@ namespace CTRPluginFramework
         return options;
     }
 
-    bool Gen6::IsInBattle(void) {
-        static const u32 pointer = Value(0x81FB170, 0x81FB478);
-
-        if (Process::Read32(pointer, data32) && data32 == 0x40001) {
-            return true;
-        }
-
-        return false;
-    }
-
-    StringVector Gen7::Choices(StringVector vect1, StringVector vect2) {
-        if (group == Group::SM || group == Group::USUM) {
-            return vect1;
-        }
-
-        return vect2;
-    }
-
-    u32 Gen7::Auto(u32 address1, u32 address2) {
-        if (game == Game::S || game == Game::US) {
-            return address1;
-        }
-
-        return address2;
-    }
-
-    string Gen7::Name(string name1, string name2) {
-        if (game == Game::S || game == Game::US) {
-            return name1;
-        }
-
-        return name2;
-    }
-
-    StringVector Gen7::Forms(int pokeNo) {
+    StringVector Gen7::FindForms(int pokeNo) {
         StringVector options;
 
-        switch (pokeNo)
-        {
+        switch (pokeNo) {
             case 3:   // Venusaur
             case 9:   // Blastoise
             case 15:  // Beedrill
@@ -610,7 +575,7 @@ namespace CTRPluginFramework
                 break;
 
             case 25:  // Pikachu
-                options = Gen7::Choices({"Normal"}, {"Normal", "Original Cap", "Hoenn Cap", "Sinnoh Cap", "Unova Cap", "Kalos Cap", "Alola Cap", "Partner Cap"});
+                options = AutoGen({"Normal"}, {"Normal", "Original Cap", "Hoenn Cap", "Sinnoh Cap", "Unova Cap", "Kalos Cap", "Alola Cap", "Partner Cap"});
                 break;
 
             case 201: // Unown
@@ -769,7 +734,7 @@ namespace CTRPluginFramework
                 break;
 
             case 800: // Necrozma
-                options = Gen7::Choices({"Normal"}, {"Normal", "Dawn", "Dusk", "Ultra"});
+                options = AutoGen({"Normal"}, {"Normal", "Dawn", "Dusk", "Ultra"});
                 break;
 
             case 801: // Magearna
@@ -782,15 +747,5 @@ namespace CTRPluginFramework
         }
 
         return options;
-    }
-
-    bool Gen7::IsInBattle(void) {
-        static u32 pointer[2] = {0x30000158, 0x30000180};
-
-        if (Process::Read32(pointer[0], data32) && data32 == 0x40001 && Process::Read8(pointer[1], data8) && data8 == 3) {
-            return true;
-        }
-
-        return false;
     }
 }

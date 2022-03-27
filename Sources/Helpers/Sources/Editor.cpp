@@ -6,7 +6,7 @@ namespace CTRPluginFramework {
     static u8 box, slot;
 
     bool Editor::Setup(void) {
-        if (KB<u8>("Box:", true, false, 2, box, 0, 1, (group == Group::XY || group == Group::ORAS ? 31 : 32), KeyboardCallback)) {
+        if (KB<u8>("Box:", true, false, 2, box, 0, 1, AutoGen(31, 32), KeyboardCallback)) {
             if (KB<u8>("Slot:", true, false, 2, slot, 0, 1, 30, KeyboardCallback)) {
                 return true;
             }
@@ -30,22 +30,29 @@ namespace CTRPluginFramework {
         return true;
     }
 
+    static int shinifyOption;
+
     void Editor::Shinify(MenuEntry *entry) {
         u32 pointer = (((slot - 1) * 232) + ((box - 1) * 6960 + GetPokePointer()));
         PK6 *pkmn = new PK6;
 
+        static const StringVector noYes = {"No", "Yes"};
+        KeyboardPlus keyboard;
+
         if (IsValid(pointer, pkmn)) {
-            if (!IsShiny(pkmn)) {
-                MakeShiny(pkmn);
+            if (keyboard.SetKeyboard(entry->Name() + ":", true, noYes, shinifyOption) != -1) {
+                if (IsShiny(pkmn) != shinifyOption) {
+                    MakeShiny(pkmn, shinifyOption);
 
-                if (SetPokemon(pointer, pkmn)) {
-                    Message::Completed();
-                    return;
+                    if (SetPokemon(pointer, pkmn)) {
+                        Message::Completed();
+                        return;
+                    }
                 }
-            }
 
-            else if (IsShiny(pkmn)) {
-                Message::Warning();
+                else {
+                    Message::Warning();
+                }
             }
         }
     }
@@ -57,7 +64,7 @@ namespace CTRPluginFramework {
         PK6 *pkmn = new PK6;
 
         if (IsValid(pointer, pkmn)) {
-            SelectAPokemon(entry);
+            FindPkmnKB(entry);
             species = pkmnID;
 
             if (species > 0) {
@@ -167,12 +174,12 @@ namespace CTRPluginFramework {
         u32 pointer = (((slot - 1) * 232) + ((box - 1) * 6960 + GetPokePointer()));
         PK6 *pkmn = new PK6;
 
-        int form, species = ProcessPlus::Read16((group == Group::XY || group == Group::ORAS ? Value(0x83D2F98, 0x83F36B4) : Value(0x34156A04, 0x33F40D70)));
+        int form, species = ProcessPlus::Read16((AutoGen(AutoGroup(0x83D2F98, 0x83F36B4), AutoGroup(0x34156A04, 0x33F40D70))));
         KeyboardPlus keyboard;
 
         if (IsValid(pointer, pkmn)) {
             if (species > 0) {
-                if (keyboard.SetKeyboard(entry->Name() + ":", true, Gen6::Forms(species), form) != -1) {
+                if (keyboard.SetKeyboard(entry->Name() + ":", true, AutoGen(Gen6::FindForms(species), Gen7::FindForms(species)), form) != -1) {
                     SetForm(pkmn, form);
 
                     if (SetPokemon(pointer, pkmn)) {
@@ -190,7 +197,7 @@ namespace CTRPluginFramework {
         PK6 *pkmn = new PK6;
 
         if (IsValid(pointer, pkmn)) {
-            SelectAHeldItem(entry);
+            FindItemKB(entry);
             item = heldItemID;
 
             if (item > 0) {
@@ -210,7 +217,7 @@ namespace CTRPluginFramework {
         PK6 *pkmn = new PK6;
 
         if (IsValid(pointer, pkmn)) {
-            SelectAnAbility(entry);
+            FindAbilityKB(entry);
             abil = abilityID;
 
             if (abil > 0) {
@@ -362,7 +369,7 @@ namespace CTRPluginFramework {
         StringVector options;
         KeyboardPlus keyboard;
 
-        for (const Origins &nickname:allOrigins) {
+        for (const Origins &nickname : allOrigins) {
             options.push_back(nickname.name);
         }
 
@@ -390,7 +397,7 @@ namespace CTRPluginFramework {
         if (allOrigins[getOrigin].choiceNo == 24 || allOrigins[getOrigin].choiceNo == 25) {
             deterVer = allLocs1[getMetLoc].choiceNo;
 
-            for (const Locations &nickname:allLocs1) {
+            for (const Locations &nickname : allLocs1) {
                 options.push_back(nickname.name);
             }
         }
@@ -398,7 +405,7 @@ namespace CTRPluginFramework {
         else if (allOrigins[getOrigin].choiceNo == 26 || allOrigins[getOrigin].choiceNo == 27) {
             deterVer = allLocs2[getMetLoc].choiceNo;
 
-            for (const Locations &nickname:allLocs2) {
+            for (const Locations &nickname : allLocs2) {
                 options.push_back(nickname.name);
             }
         }
@@ -429,7 +436,7 @@ namespace CTRPluginFramework {
         StringVector options;
         KeyboardPlus keyboard;
 
-        for (const Balls &nickname:allBalls) {
+        for (const Balls &nickname : allBalls) {
             options.push_back(nickname.name);
         }
 
@@ -538,7 +545,7 @@ namespace CTRPluginFramework {
         if (allOrigins[getOrigin].choiceNo == 24 || allOrigins[getOrigin].choiceNo == 25) {
             deterEggVer = allLocs1[getEggMetLoc].choiceNo;
 
-            for (const Locations &nickname:allLocs1) {
+            for (const Locations &nickname : allLocs1) {
                 options.push_back(nickname.name);
             }
         }
@@ -546,7 +553,7 @@ namespace CTRPluginFramework {
         else if (allOrigins[getOrigin].choiceNo == 26 || allOrigins[getOrigin].choiceNo == 27) {
             deterEggVer = allLocs2[getEggMetLoc].choiceNo;
 
-            for (const Locations &nickname:allLocs2) {
+            for (const Locations &nickname : allLocs2) {
                 options.push_back(nickname.name);
             }
         }
@@ -703,7 +710,7 @@ namespace CTRPluginFramework {
         if (IsValid(pointer, pkmn)) {
             Start:
             if (keyboard.SetKeyboard(entry->Name() + ":", true, options, moveSlot) != -1) {
-                SelectAMove(entry);
+                FindMoveKB(entry);
                 moves = moveID;
 
                 if (moves > 0) {
@@ -758,7 +765,7 @@ namespace CTRPluginFramework {
         if (IsValid(pointer, pkmn)) {
             Start:
             if (keyboard.SetKeyboard(entry->Name() + ":", true, options, relearnMoveSlot) != -1) {
-                SelectAMove(entry);
+                FindMoveKB(entry);
                 relearnMoves = moveID;
 
                 if (relearnMoves > 0) {

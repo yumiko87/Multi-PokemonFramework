@@ -40,39 +40,53 @@ namespace CTRPluginFramework {
     }
 
     namespace Gen6 {
-        StringVector Choices(StringVector vect1, StringVector vect2);
-        u32 Auto(u32 address1, u32 address2);
-        string Name(string name1, string name2);
-        StringVector Forms(int pokeNo);
+        StringVector FindForms(int pokeNo);
         bool IsInBattle(void);
     };
 
     namespace Gen7 {
-        StringVector Choices(StringVector vect1, StringVector vect2);
-        u32 Auto(u32 address1, u32 address2);
-        string Name(string name1, string name2);
-        StringVector Forms(int pokeNo);
+        StringVector FindForms(int pokeNo);
         bool IsInBattle(void);
     };
 
-    enum class Game : int {None, X, Y, OR, AS, S, M, US, UM};
-    enum class Group : int {None, XY, ORAS, SM, USUM};
-    enum class Version : int {Unsupported, Supported};
+    enum class Game : int {
+        None,
+        X,
+        Y,
+        OR,
+        AS,
+        S,
+        M,
+        US,
+        UM
+    };
 
-    extern u8 data8, offset8;
-    extern u16 data16, offset16;
-    extern u32 data32, offset32;
+    enum class Group : int {
+        None,
+        XY,
+        ORAS,
+        SM,
+        USUM
+    };
 
+    enum class Version : int {
+        Unsupported,
+        Supported
+    };
+
+    extern u8 data8, offset8; extern u16 data16, offset16; extern u32 data32, offset32;
+    extern Game game; extern Group group; extern Version version;
     extern string bin, path;
-
-    extern Game game;
-    extern Group group;
-    extern Version version;
 
     extern bool IsCompatible(void);
     extern bool IsOnWhiteList(void);
-    extern int RandMinMax(int low, int high);
-    extern int Value(int data1, int data2);
+
+    extern int AutoGroup(int data1, int data2);
+    extern StringVector AutoGroup(StringVector vect1, StringVector vect2);
+    extern u32 AutoGame(u32 address1, u32 address2);
+    extern string AutoGame(string name1, string name2);
+    extern u32 AutoGen(u32 autoGame1, u32 autoGame2);
+    extern StringVector AutoGen(StringVector vect1, StringVector vect2);
 }
 
 #include "PokeInfo.hpp"

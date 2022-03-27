@@ -37,7 +37,7 @@ namespace XY {
     }
 
     void BypassWalls(MenuEntry *entry) {
-        static const u32 address[2] = {Gen6::Auto(0x80B5820, 0x80B5824), Gen6::Auto(0x80B3A1C, 0x80B3A20)};
+        static const u32 address[2] = {AutoGame(0x80B5820, 0x80B5824), AutoGame(0x80B3A1C, 0x80B3A20)};
         static u32 data[2][1] = {{0xE3A01000}, {0xE3A06000}};
         static u32 original[2][1] = {{0}, {0}};
 
@@ -119,7 +119,7 @@ namespace XY {
         KeyboardPlus keyboard;
 
         if (options.empty()) {
-            for (const Locations &nickname:locations) {
+            for (const Locations &nickname : locations) {
                 options.push_back(nickname.name);
             }
         }

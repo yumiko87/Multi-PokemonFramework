@@ -38,7 +38,7 @@ namespace USUM {
     }
 
     void FastOffspring(MenuEntry *entry) {
-        static const u32 address = Gen7::Auto(0x45C628, 0x45C62C);
+        static const u32 address = AutoGame(0x45C628, 0x45C62C);
         static u32 data[3] = {0xE3A01001, 0xE5C011E0, 0xEA00684B};
         static u32 original[3] = {0, 0, 0};
 
@@ -70,7 +70,7 @@ namespace USUM {
             if (Process::Read32(address[1], data32) && data32 != 0xEB04320D) {
                 Process::Patch(address[1], 0xEB04320D, original);
             }
-        } 
+        }
 
         if (!entry->IsActivated()) {
             for (int j = 0; j < 7; j++) {
@@ -116,7 +116,7 @@ namespace USUM {
     }
 
     void NoOutlines(MenuEntry *entry) {
-        static const u32 address = Gen7::Auto(0x42FBA4, 0x42FBA8);
+        static const u32 address = AutoGame(0x42FBA4, 0x42FBA8);
         static u32 data[1] = {0xE320F000};
         static u32 original[1] = {0};
 
@@ -132,7 +132,7 @@ namespace USUM {
     }
 
     void FastDialogs(MenuEntry *entry) {
-        static const u32 address[2] = {Gen7::Auto(0x3D12B4, 0x3D12B8), Gen7::Auto(0x3D1B58, 0x3D1B5C)};
+        static const u32 address[2] = {AutoGame(0x3D12B4, 0x3D12B8), AutoGame(0x3D1B58, 0x3D1B5C)};
         static u32 data[2][1] = {{0xE3A04003}, {0xE3A05003}};
         static u32 original[2][1] = {{0}, {0}};
 
@@ -152,7 +152,7 @@ namespace USUM {
     }
 
     void NoPlayerShadow(MenuEntry *entry) {
-        static const u32 address = Gen7::Auto(0x3AB574, 0x3AB578);
+        static const u32 address = AutoGame(0x3AB574, 0x3AB578);
         static u32 data[1] = {0};
         static u32 original[1] = {0};
 

@@ -6,162 +6,9 @@
 #include "Helpers.hpp"
 
 namespace CTRPluginFramework {
-    extern u16 spwnSpecies;
-    extern u8 spawnLv, spwnForm;
+    extern u16 spwnSpecies; extern u8 spawnLv, spwnForm;
 
-    static StringVector ListOfForms(int pokeNo) {
-        StringVector options;
-
-        switch (pokeNo) {
-            case 3:   // Venusaur
-            case 9:   // Blastoise
-            case 65:  // Alakazam
-            case 94:  // Gengar
-            case 115: // Kangaskhan
-            case 127: // Pinsir
-            case 130: // Gyarados
-            case 142: // Aerodactyl
-            case 181: // Ampharos
-            case 208: // Steelix
-            case 212: // Scizor
-            case 214: // Heracross
-            case 229: // Houndoom
-            case 248: // Tyranitar
-            case 257: // Blaziken
-            case 282: // Gardevoir
-            case 303: // Mawile
-            case 306: // Aggron
-            case 308: // Medicham
-            case 310: // Manectric
-            case 354: // Banette
-            case 359: // Absol
-            case 380: // Latias
-            case 381: // Latios
-            case 445: // Garchomp
-            case 448: // Lucario
-            case 460: // Abomasnow
-                options = {"Normal", "Mega"};
-                break;
-
-            case 6:   // Charizard
-            case 150: // Mewtwo
-                options = {"Normal", "Mega X", "Mega Y"};
-                break;
-
-            case 201: // Unown
-                options = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "!", "?"};
-                break;
-
-            case 351: // Castform
-                options = {"Normal", "Sunny", "Rainy", "Snowy"};
-                break;
-
-            case 386: // Deoxys
-                options = {"Normal", "Attack", "Defense", "Speed"};
-                break;
-
-            case 412: // Burmy
-            case 413: // Wormadam
-            case 414: // Mothim
-                options = {"Plant", "Sandy", "Trash"};
-                break;
-
-            case 422: // Shellos
-            case 423: // Gastrodon
-                options = {"East", "West"};
-                break;
-
-            case 479: // Rotom
-                options = {"Normal", "Heat", "Wash", "Frost", "Fan", "Mow"};
-                break;
-
-            case 487: // Giratina
-                options = {"Altered", "Origin"};
-                break;
-
-            case 492: // Shaymin
-                options = {"Land", "Sky"};
-                break;
-
-            case 493: // Arceus
-                options = {"Normal", "Fighting", "Flying", "Poison", "Ground", "Rock", "Bug", "Ghost", "Steel", "Fire", "Water", "Grass", "Electric", "Psychic", "Ice", "Dragon", "Dark", "Fairy"};
-                break;
-
-            case 550: // Basculin
-                options = {"Red", "Blue"};
-                break;
-
-            case 555: // Darmanitan
-                options = {"Standard", "Zen"};
-                break;
-
-            case 585: // Deerling
-            case 586: // Sawsbuck
-                options = {"Spring", "Summer", "Autumn", "Winter"};
-                break;
-
-            case 641: // Tornadus
-            case 642: // Thundurus
-            case 645: // Landorus
-                options = {"Incarnate", "Therian"};
-                break;
-
-            case 646: // Kyurem
-                options = {"Normal", "White", "Black"};
-                break;
-
-            case 647: // Keldeo
-                options = {"Ordinary", "Resolute"};
-                break;
-
-            case 648: // Meloetta
-                options = {"Aria", "Pirouette"};
-                break;
-
-            case 649: // Genesect
-                options = {"Normal", "Douse", "Shock", "Burn", "Chill"};
-                break;
-
-            case 664: // Scatterbug
-            case 665: // Spewpa
-            case 666: // Vivillon
-                options = {"Icy Snow", "Polar", "Tundra", "Continental", "Garden", "Elegant", "Meadow", "Modern", "Marine", "Archipelago", "High-Plains", "Sandstorm", "River", "Monsoon", "Savannah", "Sun", "Ocean", "Jungle", "Fancy", "Poke Ball"};
-                break;
-
-            case 669: // Flabébé
-            case 671: // Florges
-                options = {"Red", "Yellow", "Orange", "Blue", "White"};
-                break;
-
-            case 670: // Floette
-                options = {"Red", "Yellow", "Orange", "Blue", "White", "Eternal"};
-                break;
-
-            case 676: // Furfrou
-                options = {"Natural", "Heart", "Star", "Diamond", "Deputante", "Matron", "Dandy", "La Reine", "Kabuki", "Pharaoh"};
-                break;
-
-            case 681: // Aegislash
-                options = {"Shield", "Blade"};
-                break;
-
-            case 710: // Pumpkaboo
-            case 711: // Gourgeist
-                options = {"Average", "Small", "Large", "Super"};
-                break;
-
-            case 716: // Xerneas
-                options = {"Neutral", "Active"};
-                break;
-
-            default:  // All Others
-                options = {"Normal"};
-                break;
-        }
-        return options;
-    }
-
-    static const char *allPkmn[721] = {
+    static const char *allPkmn[807] = {
         "Bulbasaur",
         "Ivysaur",
         "Venusaur",
@@ -882,7 +729,93 @@ namespace CTRPluginFramework {
         "Zygarde",
         "Diancie",
         "Hoopa",
-        "Volcanion"
+        "Volcanion",
+        "Rowlet",
+        "Dartrix",
+        "Decidueye",
+        "Litten",
+        "Torracat",
+        "Incineroar",
+        "Popplio",
+        "Brionne",
+        "Primarina",
+        "Pikipek",
+        "Trumbeak",
+        "Toucannon",
+        "Yungoos",
+        "Gumshoos",
+        "Grubbin",
+        "Charjabug",
+        "Vikavolt",
+        "Crabrawler",
+        "Crabominable",
+        "Oricorio",
+        "Cutiefly",
+        "Ribombee",
+        "Rockruff",
+        "Lycanroc",
+        "Wishiwashi",
+        "Mareanie",
+        "Toxapex",
+        "Mudbray",
+        "Mudsdale",
+        "Dewpider",
+        "Araquanid",
+        "Fomantis",
+        "Lurantis",
+        "Morelull",
+        "Shiinotic",
+        "Salandit",
+        "Salazzle",
+        "Stufful",
+        "Bewear",
+        "Bounsweet",
+        "Steenee",
+        "Tsareena",
+        "Comfey",
+        "Oranguru",
+        "Passimian",
+        "Wimpod",
+        "Golisopod",
+        "Sandygast",
+        "Palossand",
+        "Pyukumuku",
+        "TypeNull",
+        "Silvally",
+        "Minior",
+        "Komala",
+        "Turtonator",
+        "Togedemaru",
+        "Mimikyu",
+        "Bruxish",
+        "Drampa",
+        "Dhelmise",
+        "Jangmoo",
+        "Hakamoo",
+        "Kommoo",
+        "TapuKoko",
+        "TapuLele",
+        "TapuBulu",
+        "TapuFini",
+        "Cosmog",
+        "Cosmoem",
+        "Solgaleo",
+        "Lunala",
+        "Nihilego",
+        "Buzzwole",
+        "Pheromosa",
+        "Xurkitree",
+        "Celesteela",
+        "Kartana",
+        "Guzzlord",
+        "Necrozma",
+        "Magearna",
+        "Marshadow",
+        "Poipole",
+        "Naganadel",
+        "Stakataka",
+        "Blacephalon",
+        "Zeraora"
     };
 
     extern int pkmnID;
@@ -892,7 +825,7 @@ namespace CTRPluginFramework {
         vector<int> choiceNo;
     };
 
-    void SelectAPokemon(MenuEntry *entry);
+    void FindPkmnKB(MenuEntry *entry);
 
     static const StringVector allNatures = {
         "Hardy",
@@ -922,254 +855,9 @@ namespace CTRPluginFramework {
         "Quirky"
     };
 
-    static const char *allAbilities[234] = {
-        "None",
-        "Stench",
-        "Drizzle",
-        "Speed Boost",
-        "Battle Armor",
-        "Sturdy",
-        "Damp",
-        "Limber",
-        "Sand Veil",
-        "Static",
-        "Volt Absorb",
-        "Water Absorb",
-        "Oblivious",
-        "Cloud Nine",
-        "Compound Eyes",
-        "Insomnia",
-        "Color Change",
-        "Immunity",
-        "Flash Fire",
-        "Shield Dust",
-        "Own Tempo",
-        "Suction Cups",
-        "Intimidate",
-        "Shadow Tag",
-        "Rough Skin",
-        "Wonder Guard",
-        "Levitate",
-        "Effect Spore",
-        "Synchronize",
-        "Clear Body",
-        "Natural Cure",
-        "Lightning Rod",
-        "Serene Grace",
-        "Swift Swim",
-        "Chlorophyll",
-        "Illuminate",
-        "Trace",
-        "Huge Power",
-        "Poison Point",
-        "Inner Focus",
-        "Magma Armor",
-        "Water Veil",
-        "Magnet Pull",
-        "Soundproof",
-        "Rain Dish",
-        "Sand Stream",
-        "Pressure",
-        "Thick Fat",
-        "Early Bird",
-        "Flame Body",
-        "Run Away",
-        "Keen Eye",
-        "Hyper Cutter",
-        "Pickup",
-        "Truant",
-        "Hustle",
-        "Cute Charm",
-        "Plus",
-        "Minus",
-        "Forecast",
-        "Sticky Hold",
-        "Shed Skin",
-        "Guts",
-        "Marvel Scale",
-        "Liquid Ooze",
-        "Overgrow",
-        "Blaze",
-        "Torrent",
-        "Swarm",
-        "Rock Head",
-        "Drought",
-        "Arena Trap",
-        "Vital Spirit",
-        "White Smoke",
-        "Pure Power",
-        "Shell Armor",
-        "Air Lock",
-        "Tangled Feet",
-        "Motor Drive",
-        "Rivalry",
-        "Steadfast",
-        "Snow Cloak",
-        "Gluttony",
-        "Anger Point",
-        "Unburden",
-        "Heatproof",
-        "Simple",
-        "Dry Skin",
-        "Download",
-        "Iron Fist",
-        "Poison Heal",
-        "Adaptability",
-        "Skill Link",
-        "Hydration",
-        "Solar Power",
-        "Quick Feet",
-        "Normalize",
-        "Sniper",
-        "Magic Guard",
-        "No Guard",
-        "Stall",
-        "Technician",
-        "Leaf Guard",
-        "Klutz",
-        "Mold Breaker",
-        "Super Luck",
-        "Aftermath",
-        "Anticipation",
-        "Forewarn",
-        "Unaware",
-        "Tinted Lens",
-        "Filter",
-        "Slow Start",
-        "Scrappy",
-        "Storm Drain",
-        "Ice Body",
-        "Solid Rock",
-        "Snow Warning",
-        "Honey Gather",
-        "Frisk",
-        "Reckless",
-        "Multitype",
-        "Flower Gift",
-        "Bad Dreams",
-        "Pickpocket",
-        "Sheer Force",
-        "Contrary",
-        "Unnerve",
-        "Defiant",
-        "Defeatist",
-        "Cursed Body",
-        "Healer",
-        "Friend Guard",
-        "Weak Armor",
-        "Heavy Metal",
-        "Light Metal",
-        "Multiscale",
-        "Toxic Boost",
-        "Flare Boost",
-        "Harvest",
-        "Telepathy",
-        "Moody",
-        "Overcoat",
-        "Poison Touch",
-        "Regenerator",
-        "Big Pecks",
-        "Sand Rush",
-        "Wonder Skin",
-        "Analytic",
-        "Illusion",
-        "Imposter",
-        "Infiltrator",
-        "Mummy",
-        "Moxie",
-        "Justified",
-        "Rattled",
-        "Magic Bounce",
-        "Sap Sipper",
-        "Prankster",
-        "Sand Force",
-        "Iron Barbs",
-        "Zen Mode",
-        "Victory Star",
-        "Turboblaze",
-        "Teravolt",
-        "Aroma Veil",
-        "Flower Veil",
-        "Cheek Pouch",
-        "Protean",
-        "Fur Coat",
-        "Magician",
-        "Bulletproof",
-        "Competitive",
-        "Strong Jaw",
-        "Refrigerate",
-        "Sweet Veil",
-        "Stance Change",
-        "Gale Wings",
-        "Mega Launcher",
-        "Grass Pelt",
-        "Symbiosis",
-        "Tough Claws",
-        "Pixilate",
-        "Gooey",
-        "Aerilate",
-        "Parental Bond",
-        "Dark Aura",
-        "Fairy Aura",
-        "Aura Break",
-        "Primordial Sea",
-        "Desolate Land",
-        "Delta Stream",
-        "Stamina",
-        "Wimp Out",
-        "Emergency Exit",
-        "Water Compaction",
-        "Merciless",
-        "Shields Down",
-        "Stakeout",
-        "Water Bubble",
-        "Steelworker",
-        "Berserk",
-        "Slush Rush",
-        "Long Reach",
-        "Liquid Voice",
-        "Triage",
-        "Galvanize",
-        "Surge Surfer",
-        "Schooling",
-        "Disguise",
-        "Battle Bond",
-        "Power Construct",
-        "Corrosion",
-        "Comatose",
-        "Queenly Majesty",
-        "Innards Out",
-        "Dancer",
-        "Battery",
-        "Fluffy",
-        "Dazzling",
-        "Soul-Heart",
-        "Tangling Hair",
-        "Receiver",
-        "Power of Alchemy",
-        "Beast Boost",
-        "RKS System",
-        "Electric Surge",
-        "Psychic Surge",
-        "Misty Surge",
-        "Grassy Surge",
-        "Full Metal Body",
-        "Shadow Shield",
-        "Prism Armor",
-        "Neuroforce"
-    };
+    void FindAbilityKB(MenuEntry *entry);
 
-    extern int abilityID;
-
-    struct Ability {
-        StringVector name;
-        vector<int> choiceNo;
-    };
-
-    void SelectAnAbility(MenuEntry *entry);
-
-    static const char *allHeldItems[960] = {
-        "None",
+    static const char *allItems[900] = {
         "Master Ball",
         "Ultra Ball",
         "Great Ball",
@@ -1283,13 +971,11 @@ namespace CTRPluginFramework {
         "Odd Keystone",
         "Griseous Orb",
         "Tea",
-        "???",
         "Autograph",
         "Douse Drive",
         "Shock Drive",
         "Burn Drive",
         "Chill Drive",
-        "???",
         "Pokémon Box Link",
         "Medicine Pocket",
         "TM Case",
@@ -1298,11 +984,6 @@ namespace CTRPluginFramework {
         "Clothing Trunk",
         "Catching Pocket",
         "Battle Pocket",
-        "???",
-        "???",
-        "???",
-        "???",
-        "???",
         "Sweet Heart",
         "Adamant Orb",
         "Lustrous Orb",
@@ -1595,8 +1276,6 @@ namespace CTRPluginFramework {
         "HM04",
         "HM05",
         "HM06",
-        "???",
-        "???",
         "Explorer Kit",
         "Loot Sack",
         "Rule Book",
@@ -1791,7 +1470,6 @@ namespace CTRPluginFramework {
         "TM94",
         "TM95",
         "Xtransceiver",
-        "???",
         "Gram 1",
         "Gram 2",
         "Gram 3",
@@ -1811,7 +1489,7 @@ namespace CTRPluginFramework {
         "Weakness Policy",
         "Assault Vest",
         "Holo Caster",
-        "Prof’s Letter",
+        "Prof's Letter",
         "Roller Skates",
         "Pixie Plate",
         "Ability Capsule",
@@ -1976,40 +1654,7 @@ namespace CTRPluginFramework {
         "Snorlium Z",
         "Eevium Z",
         "Mewnium Z",
-        "Normalium Z",
-        "Firium Z",
-        "Waterium Z",
-        "Electrium Z",
-        "Grassium Z",
-        "Icium Z",
-        "Fightinium Z",
-        "Poisonium Z",
-        "Groundium Z",
-        "Flyinium Z",
-        "Psychium Z",
-        "Buginium Z",
-        "Rockium Z",
-        "Ghostium Z",
-        "Dragonium Z",
-        "Darkinium Z",
-        "Steelium Z",
-        "Fairium Z",
-        "Pikanium Z",
-        "Decidium Z",
-        "Incinium Z",
-        "Primarium Z",
-        "Tapunium Z",
-        "Marshadium Z",
-        "Aloraichium Z",
-        "Snorlium Z",
-        "Eevium Z",
-        "Mewnium Z",
         "Pikashunium Z",
-        "Pikashunium Z",
-        "???",
-        "???",
-        "???",
-        "???",
         "Forage Bag",
         "Fishing Rod",
         "Professor’s Mask",
@@ -2017,7 +1662,6 @@ namespace CTRPluginFramework {
         "Sparkling Stone",
         "Adrenaline Orb",
         "Zygarde Cube",
-        "???",
         "Ice Stone",
         "Ride Pager",
         "Beast Ball",
@@ -2028,7 +1672,6 @@ namespace CTRPluginFramework {
         "Purple Nectar",
         "Sun Flute",
         "Moon Flute",
-        "???",
         "Enigmatic Card",
         "Silver Razz Berry",
         "Golden Razz Berry",
@@ -2036,11 +1679,6 @@ namespace CTRPluginFramework {
         "Golden Nanab Berry",
         "Silver Pinap Berry",
         "Golden Pinap Berry",
-        "???",
-        "???",
-        "???",
-        "???",
-        "???",
         "Secret Key",
         "S.S. Ticket",
         "Silph Scope",
@@ -2066,9 +1704,6 @@ namespace CTRPluginFramework {
         "Leaf Letter",
         "Leaf Letter",
         "Small Bouquet",
-        "???",
-        "???",
-        "???",
         "Lure",
         "Super Lure",
         "Max Lure",
@@ -2090,12 +1725,6 @@ namespace CTRPluginFramework {
         "Dragon Memory",
         "Dark Memory",
         "Fairy Memory",
-        "Solganium Z",
-        "Lunalium Z",
-        "Ultranecrozium Z",
-        "Mimikium Z",
-        "Lycanium Z",
-        "Kommonium Z",
         "Solganium Z",
         "Lunalium Z",
         "Ultranecrozium Z",
@@ -2138,10 +1767,252 @@ namespace CTRPluginFramework {
         vector<int> choiceNo;
     };
 
-    void SelectAHeldItem(MenuEntry *entry);
+    void FindItemKB(MenuEntry *entry);
 
-    static const char *allMoves[743] = {
-        "None",
+    static const char *allAbilities[233] = {
+        "Stench",
+        "Drizzle",
+        "Speed Boost",
+        "Battle Armor",
+        "Sturdy",
+        "Damp",
+        "Limber",
+        "Sand Veil",
+        "Static",
+        "Volt Absorb",
+        "Water Absorb",
+        "Oblivious",
+        "Cloud Nine",
+        "Compound Eyes",
+        "Insomnia",
+        "Color Change",
+        "Immunity",
+        "Flash Fire",
+        "Shield Dust",
+        "Own Tempo",
+        "Suction Cups",
+        "Intimidate",
+        "Shadow Tag",
+        "Rough Skin",
+        "Wonder Guard",
+        "Levitate",
+        "Effect Spore",
+        "Synchronize",
+        "Clear Body",
+        "Natural Cure",
+        "Lightning Rod",
+        "Serene Grace",
+        "Swift Swim",
+        "Chlorophyll",
+        "Illuminate",
+        "Trace",
+        "Huge Power",
+        "Poison Point",
+        "Inner Focus",
+        "Magma Armor",
+        "Water Veil",
+        "Magnet Pull",
+        "Soundproof",
+        "Rain Dish",
+        "Sand Stream",
+        "Pressure",
+        "Thick Fat",
+        "Early Bird",
+        "Flame Body",
+        "Run Away",
+        "Keen Eye",
+        "Hyper Cutter",
+        "Pickup",
+        "Truant",
+        "Hustle",
+        "Cute Charm",
+        "Plus",
+        "Minus",
+        "Forecast",
+        "Sticky Hold",
+        "Shed Skin",
+        "Guts",
+        "Marvel Scale",
+        "Liquid Ooze",
+        "Overgrow",
+        "Blaze",
+        "Torrent",
+        "Swarm",
+        "Rock Head",
+        "Drought",
+        "Arena Trap",
+        "Vital Spirit",
+        "White Smoke",
+        "Pure Power",
+        "Shell Armor",
+        "Air Lock",
+        "Tangled Feet",
+        "Motor Drive",
+        "Rivalry",
+        "Steadfast",
+        "Snow Cloak",
+        "Gluttony",
+        "Anger Point",
+        "Unburden",
+        "Heatproof",
+        "Simple",
+        "Dry Skin",
+        "Download",
+        "Iron Fist",
+        "Poison Heal",
+        "Adaptability",
+        "Skill Link",
+        "Hydration",
+        "Solar Power",
+        "Quick Feet",
+        "Normalize",
+        "Sniper",
+        "Magic Guard",
+        "No Guard",
+        "Stall",
+        "Technician",
+        "Leaf Guard",
+        "Klutz",
+        "Mold Breaker",
+        "Super Luck",
+        "Aftermath",
+        "Anticipation",
+        "Forewarn",
+        "Unaware",
+        "Tinted Lens",
+        "Filter",
+        "Slow Start",
+        "Scrappy",
+        "Storm Drain",
+        "Ice Body",
+        "Solid Rock",
+        "Snow Warning",
+        "Honey Gather",
+        "Frisk",
+        "Reckless",
+        "Multitype",
+        "Flower Gift",
+        "Bad Dreams",
+        "Pickpocket",
+        "Sheer Force",
+        "Contrary",
+        "Unnerve",
+        "Defiant",
+        "Defeatist",
+        "Cursed Body",
+        "Healer",
+        "Friend Guard",
+        "Weak Armor",
+        "Heavy Metal",
+        "Light Metal",
+        "Multiscale",
+        "Toxic Boost",
+        "Flare Boost",
+        "Harvest",
+        "Telepathy",
+        "Moody",
+        "Overcoat",
+        "Poison Touch",
+        "Regenerator",
+        "Big Pecks",
+        "Sand Rush",
+        "Wonder Skin",
+        "Analytic",
+        "Illusion",
+        "Imposter",
+        "Infiltrator",
+        "Mummy",
+        "Moxie",
+        "Justified",
+        "Rattled",
+        "Magic Bounce",
+        "Sap Sipper",
+        "Prankster",
+        "Sand Force",
+        "Iron Barbs",
+        "Zen Mode",
+        "Victory Star",
+        "Turboblaze",
+        "Teravolt",
+        "Aroma Veil",
+        "Flower Veil",
+        "Cheek Pouch",
+        "Protean",
+        "Fur Coat",
+        "Magician",
+        "Bulletproof",
+        "Competitive",
+        "Strong Jaw",
+        "Refrigerate",
+        "Sweet Veil",
+        "Stance Change",
+        "Gale Wings",
+        "Mega Launcher",
+        "Grass Pelt",
+        "Symbiosis",
+        "Tough Claws",
+        "Pixilate",
+        "Gooey",
+        "Aerilate",
+        "Parental Bond",
+        "Dark Aura",
+        "Fairy Aura",
+        "Aura Break",
+        "Primordial Sea",
+        "Desolate Land",
+        "Delta Stream",
+        "Stamina",
+        "Wimp Out",
+        "Emergency Exit",
+        "Water Compaction",
+        "Merciless",
+        "Shields Down",
+        "Stakeout",
+        "Water Bubble",
+        "Steelworker",
+        "Berserk",
+        "Slush Rush",
+        "Long Reach",
+        "Liquid Voice",
+        "Triage",
+        "Galvanize",
+        "Surge Surfer",
+        "Schooling",
+        "Disguise",
+        "Battle Bond",
+        "Power Construct",
+        "Corrosion",
+        "Comatose",
+        "Queenly Majesty",
+        "Innards Out",
+        "Dancer",
+        "Battery",
+        "Fluffy",
+        "Dazzling",
+        "Soul-Heart",
+        "Tangling Hair",
+        "Receiver",
+        "Power of Alchemy",
+        "Beast Boost",
+        "RKS System",
+        "Electric Surge",
+        "Psychic Surge",
+        "Misty Surge",
+        "Grassy Surge",
+        "Full Metal Body",
+        "Shadow Shield",
+        "Prism Armor",
+        "Neuroforce"
+    };
+
+    extern int abilityID;
+
+    struct Ability {
+        StringVector name;
+        vector<int> choiceNo;
+    };
+
+    static const char *allMoves[742] = {
         "Pound",
         "Karate Chop",
         "Double Slap",
@@ -2893,7 +2764,7 @@ namespace CTRPluginFramework {
         vector<int> choiceNo;
     };
 
-    void SelectAMove(MenuEntry *entry);
+    void FindMoveKB(MenuEntry *entry);
 
     struct Origins {
         const char *name;
@@ -3048,7 +2919,7 @@ namespace CTRPluginFramework {
         {168, "Unknown Dungeon"}
     };
 
-    static const Locations allLocs2[93] = {
+    static const Locations allLocs2[92] = {
         {170, "Littleroot Town"},
         {172, "Oldale Town"},
         {174, "Dewford Town"},
@@ -3102,7 +2973,6 @@ namespace CTRPluginFramework {
         {270, "Route 134"},
         {272, "Meteor Falls"},
         {274, "Rusturf Tunnel"},
-        {276, "???"},
         {278, "Desert Ruins"},
         {280, "Granite Cave"},
         {282, "Petalburg Woods"},

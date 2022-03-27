@@ -47,7 +47,7 @@ namespace SM {
         StringVector options;
         KeyboardPlus keyboard;
 
-        for (const Conditions &nickname:allCndtions) {
+        for (const Conditions &nickname : allCndtions) {
             options.push_back(nickname.name);
         }
 
@@ -199,7 +199,7 @@ namespace SM {
 
     void Item(MenuEntry *entry) {
         if (Gen6::IsInBattle()) {
-            SelectAHeldItem(entry);
+            FindItemKB(entry);
             item = heldItemID;
 
             if (item > 0) {
@@ -226,7 +226,7 @@ namespace SM {
         if (Gen6::IsInBattle()) {
             Start:
             if (keyboard.SetKeyboard(entry->Name() + ":", true, options, atkSlot) != -1) {
-                SelectAMove(entry);
+                FindMoveKB(entry);
                 attack = moveID;
 
                 if (attack > 0) {
@@ -642,12 +642,12 @@ namespace SM {
     }
 
     void WildPokemon(MenuEntry *entry) {
-        SelectAPokemon(entry);
+        FindPkmnKB(entry);
         pokeNo = pkmnID;
         KeyboardPlus keyboard;
 
         if (pokeNo > 0) {
-            if (keyboard.SetKeyboard("Form:", true, Gen7::Forms(pokeNo), form) != -1) {
+            if (keyboard.SetKeyboard("Form:", true, Gen7::FindForms(pokeNo), form) != -1) {
                 if (KB<u16>("Level:", true, false, 3, level, 0, 1, 100, KeyboardCallback)) {
                     entry->SetGameFunc(InitPokemon);
                 }
@@ -684,7 +684,7 @@ namespace SM {
     static int legendaryIndex;
 
     void RematchLegendariesKB(MenuEntry *entry) {
-        static const StringVector options = {"Tapu Koko", "Tapu Lele", "Tapu Bulu", "Tapu Fini", "Cosmog", Gen7::Name("Solgaleo", "Lunala"), "Necrozma"};
+        static const StringVector options = {"Tapu Koko", "Tapu Lele", "Tapu Bulu", "Tapu Fini", "Cosmog", AutoGame("Solgaleo", "Lunala"), "Necrozma"};
         KeyboardPlus keyboard;
         keyboard.SetKeyboard(entry->Name() + ":", true, options, legendaryIndex);
     }

@@ -47,7 +47,7 @@ namespace USUM {
         StringVector options;
         KeyboardPlus keyboard;
 
-        for (const Conditions &nickname:allCndtions) {
+        for (const Conditions &nickname : allCndtions) {
             options.push_back(nickname.name);
         }
 
@@ -199,7 +199,7 @@ namespace USUM {
 
     void Item(MenuEntry *entry) {
         if (Gen6::IsInBattle()) {
-            SelectAHeldItem(entry);
+            FindItemKB(entry);
             item = heldItemID;
 
             if (item > 0) {
@@ -226,7 +226,7 @@ namespace USUM {
         if (Gen6::IsInBattle()) {
             Start:
             if (keyboard.SetKeyboard(entry->Name() + ":", true, options, atkSlot) != -1) {
-                SelectAMove(entry);
+                FindMoveKB(entry);
                 attack = moveID;
 
                 if (attack > 0) {
@@ -608,13 +608,13 @@ namespace USUM {
     static u16 level;
 
     void InitPokemon(MenuEntry *entry) {
-        static u32 address[7] = {0x5BBFC0, 0x5BBFE0, Gen7::Auto(0x3A86A0, 0x3A86A4), Gen7::Auto(0x3A86B0, 0x3A86B4), Gen7::Auto(0x3A86DC, 0x3A86E0), Gen7::Auto(0x3A8688, 0x3A868C), Gen7::Auto(0x3A873C, 0x3A8740)};
+        static u32 address[7] = {0x5BBFC0, 0x5BBFE0, AutoGame(0x3A86A0, 0x3A86A4), AutoGame(0x3A86B0, 0x3A86B4), AutoGame(0x3A86DC, 0x3A86E0), AutoGame(0x3A8688, 0x3A868C), AutoGame(0x3A873C, 0x3A8740)};
         static u32 data[10] = {0xE92D400E, 0xE59F0014, 0xE3500000, 0x18BD800E, 0xE59F000C, 0xEBF90532, 0xE2800001, 0xE8BD800E, 0x00000000, 0x00000327};
         static u32 original[1] = {0};
 
         if (entry->WasJustActivated()) {
             if (Process::Patch(address[0], data, 0x28)) {
-                Process::Write32(address[2], Gen7::Auto(0xEB084E46, 0xEB084E45));
+                Process::Write32(address[2], AutoGame(0xEB084E46, 0xEB084E45));
                 Process::Write32(address[3], 0xE1D400B0);
                 Process::Write32(address[4], 0xE1D400B0);
 
@@ -642,12 +642,12 @@ namespace USUM {
     }
 
     void WildPokemon(MenuEntry *entry) {
-        SelectAPokemon(entry);
+        FindPkmnKB(entry);
         pokeNo = pkmnID;
         KeyboardPlus keyboard;
 
         if (pokeNo > 0) {
-            if (keyboard.SetKeyboard("Form:", true, Gen7::Forms(pokeNo), form) != -1) {
+            if (keyboard.SetKeyboard("Form:", true, Gen7::FindForms(pokeNo), form) != -1) {
                 if (KB<u16>("Level:", true, false, 3, level, 0, 1, 100, KeyboardCallback)) {
                     entry->SetGameFunc(InitPokemon);
                 }
@@ -684,7 +684,7 @@ namespace USUM {
     static int legendaryIndex;
 
     void RematchLegendariesKB(MenuEntry *entry) {
-        static const StringVector options = {"Tapu Koko", "Tapu Lele", "Tapu Bulu", "Tapu Fini", "Cosmog", Gen7::Name("Solgaleo", "Lunala"), "Necrozma"};
+        static const StringVector options = {"Tapu Koko", "Tapu Lele", "Tapu Bulu", "Tapu Fini", "Cosmog", AutoGame("Solgaleo", "Lunala"), "Necrozma"};
         KeyboardPlus keyboard;
         keyboard.SetKeyboard(entry->Name() + ":", true, options, legendaryIndex);
     }

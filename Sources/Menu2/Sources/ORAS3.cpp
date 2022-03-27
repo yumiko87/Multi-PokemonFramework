@@ -128,7 +128,7 @@ namespace ORAS {
         KeyboardPlus keyboard;
 
         if (options.empty()) {
-            for (const Locations &nickname:locations) {
+            for (const Locations &nickname : locations) {
                 options.push_back(nickname.name);
             }
         }

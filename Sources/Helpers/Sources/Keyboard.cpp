@@ -44,9 +44,8 @@ namespace CTRPluginFramework {
     bool KeyboardCallback(const void *input, string &error) {
         u16 val = *static_cast<const u16 *>(input);
 
-        if (val >= min && val <= max) {
+        if (val >= min && val <= max)
             return (true);
-        }
 
         error = "The value must be between " << to_string(min) << "-" << to_string(max) << ".";
         return (false);

@@ -45,7 +45,7 @@ namespace XY {
         StringVector options;
         KeyboardPlus keyboard;
 
-        for (const Conditions &nickname:allCndtions) {
+        for (const Conditions &nickname : allCndtions) {
             options.push_back(nickname.name);
         }
 
@@ -197,7 +197,7 @@ namespace XY {
 
     void Item(MenuEntry *entry) {
         if (Gen6::IsInBattle()) {
-            SelectAHeldItem(entry);
+            FindItemKB(entry);
             item = heldItemID;
 
             if (item > 0) {
@@ -224,7 +224,7 @@ namespace XY {
         if (Gen6::IsInBattle()) {
             Start:
             if (keyboard.SetKeyboard(entry->Name() + ":", true, options, atkSlot) != -1) {
-                SelectAMove(entry);
+                FindMoveKB(entry);
                 attack = moveID;
 
                 if (attack > 0) {
@@ -458,13 +458,13 @@ namespace XY {
     int pokeID, form;
 
     void WildPokemon(MenuEntry *entry) {
-        SelectAPokemon(entry);
+        FindPkmnKB(entry);
         pokeID = pkmnID;
         KeyboardPlus keyboard;
 
         if (pokeID > 0) {
-            if (keyboard.SetKeyboard("Form:", true, Gen6::Forms(pokeID), form) != -1) {
-                InitPokemon(pokeID, form, Value(false, true));
+            if (keyboard.SetKeyboard("Form:", true, Gen6::FindForms(pokeID), form) != -1) {
+                InitPokemon(pokeID, form, AutoGroup(false, true));
             }
         }
     }
@@ -472,7 +472,7 @@ namespace XY {
     static int legendaryIndex;
 
     void RematchLegendariesKB(MenuEntry *entry) {
-        static const StringVector options = {"Mewtwo", Gen6::Name("Xerneas", "Yveltal"), "Zygarde"};
+        static const StringVector options = {"Mewtwo", AutoGame("Xerneas", "Yveltal"), "Zygarde"};
         KeyboardPlus keyboard;
         keyboard.SetKeyboard(entry->Name() + ":", true, options, legendaryIndex);
     }

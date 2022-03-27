@@ -6,7 +6,7 @@ using namespace CTRPluginFramework;
 
 namespace USUM {
     void Speedx2(MenuEntry *entry) {
-        static const u32 address = Gen7::Auto(0x3AAEB0, 0x3AAEB4);
+        static const u32 address = AutoGame(0x3AAEB0, 0x3AAEB4);
         static u32 data[1] = {0x3FC00000};
         static u32 original[1] = {0};
 
@@ -22,7 +22,7 @@ namespace USUM {
     }
 
     void BypassWalls(MenuEntry *entry) {
-        static const u32 address[2] = {Gen7::Auto(0x3AD228, 0x3AD22C), Gen7::Auto(0x3AD35C, 0x3AD360)};
+        static const u32 address[2] = {AutoGame(0x3AD228, 0x3AD22C), AutoGame(0x3AD35C, 0x3AD360)};
         static u32 data[1] = {0xE1A00000};
         static u32 original[2] = {0, 0};
 

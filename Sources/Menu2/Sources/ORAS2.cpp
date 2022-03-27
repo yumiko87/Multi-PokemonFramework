@@ -99,7 +99,7 @@ namespace ORAS {
     }
 
     void PCAnywhere(MenuEntry *entry) {
-        static const u32 address = Gen6::Auto(0x3D8748, 0x3D8744);
+        static const u32 address = AutoGame(0x3D8748, 0x3D8744);
         static u32 data[1] = {0xE3A00004};
         static u32 original[1] = {0};
 
