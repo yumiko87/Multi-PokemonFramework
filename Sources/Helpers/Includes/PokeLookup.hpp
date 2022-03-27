@@ -2012,7 +2012,7 @@ namespace CTRPluginFramework {
         vector<int> choiceNo;
     };
 
-    static const char *allMoves[742] = {
+    static const char *allMoves[675] = {
         "Pound",
         "Karate Chop",
         "Double Slap",
@@ -2634,43 +2634,6 @@ namespace CTRPluginFramework {
         "Precipice Blades",
         "Dragon Ascent",
         "Hyperspace Fury",
-        "Breakneck Blitz",
-        "Breakneck Blitz",
-        "All-Out Pummeling",
-        "All-Out Pummeling",
-        "Supersonic Skystrike",
-        "Supersonic Skystrike",
-        "Acid Downpour",
-        "Acid Downpour",
-        "Tectonic Rage",
-        "Tectonic Rage",
-        "Continental Crush",
-        "Continental Crush",
-        "Savage Spin-Out",
-        "Savage Spin-Out",
-        "Never-Ending Nightmare",
-        "Never-Ending Nightmare",
-        "Corkscrew Crash",
-        "Corkscrew Crash",
-        "Inferno Overdrive",
-        "Inferno Overdrive",
-        "Hydro Vortex",
-        "Hydro Vortex",
-        "Bloom Doom",
-        "Bloom Doom",
-        "Gigavolt Havoc",
-        "Gigavolt Havoc",
-        "Shattered Psyche",
-        "Shattered Psyche",
-        "Subzero Slammer",
-        "Subzero Slammer",
-        "Devastating Drake",
-        "Devastating Drake",
-        "Black Hole Eclipse",
-        "Black Hole Eclipse",
-        "Twinkle Tackle",
-        "Twinkle Tackle",
-        "Catastropika",
         "Shore Up",
         "First Impression",
         "Baneful Bunker",
@@ -2707,15 +2670,6 @@ namespace CTRPluginFramework {
         "Dragon Hammer",
         "Brutal Swing",
         "Aurora Veil",
-        "Sinister Arrow Raid",
-        "Malicious Moonsault",
-        "Oceanic Operetta",
-        "Guardian of Alola",
-        "Soul-Stealing 7-Star Strike",
-        "Stoked Sparksurfer",
-        "Pulverizing Pancake",
-        "Extreme Evoboost",
-        "Genesis Supernova",
         "Shell Trap",
         "Fleur Cannon",
         "Psychic Fangs",
@@ -2731,30 +2685,9 @@ namespace CTRPluginFramework {
         "Zing Zap",
         "Nature's Madness",
         "Multi-Attack",
-        "10,000,000 Volt Thunderbolt",
         "Mind Blown",
         "Plasma Fists",
-        "Photon Geyser",
-        "Light That Burns the Sky",
-        "Searing Sunraze Smash",
-        "Menacing Moonraze Maelstrom",
-        "Let's Snuggle Forever",
-        "Splintered Stormshards",
-        "Clangorous Soulblaze",
-        "Zippy Zap",
-        "Splishy Splash",
-        "Floaty Fall",
-        "Pika Papow",
-        "Bouncy Bubble",
-        "Buzzy Buzz",
-        "Sizzly Slide",
-        "Glitzy Glow",
-        "Baddy Bad",
-        "Sappy Seed",
-        "Freezy Frost",
-        "Sparkly Swirl",
-        "Veevee Volley",
-        "Double Iron Bash"
+        "Photon Geyser"
     };
 
     extern int moveID;
@@ -2810,7 +2743,7 @@ namespace CTRPluginFramework {
         const char *name;
     };
 
-    static const Locations allLocs1[106] = {
+    static const Locations allLocs6[106] = {
         {2, "Mystery Zone"},
         {4, "Faraway Place"},
         {6, "Vaniville Town"},
@@ -2919,7 +2852,7 @@ namespace CTRPluginFramework {
         {168, "Unknown Dungeon"}
     };
 
-    static const Locations allLocs2[92] = {
+    static const Locations allLocs6b[92] = {
         {170, "Littleroot Town"},
         {172, "Oldale Town"},
         {174, "Dewford Town"},
@@ -3049,76 +2982,64 @@ namespace CTRPluginFramework {
         {10, "Timer Ball", 3}
     };
 
-    static const StringVector rib0Ribbons = {
-        {"Champion Kalos"},
-        {"Champion G3"},
-        {"Champion Sinnoh"},
-        {"Best Friends"},
-        {"Training"},
-        {"Battler Skillful"},
-        {"Battler Expert"},
-        {"Effort"}
+    struct Ribbons {
+        int category;
+        const char *name;
+        int index;
     };
 
-    static const StringVector rib1Ribbons = {
-        {"Alert"},
-        {"Shock"},
-        {"Downcast"},
-        {"Careless"},
-        {"Relax"},
-        {"Snooze"},
-        {"Smile"},
-        {"Gorgeous"}
+    static const Ribbons allRibbons[48] = {
+        {0, "Champion Kalos", 0},
+        {0, "Champion G3", 1},
+        {0, "Champion Sinnoh", 2},
+        {0, "Best Friends", 3},
+        {0, "Training", 4},
+        {0, "Battler Skillful", 5},
+        {0, "Battler Expert", 6},
+        {0, "Effort", 7},
+        {1, "Alert", 0},
+        {1, "Shock", 1},
+        {1, "Downcast", 2},
+        {1, "Careless", 3},
+        {1, "Relax", 4},
+        {1, "Snooze", 5},
+        {1, "Smile", 6},
+        {1, "Gorgeous", 7},
+        {2, "Royal", 0},
+        {2, "Gorgeous Royal", 1},
+        {2, "Artist", 2},
+        {2, "Footprint", 3},
+        {2, "Record", 4},
+        {2, "Legend", 5},
+        {2, "Country", 6},
+        {2, "National", 7},
+        {3, "Earth", 0},
+        {3, "World", 1},
+        {3, "Classic", 2},
+        {3, "Premier", 3},
+        {3, "Event", 4},
+        {3, "Birthday", 5},
+        {3, "Special", 6},
+        {3, "Souvenir", 7},
+        {4, "Wishing", 0},
+        {4, "Champion Battle", 1},
+        {4, "Champion Regional", 2},
+        {4, "Champion National", 3},
+        {4, "Champion World", 4},
+        {4, "Champion G6 Hoenn", 7},
+        {5, "Contest Star", 0},
+        {5, "Master Coolness", 1},
+        {5, "Master Beauty", 2},
+        {5, "Master Cuteness", 3},
+        {5, "Master Cleverness", 4},
+        {5, "Master Toughness", 5},
+        {5, "Champion Alola", 6},
+        {5, "Battle Royale", 7},
+        {6, "Battle Tree Great", 0},
+        {6, "Battle Tree Master", 1}
     };
 
-    static const StringVector rib2Ribbons = {
-        {"Royal"},
-        {"Gorgeous Royal"},
-        {"Artist"},
-        {"Footprint"},
-        {"Record"},
-        {"Legend"},
-        {"Country"},
-        {"National"}
-    };
-
-    static const StringVector rib3Ribbons = {
-        {"Earth"},
-        {"World"},
-        {"Classic"},
-        {"Premier"},
-        {"Event"},
-        {"Birthday"},
-        {"Special"},
-        {"Souvenir"}
-    };
-
-    static const StringVector rib4Ribbons = {
-        {"Wishing"},
-        {"Champion Battle"},
-        {"Champion Regional"},
-        {"Champion National"},
-        {"Champion World"},
-        {"Has Contest Memory Ribbon"},
-        {"Has Battle Memory Ribbon"},
-        {"Champion G6 Hoenn"}
-    };
-
-    static const StringVector rib5Ribbons = {
-        {"Contest Star"},
-        {"Master Coolness"},
-        {"Master Beauty"},
-        {"Master Cuteness"},
-        {"Master Cleverness"},
-        {"Master Toughness"},
-        {"Champion Alola"},
-        {"Battle Royale"}
-    };
-
-    static const StringVector rib6Ribbons = {
-        {"Battle Tree Great"},
-        {"Battle Tree Master"}
-    };
+    static const vector<int> fixedGender = {29, 30, 31, 32, 33, 34, 81, 82, 100, 101, 106, 107, 113, 115, 120, 121, 124, 128, 132, 137, 144, 150, 151, 172, 201, 233, 236, 237, 238, 241, 242, 243, 244, 245, 249, 250, 251, 292, 313, 314, 337, 338, 343, 344, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 413, 414, 416, 436, 437, 440, 462, 474, 475, 478, 479, 480, 481, 482, 483, 484, 486, 487, 488, 489, 490, 491, 492, 493, 494, 538, 539, 548, 549, 599, 600, 601, 615, 622, 623, 627, 628, 629, 630, 638, 639, 640, 641, 642, 643, 644, 645, 646, 647, 648, 649, 669, 670, 671, 703, 716, 717, 718, 719, 720, 721, 758, 761, 762, 763, 772, 773, 774, 781, 785, 786, 787, 788, 789, 790, 791, 792, 793, 794, 795, 796, 797, 798, 799, 800, 801, 802, 803, 804, 805, 806, 807};
 }
 
 #endif

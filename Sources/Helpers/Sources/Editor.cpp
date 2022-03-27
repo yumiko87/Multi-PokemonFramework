@@ -124,6 +124,13 @@ namespace CTRPluginFramework {
         KeyboardPlus keyboard;
 
         if (IsValid(pointer, pkmn)) {
+            for (int i = 0; i < fixedGender.size(); i++) {
+                if (pkmn->species == fixedGender[i]) {
+                    MessageBox("Cannot override fixed gender.", DialogType::DialogOk, ClearScreen::Both)();
+                    return;
+                }
+            }
+
             if (keyboard.SetKeyboard(entry->Name() + ":", true, options, genderChoice) != -1) {
                 SetGender(pkmn, genderChoice);
 
@@ -141,7 +148,7 @@ namespace CTRPluginFramework {
         PK6 *pkmn = new PK6;
 
         if (IsValid(pointer, pkmn)) {
-            if (KB<u32>(entry->Name() + ":", true, false, 7, expAmount, 0, 1, 1640000, KeyboardCallback)) {
+            if (KB<u32>(entry->Name() + ":", true, false, 7, expAmount, 0, 1, 1250000, KeyboardCallback)) {
                 if (SetExp(pkmn, expAmount)) {
                     if (SetPokemon(pointer, pkmn)) {
                         Message::Completed();
@@ -301,7 +308,9 @@ namespace CTRPluginFramework {
             Start:
             if (keyboard.SetKeyboard(entry->Name() + ":", true, options, pkrsCureChoice) != -1) {
                 if (pkrsCureChoice == 0) {
-                    SetPokerus(pkmn, 0, 0, true);
+                    if (KB<u8>("Strain:", true, false, 1, pkrsVal[1], 0, 0, 3, KeyboardCallback)) {
+                        SetPokerus(pkmn, 0, pkrsVal[1], true);
+                    }
                 }
 
                 else if (pkrsCureChoice == 1) {
@@ -395,17 +404,17 @@ namespace CTRPluginFramework {
         KeyboardPlus keyboard;
 
         if (allOrigins[getOrigin].choiceNo == 24 || allOrigins[getOrigin].choiceNo == 25) {
-            deterVer = allLocs1[getMetLoc].choiceNo;
+            deterVer = allLocs6[getMetLoc].choiceNo;
 
-            for (const Locations &nickname : allLocs1) {
+            for (const Locations &nickname : allLocs6) {
                 options.push_back(nickname.name);
             }
         }
 
         else if (allOrigins[getOrigin].choiceNo == 26 || allOrigins[getOrigin].choiceNo == 27) {
-            deterVer = allLocs2[getMetLoc].choiceNo;
+            deterVer = allLocs6b[getMetLoc].choiceNo;
 
-            for (const Locations &nickname : allLocs2) {
+            for (const Locations &nickname : allLocs6b) {
                 options.push_back(nickname.name);
             }
         }
@@ -483,7 +492,7 @@ namespace CTRPluginFramework {
             Start:
             if (keyboard.SetKeyboard(entry->Name() + ":", true, options, dateChoice) != -1) {
                 if (dateChoice == 0) {
-                   if (KB<u8>("Year:", true, false, 2, date[0], 0, 0, 99, KeyboardCallback)) {
+                   if (KB<u8>(options[dateChoice] + ":", true, false, 2, date[0], 0, 0, 99, KeyboardCallback)) {
                        SetMetDate(pkmn, true, date[0], false, 0, false, 0, false);
                    }
 
@@ -491,7 +500,7 @@ namespace CTRPluginFramework {
                 }
 
                 else if (dateChoice == 1) {
-                   if (KB<u8>("Month:", true, false, 2, date[1], 0, 1, 12, KeyboardCallback)) {
+                   if (KB<u8>(options[dateChoice] + ":", true, false, 2, date[1], 0, 1, 12, KeyboardCallback)) {
                        SetMetDate(pkmn, false, 0, true, date[1], false, 0, false);
                    }
 
@@ -499,7 +508,7 @@ namespace CTRPluginFramework {
                 }
 
                 else if (dateChoice == 2) {
-                   if (KB<u8>("Day:", true, false, 2, date[2], 0, 1, 31, KeyboardCallback)) {
+                   if (KB<u8>(options[dateChoice] + ":", true, false, 2, date[2], 0, 1, 31, KeyboardCallback)) {
                        SetMetDate(pkmn, false, 0, false, 0, true, date[2], false);
                    }
 
@@ -543,17 +552,17 @@ namespace CTRPluginFramework {
         KeyboardPlus keyboard;
 
         if (allOrigins[getOrigin].choiceNo == 24 || allOrigins[getOrigin].choiceNo == 25) {
-            deterEggVer = allLocs1[getEggMetLoc].choiceNo;
+            deterEggVer = allLocs6[getEggMetLoc].choiceNo;
 
-            for (const Locations &nickname : allLocs1) {
+            for (const Locations &nickname : allLocs6) {
                 options.push_back(nickname.name);
             }
         }
 
         else if (allOrigins[getOrigin].choiceNo == 26 || allOrigins[getOrigin].choiceNo == 27) {
-            deterEggVer = allLocs2[getEggMetLoc].choiceNo;
+            deterEggVer = allLocs6b[getEggMetLoc].choiceNo;
 
-            for (const Locations &nickname : allLocs2) {
+            for (const Locations &nickname : allLocs6b) {
                 options.push_back(nickname.name);
             }
         }
@@ -589,7 +598,7 @@ namespace CTRPluginFramework {
             Start:
             if (keyboard.SetKeyboard(entry->Name() + ":", true, options, eggDateChoice) != -1) {
                 if (eggDateChoice == 0) {
-                   if (KB<u8>("Year:", true, false, 2, eggDate[0], 0, 0, 99, KeyboardCallback)) {
+                   if (KB<u8>(options[eggDateChoice] + ":", true, false, 2, eggDate[0], 0, 0, 99, KeyboardCallback)) {
                        SetMetDate(pkmn, true, eggDate[0], false, 0, false, 0, true);
                    }
 
@@ -597,7 +606,7 @@ namespace CTRPluginFramework {
                 }
 
                 else if (eggDateChoice == 1) {
-                   if (KB<u8>("Month:", true, false, 2, eggDate[1], 0, 1, 12, KeyboardCallback)) {
+                   if (KB<u8>(options[eggDateChoice] + ":", true, false, 2, eggDate[1], 0, 1, 12, KeyboardCallback)) {
                        SetMetDate(pkmn, false, 0, true, eggDate[1], false, 0, true);
                    }
 
@@ -605,7 +614,7 @@ namespace CTRPluginFramework {
                 }
 
                 else if (eggDateChoice == 2) {
-                   if (KB<u8>("Day:", true, false, 2, eggDate[2], 0, 1, 31, KeyboardCallback)) {
+                   if (KB<u8>(options[eggDateChoice] + ":", true, false, 2, eggDate[2], 0, 1, 31, KeyboardCallback)) {
                        SetMetDate(pkmn, false, 0, false, 0, true, eggDate[2], true);
                    }
 
@@ -849,114 +858,27 @@ namespace CTRPluginFramework {
         }
     }
 
-    int ribb, ribbSection, ribbChoice;
+    static int ribbonChoice, obtainRibbon;
 
     void Editor::Ribbons(MenuEntry *entry) {
         u32 pointer = (((slot - 1) * 232) + ((box - 1) * 6960 + GetPokePointer()));
         PK6 *pkmn = new PK6;
 
-        static const StringVector options = {"RIB0", "RIB1", "RIB2", "RIB3", "RIB4", "RIB5", "RIB6"}, noYes = {"No", "Yes"};
+        StringVector options;
+        static StringVector noYes = {"No", "Yes"};
         KeyboardPlus keyboard;
+
+        for (int i = 0; i < AutoGen(AutoGame(37, 44), 46); i++)
+            options.push_back(allRibbons[i].name);
 
         if (IsValid(pointer, pkmn)) {
             Start:
-            if (keyboard.SetKeyboard(entry->Name() + ":", true, options, ribbSection) != -1) {
-                switch (ribbSection) {
-                    case 0: {
-                        if (keyboard.SetKeyboard(options[ribbSection] + ":", true, rib0Ribbons, ribb) != -1) {
-                            if (keyboard.SetKeyboard(rib0Ribbons[ribb] + ":", true, noYes, ribbChoice) != -1) {
-                                SetRibbons(pkmn, ribbSection, ribbChoice, ribb);
-                            }
-
-                            else goto Start;
-                        }
-
-                        else goto Start;
-                    }
-                    break;
-
-                    case 1: {
-                        if (keyboard.SetKeyboard(options[ribbSection] + ":", true, rib1Ribbons, ribb) != -1) {
-                            if (keyboard.SetKeyboard(rib1Ribbons[ribb] + ":", true, noYes, ribbChoice) != -1) {
-                                SetRibbons(pkmn, ribbSection, ribbChoice, ribb);
-                            }
-
-                            else goto Start;
-                        }
-
-                        else goto Start;
-                    }
-                    break;
-
-                    case 2: {
-                        if (keyboard.SetKeyboard(options[ribbSection] + ":", true, rib2Ribbons, ribb) != -1) {
-                            if (keyboard.SetKeyboard(rib2Ribbons[ribb] + ":", true, noYes, ribbChoice) != -1) {
-                                SetRibbons(pkmn, ribbSection, ribbChoice, ribb);
-                            }
-
-                            else goto Start;
-                        }
-
-                        else goto Start;
-                    }
-                    break;
-
-                    case 3: {
-                        if (keyboard.SetKeyboard(options[ribbSection] + ":", true, rib3Ribbons, ribb) != -1) {
-                            if (keyboard.SetKeyboard(rib3Ribbons[ribb] + ":", true, noYes, ribbChoice) != -1) {
-                                SetRibbons(pkmn, ribbSection, ribbChoice, ribb);
-                            }
-
-                            else goto Start;
-                        }
-
-                        else goto Start;
-                    }
-                    break;
-
-                    case 4: {
-                        if (keyboard.SetKeyboard(options[ribbSection] + ":", true, rib4Ribbons, ribb) != -1) {
-                            if (keyboard.SetKeyboard(rib4Ribbons[ribb] + ":", true, noYes, ribbChoice) != -1) {
-                                SetRibbons(pkmn, ribbSection, ribbChoice, ribb);
-                            }
-
-                            else goto Start;
-                        }
-
-                        else goto Start;
-                    }
-                    break;
-
-                    case 5: {
-                        if (keyboard.SetKeyboard(options[ribbSection] + ":", true, rib5Ribbons, ribb) != -1) {
-                            if (keyboard.SetKeyboard(rib5Ribbons[ribb] + ":", true, noYes, ribbChoice) != -1) {
-                                SetRibbons(pkmn, ribbSection, ribbChoice, ribb);
-                            }
-
-                            else goto Start;
-                        }
-
-                        else goto Start;
-                    }
-                    break;
-
-                    case 6: {
-                        if (keyboard.SetKeyboard(options[ribbSection] + ":", true, rib6Ribbons, ribb) != -1) {
-                            if (keyboard.SetKeyboard(rib6Ribbons[ribb] + ":", true, noYes, ribbChoice) != -1) {
-                                SetRibbons(pkmn, ribbSection, ribbChoice, ribb);
-                            }
-
-                            else goto Start;
-                        }
-
-                        else goto Start;
-                    }
-                    break;
-
-                    default:
-                        goto Start;
-                        break;
+            if (keyboard.SetKeyboard(entry->Name() + ":", true, options, ribbonChoice) != -1) {
+                if (keyboard.SetKeyboard(options[ribbonChoice] + ":", true, noYes, obtainRibbon) != -1) {
+                    SetRibbons(pkmn, allRibbons[ribbonChoice].category, allRibbons[ribbonChoice].index, obtainRibbon);
                 }
+
+                else goto Start;
 
                 if (SetPokemon(pointer, pkmn)) {
                     Message::Completed();

@@ -389,9 +389,13 @@ namespace CTRPluginFramework {
 
     template <class PKX>
     void SetSpecies(PKX *poke, u16 pokeNo) {
-        if (pokeNo > 0 && pokeNo <= 721 || pokeNo <= 802 || pokeNo <= 807) {
-            poke->species = pokeNo;
+        if (poke->species != pokeNo) {
+            if (pokeNo > 0 && pokeNo <= AutoGen(721, AutoGroup(802, 807))) {
+                poke->species = pokeNo;
+            }
         }
+
+        else Message::Warning;
     }
 
     template<class PKX>
@@ -411,7 +415,7 @@ namespace CTRPluginFramework {
 
     template<class PKX>
     bool SetExp(PKX *poke, u32 amount) {
-        if (amount <= 1640000) {
+        if (amount <= 1250000) {
             poke->exp = amount;
             return true;
         }
@@ -457,13 +461,10 @@ namespace CTRPluginFramework {
 
     template<class PKX>
     void SetPokerus(PKX *poke, int days, int strain, bool isCured) {
-        if (!isCured) {
+        if (!isCured)
             poke->pkrus = ((poke->pkrus & ~0xF) | days);
-            poke->pkrus = ((poke->pkrus & 0xF) | strain << 4);
-            return;
-        }
 
-        poke->pkrus = 0;
+        poke->pkrus = ((poke->pkrus & 0xF) | strain << 4);
     }
 
     template<class PKX>
@@ -686,8 +687,8 @@ namespace CTRPluginFramework {
     }
 
     template <class PKX>
-    void SetRibbons(PKX *poke, int index, bool obtain, int option) {
-        poke->ribbons[index] = ((poke->ribbons[index] & ~(1 << option)) | (obtain ? 1 << option : 0));
+    void SetRibbons(PKX *poke, int category, int index, bool obtain) {
+        poke->ribbons[category] = ((poke->ribbons[category] & ~(1 << index)) | (obtain ? 1 << index : 0));
     }
 }
 

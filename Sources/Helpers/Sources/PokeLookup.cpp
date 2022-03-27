@@ -277,8 +277,6 @@ namespace CTRPluginFramework {
         return (output.choiceNo.size());
     }
 
-    int countInvalid;
-
     /**
     * @brief This function will be called by the keyboard everytime the input change
     * @param keyboard The keyboard that called the function
@@ -287,7 +285,7 @@ namespace CTRPluginFramework {
     void ItemInputChange(Keyboard &keyboard, KeyboardEvent &event) {
         string &input = keyboard.GetInput();
         HeldItem matches;
-        int count = MatchHeldItem(matches, input), choice;
+        int count = MatchHeldItem(matches, input), countInvalid, choice;
         static const vector<int> ignored = {114, 120, 129, 130, 131, 132, 133, 426, 427, 622, 807, 808, 809, 810, 811, 812, 813, 814, 815, 816, 817, 818, 819, 820, 821, 822, 823, 824, 825, 826, 827, 828, 829, 830, 831, 832, 833, 834, 834, 835, 837, 838, 839, 840, 848, 859, 867, 868, 869, 870, 871, 887, 898, 899, 927, 928, 929, 930, 931, 932};
 
         // If the user removed a letter, clear the input and set an error
@@ -421,8 +419,8 @@ namespace CTRPluginFramework {
     void MoveInputChange(Keyboard &keyboard, KeyboardEvent &event) {
         string &input = keyboard.GetInput();
         Moves matches;
-        int count = MatchMove(matches, input), choice;
-        moveID = matches.choiceNo[choice] + 1;
+        int count = MatchMove(matches, input), countInvalid, choice;
+        static const vector<int> ignored = {622, 623, 624, 625, 626, 627, 628, 629, 630, 631, 632, 633, 634, 635, 636, 637, 638, 639, 640, 641, 642, 643, 644, 645, 646, 647, 648, 649, 650, 651, 652, 653, 654, 655, 656, 657, 658, 695, 696, 697, 698, 699, 700, 701, 702, 703, 719, 723, 724, 725, 726, 727, 728};
 
         // If the user removed a letter, clear the input and set an error
         if (event.type == KeyboardEvent::CharacterRemoved) {
@@ -447,42 +445,47 @@ namespace CTRPluginFramework {
         if (count == 1) {
             // The choiceNo must be within a valid range depending on the game
             if (moveID <= AutoGen(AutoGroup(617, 621), AutoGroup(719, 742))) {
+                countInvalid = 0;
+
+                for (int i = 0; i < ignored.size(); i++) {
+                    if (matches.choiceNo[0] + 1 > ignored[i])
+                        countInvalid++;
+                }
+
+                moveID = matches.choiceNo[0] + 1 + countInvalid;
                 input = matches.name[0];
                 return;
             }
 
-            else {
-                keyboard.SetError("This move is not valid. Please try again.");
-                return;
-            }
+            keyboard.SetError("This move is not valid. Please try again.");
+            return;
         }
 
         // If we have less than or equal to ten matches, populate a list keyboard
         if (count <= 10) {
             // The choiceNo must be within a valid range depending on the game
-            if (moveID <= AutoGen(AutoGroup(617, 621), AutoGroup(719, 742))) {
-                if (matches.name[choice] == matches.name[choice + 1] || matches.name[choice] == matches.name[choice - 1]) {
+            if (moveID <= AutoGen(AutoGroup(617, 621), AutoGroup(719, 728)) - 53) {
+                Keyboard kb(matches.name);
+                kb.CanAbort(false);
+                kb.DisplayTopScreen = false;
+                choice = kb.Open();
+
+                if (choice >= 0) {
+                    countInvalid = 0;
+
+                    for (int i = 0; i < ignored.size(); i++) {
+                        if (matches.choiceNo[choice] + 1 > ignored[i])
+                            countInvalid++;
+                    }
+
+                    moveID = matches.choiceNo[choice] + 1 + countInvalid;
                     input = matches.name[choice];
                     return;
                 }
-
-                else {
-                    Keyboard populate(matches.name);
-                    populate.CanAbort(false);
-                    populate.DisplayTopScreen = false;
-                    choice = populate.Open();
-
-                    if (choice >= 0) {
-                        input = matches.name[choice];
-                        return;
-                    }
-                }
             }
 
-            else {
-                keyboard.SetError("This move is not valid. Please try again.");
-                return;
-            }
+            keyboard.SetError("This move is not valid. Please try again.");
+            return;
         }
 
         // We have too much results, the user must keep typing letters
