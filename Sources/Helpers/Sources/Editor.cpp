@@ -120,7 +120,7 @@ namespace CTRPluginFramework {
         u32 pointer = (((slot - 1) * 232) + ((box - 1) * 6960 + GetPokePointer()));
         PK6 *pkmn = new PK6;
 
-        static const StringVector options = {"Male", "Female", "Genderless"};
+        static const StringVector options = {"Male", "Female"};
         KeyboardPlus keyboard;
 
         if (IsValid(pointer, pkmn)) {
@@ -141,17 +141,24 @@ namespace CTRPluginFramework {
         }
     }
 
-    static u32 expAmount;
+    static u16 level;
 
-    void Editor::Experience(MenuEntry *entry) {
+    void Editor::Level(MenuEntry *entry) {
         u32 pointer = (((slot - 1) * 232) + ((box - 1) * 6960 + GetPokePointer()));
         PK6 *pkmn = new PK6;
 
         if (IsValid(pointer, pkmn)) {
-            if (KB<u32>(entry->Name() + ":", true, false, 7, expAmount, 0, 1, 1250000, KeyboardCallback)) {
-                if (SetExp(pkmn, expAmount)) {
-                    if (SetPokemon(pointer, pkmn)) {
-                        Message::Completed();
+            if (KB<u16>(entry->Name() + ":", true, false, 3, level, 0, 1, 100, KeyboardCallback)) {
+                for (int i = 0; i < growthRates.size(); i++) {
+                    for (int j = 0; j < growthRates[i].size(); j++) {
+                        if (pkmn->species == growthRates[i][j]) {
+                            SetLevel(pkmn, level, i);
+
+                            if (SetPokemon(pointer, pkmn)) {
+                                Message::Completed();
+                                return;
+                            }
+                        }
                     }
                 }
             }
@@ -309,14 +316,14 @@ namespace CTRPluginFramework {
             if (keyboard.SetKeyboard(entry->Name() + ":", true, options, pkrsCureChoice) != -1) {
                 if (pkrsCureChoice == 0) {
                     if (KB<u8>("Strain:", true, false, 1, pkrsVal[1], 0, 0, 3, KeyboardCallback)) {
-                        SetPokerus(pkmn, 0, pkrsVal[1], true);
+                        SetPokerus(pkmn, 0, pkrsVal[1]);
                     }
                 }
 
                 else if (pkrsCureChoice == 1) {
-                    if (KB<u8>("Days:", true, false, 2, pkrsVal[0], 0, 0, 15, KeyboardCallback)) {
+                    if (KB<u8>("Days:", true, false, 2, pkrsVal[0], 0, 1, 15, KeyboardCallback)) {
                         if (KB<u8>("Strain:", true, false, 1, pkrsVal[1], 0, 0, 3, KeyboardCallback)) {
-                            SetPokerus(pkmn, pkrsVal[0], pkrsVal[1], false);
+                            SetPokerus(pkmn, pkrsVal[0], pkrsVal[1]);
                         }
 
                         else goto Start;
@@ -478,6 +485,19 @@ namespace CTRPluginFramework {
         }
     }
 
+    int dateLimit(int index) {
+        if (index == 0)
+            return 99;
+
+        if (index == 1)
+            return 12;
+
+        if (index == 2)
+            return 31;
+
+        return 0;
+    }
+
     static u8 date[3];
     static int dateChoice;
 
@@ -491,28 +511,16 @@ namespace CTRPluginFramework {
         if (IsValid(pointer, pkmn)) {
             Start:
             if (keyboard.SetKeyboard(entry->Name() + ":", true, options, dateChoice) != -1) {
-                if (dateChoice == 0) {
-                   if (KB<u8>(options[dateChoice] + ":", true, false, 2, date[0], 0, 0, 99, KeyboardCallback)) {
-                       SetMetDate(pkmn, true, date[0], false, 0, false, 0, false);
-                   }
+                int settings[3][3] = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
 
-                   else goto Start;
-                }
+                for (int i = 0; i < 3; i ++) {
+                    if (i == dateChoice) {
+                        if (KB<u8>(options[dateChoice] + ":", true, false, 2, date[i], 0, 1, dateLimit(i), KeyboardCallback)) {
+                            SetMetDate(pkmn, settings[i][0], settings[i][1], settings[i][2], false, date);
+                        }
 
-                else if (dateChoice == 1) {
-                   if (KB<u8>(options[dateChoice] + ":", true, false, 2, date[1], 0, 1, 12, KeyboardCallback)) {
-                       SetMetDate(pkmn, false, 0, true, date[1], false, 0, false);
-                   }
-
-                   else goto Start;
-                }
-
-                else if (dateChoice == 2) {
-                   if (KB<u8>(options[dateChoice] + ":", true, false, 2, date[2], 0, 1, 31, KeyboardCallback)) {
-                       SetMetDate(pkmn, false, 0, false, 0, true, date[2], false);
-                   }
-
-                   else goto Start;
+                        else goto Start;
+                    }
                 }
 
                 if (SetPokemon(pointer, pkmn)) {
@@ -597,28 +605,16 @@ namespace CTRPluginFramework {
         if (IsValid(pointer, pkmn)) {
             Start:
             if (keyboard.SetKeyboard(entry->Name() + ":", true, options, eggDateChoice) != -1) {
-                if (eggDateChoice == 0) {
-                   if (KB<u8>(options[eggDateChoice] + ":", true, false, 2, eggDate[0], 0, 0, 99, KeyboardCallback)) {
-                       SetMetDate(pkmn, true, eggDate[0], false, 0, false, 0, true);
-                   }
+                int settings[3][3] = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
 
-                   else goto Start;
-                }
+                for (int i = 0; i < 3; i ++) {
+                    if (i == eggDateChoice) {
+                        if (KB<u8>(options[eggDateChoice] + ":", true, false, 2, eggDate[i], 0, 1, dateLimit(i), KeyboardCallback)) {
+                            SetMetDate(pkmn, settings[i][0], settings[i][1], settings[i][2], true, eggDate);
+                        }
 
-                else if (eggDateChoice == 1) {
-                   if (KB<u8>(options[eggDateChoice] + ":", true, false, 2, eggDate[1], 0, 1, 12, KeyboardCallback)) {
-                       SetMetDate(pkmn, false, 0, true, eggDate[1], false, 0, true);
-                   }
-
-                   else goto Start;
-                }
-
-                else if (eggDateChoice == 2) {
-                   if (KB<u8>(options[eggDateChoice] + ":", true, false, 2, eggDate[2], 0, 1, 31, KeyboardCallback)) {
-                       SetMetDate(pkmn, false, 0, false, 0, true, eggDate[2], true);
-                   }
-
-                   else goto Start;
+                        else goto Start;
+                    }
                 }
 
                 if (SetPokemon(pointer, pkmn)) {

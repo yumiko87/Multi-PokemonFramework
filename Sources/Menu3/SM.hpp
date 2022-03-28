@@ -50,7 +50,7 @@ namespace SM {
             new MenuEntry("Species", nullptr, Editor::Species),
             new MenuEntry("Is Nicknamed", nullptr, Editor::IsNicknamed),
             new MenuEntry("Nickname", nullptr, Editor::Nickname),
-            new MenuEntry("Experience", nullptr, Editor::Experience),
+            new MenuEntry("Level", nullptr, Editor::Level),
             new MenuEntry("Nature", nullptr, Editor::Nature),
             new MenuEntry("Gender", nullptr, Editor::Gender),
             new MenuEntry("Form", nullptr, Editor::Form),

@@ -16,7 +16,7 @@ namespace CTRPluginFramework {
         void IsNicknamed(MenuEntry *entry);
         void Nickname(MenuEntry *entry);
         void Gender(MenuEntry *entry);
-        void Experience(MenuEntry *entry);
+        void Level(MenuEntry *entry);
         void Nature(MenuEntry *entry);
         void Form(MenuEntry *entry);
         void HeldItem(MenuEntry *entry);

@@ -54,7 +54,7 @@ namespace CTRPluginFramework {
     };
 
     int main(void) {
-        PluginMenu *menu = new PluginMenu("Multi-Pokémon Framework", 22, 3, 25, "A CTRPF plugin for the Nintendo 3DS Pokémon games that supports both the 6th and 7th generations.\n\nFor more details, you may visit the repo at\n" << Color::Orange << REPO);
+        PluginMenu *menu = new PluginMenu("Multi-Pokémon Framework", 22, 3, 27, "A CTRPF plugin for the Nintendo 3DS Pokémon games that supports both the 6th and 7th generations.\n\nFor more details, you may visit the repo at\n" << Color::Orange << REPO);
 
         menu->ShowWelcomeMessage(false);
         menu->SynchronizeWithFrame(true);

@@ -6,9 +6,9 @@
 
 namespace CTRPluginFramework {
     static MenuEntry *EntryWithHotkey(MenuEntry *entry, const Hotkey &hotkey) {
-        if (entry != nullptr) {
+        if (entry != nullptr)
             entry->Hotkeys += hotkey;
-        }
+
         return (entry);
     }
 
@@ -18,6 +18,7 @@ namespace CTRPluginFramework {
                 entry->Hotkeys += hotkey;
             }
         }
+
         return (entry);
     }
 }

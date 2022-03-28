@@ -6,21 +6,17 @@ namespace CTRPluginFramework {
     u32 pokePointer;
 
     u32 GetPokePointer(void) {
-        if (group == Group::XY) {
+        if (group == Group::XY)
             pokePointer = 0x8C861C8;
-        }
 
-        if (group == Group::ORAS) {
+        if (group == Group::ORAS)
             pokePointer = 0x8C9E134;
-        }
 
-        if (group == Group::SM) {
+        if (group == Group::SM)
             pokePointer = 0x330D9838;
-        }
 
-        if (group == Group::USUM) {
+        if (group == Group::USUM)
             pokePointer = 0x33015AB0;
-        }
 
         return pokePointer;
     }

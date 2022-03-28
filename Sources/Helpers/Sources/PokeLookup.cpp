@@ -52,7 +52,6 @@ namespace CTRPluginFramework {
         string &input = keyboard.GetInput();
         Pokemon matches;
         int count = MatchPkmn(matches, input), choice;
-        pkmnID = matches.choiceNo[choice] + 1;
 
         // If the user removed a letter, clear the input and set an error
         if (event.type == KeyboardEvent::CharacterRemoved) {
@@ -77,6 +76,7 @@ namespace CTRPluginFramework {
         if (count == 1) {
             // The choiceNo must be within a valid range depending on the game
             if (pkmnID <= AutoGen(721, AutoGroup(802, 807))) {
+                pkmnID = matches.choiceNo[0] + 1;
                 input = matches.name[0];
                 return;
             }
@@ -87,14 +87,15 @@ namespace CTRPluginFramework {
 
         // If we have less than or equal to ten matches, populate a list keyboard
         if (count <= 10) {
-            Keyboard populate(matches.name);
-            populate.CanAbort(false);
-            populate.DisplayTopScreen = false;
-            choice = populate.Open();
+            Keyboard kb(matches.name);
+            kb.CanAbort(false);
+            kb.DisplayTopScreen = false;
+            choice = kb.Open();
 
             if (choice >= 0) {
                 // The choiceNo must be within a valid range depending on the game
                 if (pkmnID <= AutoGen(721, AutoGroup(802, 807))) {
+                    pkmnID = matches.choiceNo[choice] + 1;
                     input = matches.name[choice];
                     return;
                 }
@@ -169,7 +170,6 @@ namespace CTRPluginFramework {
         string &input = keyboard.GetInput();
         Ability matches;
         int count = MatchAbility(matches, input), choice;
-        abilityID = matches.choiceNo[choice] + 1;
 
         // If the user removed a letter, clear the input and set an error
         if (event.type == KeyboardEvent::CharacterRemoved) {
@@ -194,6 +194,7 @@ namespace CTRPluginFramework {
         if (count == 1) {
             // The choiceNo must be within a valid range depending on the game
             if (abilityID <= AutoGen(AutoGroup(188, 191), 233)) {
+                abilityID = matches.choiceNo[0] + 1;
                 input = matches.name[0];
                 return;
             }
@@ -206,12 +207,13 @@ namespace CTRPluginFramework {
         if (count <= 10) {
             // The choiceNo must be within a valid range depending on the game
             if (abilityID <= AutoGen(AutoGroup(188, 191), 233)) {
-                Keyboard populate(matches.name);
-                populate.CanAbort(false);
-                populate.DisplayTopScreen = false;
-                choice = populate.Open();
+                Keyboard kb(matches.name);
+                kb.CanAbort(false);
+                kb.DisplayTopScreen = false;
+                choice = kb.Open();
 
                 if (choice >= 0) {
+                    abilityID = matches.choiceNo[choice] + 1;
                     input = matches.name[choice];
                     return;
                 }
